@@ -64,6 +64,11 @@ whitespace			[[:space:]]+
 <MULTILINE_COMMENT>[^*]+			{ return IgnoredLexemeAction(); }
 <MULTILINE_COMMENT>.				{ return IgnoredLexemeAction(); }
 
+"automaton"                         { return KeywordLexemeAction(AUTOMATON); }   
+"convert"                           { return KeywordLexemeAction(CONVERT); }       
+"print"                             { return KeywordLexemeAction(PRINT); }   
+"show"                              { return KeywordLexemeAction(SHOW); }                 
+
 "-"									{ return ArithmeticOperatorLexemeAction(SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(DIV); }

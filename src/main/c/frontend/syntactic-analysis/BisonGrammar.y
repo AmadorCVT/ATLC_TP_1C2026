@@ -50,6 +50,11 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %destructor { destroyFactor($$); } <factor>
 
 /** Terminals. */
+%token <token> AUTOMATON
+%token <token> CONVERT
+%token <token> PRINT
+%token <token> SHOW
+%token <string> STRING
 %token <integer> INTEGER
 %token <token> ADD
 %token <token> CLOSE_BRACE
@@ -66,6 +71,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> UNKNOWN
 
 /** Non-terminals. */
+%type <automaton> automaton
 %type <constant> constant
 %type <expression> expression
 %type <factor> factor
@@ -86,6 +92,9 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
 	;
+
+automaton: AUTOMATON STRING { $$ = AutomatonSemanticAction($2); }
+	; // TODO: Finish
 
 expression: expression[left] ADD expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
