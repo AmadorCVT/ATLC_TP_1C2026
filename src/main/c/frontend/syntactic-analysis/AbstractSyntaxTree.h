@@ -17,6 +17,8 @@ ModuleDestructor initializeAbstractSyntaxTreeModule();
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 
+typedef struct Automaton Automaton;
+typedef struct Definition Definition;
 typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
@@ -25,6 +27,12 @@ typedef struct Program Program;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
+
+enum AutomatonType {
+	DFA,
+	NFA,
+	LNFA
+};
 
 enum ExpressionType {
 	ADDITION,

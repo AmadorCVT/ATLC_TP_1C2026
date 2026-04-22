@@ -58,20 +58,24 @@ extern int yydebug;
     CONVERT = 259,                 /* CONVERT  */
     PRINT = 260,                   /* PRINT  */
     SHOW = 261,                    /* SHOW  */
-    STRING = 262,                  /* STRING  */
-    INTEGER = 263,                 /* INTEGER  */
-    ADD = 264,                     /* ADD  */
-    CLOSE_BRACE = 265,             /* CLOSE_BRACE  */
-    CLOSE_COMMENT = 266,           /* CLOSE_COMMENT  */
-    CLOSE_PARENTHESIS = 267,       /* CLOSE_PARENTHESIS  */
-    DIV = 268,                     /* DIV  */
-    MUL = 269,                     /* MUL  */
-    OPEN_BRACE = 270,              /* OPEN_BRACE  */
-    OPEN_COMMENT = 271,            /* OPEN_COMMENT  */
-    OPEN_PARENTHESIS = 272,        /* OPEN_PARENTHESIS  */
-    SUB = 273,                     /* SUB  */
-    IGNORED = 274,                 /* IGNORED  */
-    UNKNOWN = 275                  /* UNKNOWN  */
+    TYPE_DFA = 262,                /* TYPE_DFA  */
+    TYPE_NFA = 263,                /* TYPE_NFA  */
+    TYPE_LNFA = 264,               /* TYPE_LNFA  */
+    DEFINE_AUTOMATON = 265,        /* DEFINE_AUTOMATON  */
+    ID = 266,                      /* ID  */
+    INTEGER = 267,                 /* INTEGER  */
+    ADD = 268,                     /* ADD  */
+    CLOSE_BRACE = 269,             /* CLOSE_BRACE  */
+    CLOSE_COMMENT = 270,           /* CLOSE_COMMENT  */
+    CLOSE_PARENTHESIS = 271,       /* CLOSE_PARENTHESIS  */
+    DIV = 272,                     /* DIV  */
+    MUL = 273,                     /* MUL  */
+    OPEN_BRACE = 274,              /* OPEN_BRACE  */
+    OPEN_COMMENT = 275,            /* OPEN_COMMENT  */
+    OPEN_PARENTHESIS = 276,        /* OPEN_PARENTHESIS  */
+    SUB = 277,                     /* SUB  */
+    IGNORED = 278,                 /* IGNORED  */
+    UNKNOWN = 279                  /* UNKNOWN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -90,12 +94,14 @@ union SemanticValue
 
 	/** Non-terminals. */
 
+	Automaton * automaton;
+	Definition * definition;
 	Constant * constant;
 	Expression * expression;
 	Factor * factor;
 	Program * program;
 
-#line 99 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 105 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 22 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

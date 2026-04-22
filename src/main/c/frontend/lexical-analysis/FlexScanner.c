@@ -388,8 +388,8 @@ static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t yyscanner );
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
-#define YY_NUM_RULES 22
-#define YY_END_OF_BUFFER 23
+#define YY_NUM_RULES 26
+#define YY_END_OF_BUFFER 27
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -397,14 +397,15 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[58] =
+static const flex_int16_t yy_accept[69] =
     {   0,
-        0,    0,    0,    0,    0,    0,   23,   21,   20,   20,
-       17,   18,   14,   16,   13,   15,   19,   21,   21,   21,
-       21,    1,    2,    2,    4,    3,    7,    7,    8,   20,
-        5,   19,    0,    0,    0,    0,    2,    7,    6,    0,
-        0,    0,    0,    0,    0,    0,   12,    0,    0,   11,
-        0,    0,    0,   10,    0,    9,    0
+        0,    0,    0,    0,    0,    0,   27,   25,   24,   24,
+       21,   22,   18,   20,   17,   19,   23,   16,   25,   25,
+       25,   25,   25,   25,   25,    1,    2,    2,    4,    3,
+        7,    7,    8,   24,    5,   23,    0,    0,    0,    0,
+        0,    0,    0,    2,    7,    6,   13,    0,   14,    0,
+        0,    0,    0,   15,    0,    0,    0,   12,    0,    0,
+       11,    0,    0,    0,   10,    0,    9,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -414,15 +415,15 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
         5,    6,    7,    1,    8,    1,    9,   10,   10,   10,
-       10,   10,   10,   10,   10,   10,   10,    1,    1,    1,
+       10,   10,   10,   10,   10,   10,   10,   11,    1,    1,
+        1,    1,    1,    1,   12,    1,    1,   13,    1,   14,
+        1,    1,    1,    1,    1,   15,    1,   16,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,   11,    1,   12,    1,
+        1,    1,    1,    1,    1,    1,   17,    1,   18,    1,
 
-       13,    1,    1,   14,   15,    1,    1,    1,   16,   17,
-       18,   19,    1,   20,   21,   22,   23,   24,   25,    1,
-        1,    1,   26,    1,   27,    1,    1,    1,    1,    1,
+       19,    1,    1,   20,   21,    1,    1,    1,   22,   23,
+       24,   25,    1,   26,   27,   28,   29,   30,   31,    1,
+        1,    1,   32,    1,   33,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -439,72 +440,79 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[28] =
+static const YY_CHAR yy_meta[34] =
     {   0,
         1,    1,    1,    1,    1,    2,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    3,    3
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    3,    3
     } ;
 
-static const flex_int16_t yy_base[62] =
+static const flex_int16_t yy_base[73] =
     {   0,
-        0,    0,   25,   27,   26,   28,   79,   80,   33,   35,
-       80,   80,   80,   80,   80,   72,   67,   53,   57,   54,
-       59,   80,    0,    0,   80,   80,    0,    0,   63,   37,
-       80,   61,   48,   52,   53,   49,    0,    0,   80,   48,
-       40,   33,   24,   32,   34,   24,   80,   34,   24,   80,
-       21,   20,   23,   80,   16,   80,   80,   54,   57,   60,
-       62
+        0,    0,   31,   33,   32,   34,   92,   93,   39,   41,
+       93,   93,   93,   93,   93,   85,   80,   93,   75,   72,
+       73,   57,   61,   58,   63,   93,    0,    0,   93,   93,
+        0,    0,   73,   43,   93,   71,   68,   65,   66,   48,
+       39,   40,   36,    0,    0,   93,   93,   47,   93,   34,
+       27,   33,   24,   93,   32,   34,   24,   93,   34,   24,
+       93,   21,   20,   23,   93,   16,   93,   93,   66,   69,
+       72,   74
     } ;
 
-static const flex_int16_t yy_def[62] =
+static const flex_int16_t yy_def[73] =
     {   0,
-       57,    1,   58,   58,   59,   59,   57,   57,   57,   57,
-       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
-       57,   57,   60,   60,   57,   57,   61,   61,   57,   57,
-       57,   57,   57,   57,   57,   57,   60,   61,   57,   57,
-       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
-       57,   57,   57,   57,   57,   57,    0,   57,   57,   57,
-       57
+       68,    1,   69,   69,   70,   70,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68,   71,   71,   68,   68,
+       72,   72,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   71,   72,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68,   68,    0,   68,   68,
+       68,   68
     } ;
 
-static const flex_int16_t yy_nxt[108] =
+static const flex_int16_t yy_nxt[127] =
     {   0,
         8,    9,   10,   11,   12,   13,   14,   15,   16,   17,
-       18,   19,    8,    8,    8,    8,    8,    8,   20,    8,
-       21,    8,    8,    8,    8,   22,    8,   24,   28,   24,
-       28,   29,   56,   29,   30,   30,   30,   30,   30,   30,
-       55,   54,   53,   52,   51,   50,   49,   48,   47,   46,
-       25,   26,   25,   26,   23,   23,   23,   27,   27,   27,
-       37,   37,   38,   45,   38,   44,   43,   42,   41,   40,
-       32,   39,   36,   35,   34,   33,   32,   31,   57,    7,
-       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
-       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
+       18,    8,   19,    8,   20,   21,   22,   23,    8,    8,
+        8,    8,    8,    8,   24,    8,   25,    8,    8,    8,
+        8,   26,    8,   28,   32,   28,   32,   33,   67,   33,
+       34,   34,   34,   34,   34,   34,   66,   65,   64,   63,
+       62,   61,   60,   59,   58,   57,   56,   55,   54,   53,
+       52,   51,   29,   30,   29,   30,   27,   27,   27,   31,
+       31,   31,   44,   44,   45,   50,   45,   49,   48,   47,
+       36,   46,   43,   42,   41,   40,   39,   38,   37,   36,
+       35,   68,    7,   68,   68,   68,   68,   68,   68,   68,
 
-       57,   57,   57,   57,   57,   57,   57
+       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68
     } ;
 
-static const flex_int16_t yy_chk[108] =
+static const flex_int16_t yy_chk[127] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    3,    5,    4,
-        6,    5,   55,    6,    9,    9,   10,   10,   30,   30,
-       53,   52,   51,   49,   48,   46,   45,   44,   43,   42,
-        3,    3,    4,    4,   58,   58,   58,   59,   59,   59,
-       60,   60,   61,   41,   61,   40,   36,   35,   34,   33,
-       32,   29,   21,   20,   19,   18,   17,   16,    7,   57,
-       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
-       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    3,    5,    4,    6,    5,   66,    6,
+        9,    9,   10,   10,   34,   34,   64,   63,   62,   60,
+       59,   57,   56,   55,   53,   52,   51,   50,   48,   43,
+       42,   41,    3,    3,    4,    4,   69,   69,   69,   70,
+       70,   70,   71,   71,   72,   40,   72,   39,   38,   37,
+       36,   33,   25,   24,   23,   22,   21,   20,   19,   17,
+       16,    7,   68,   68,   68,   68,   68,   68,   68,   68,
 
-       57,   57,   57,   57,   57,   57,   57
+       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
+       68,   68,   68,   68,   68,   68
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[23] =
+static const flex_int32_t yy_rule_can_match_eol[27] =
     {   0,
 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    1, 0, 0,     };
+    0, 0, 0, 0, 1, 0, 0,     };
 
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
@@ -521,6 +529,8 @@ static const flex_int32_t yy_rule_can_match_eol[23] =
  * @see https://westes.github.io/flex/manual/Definitions-Section.html#Definitions-Section
  */
 
+extern CompilationStatus KeywordLexemeAction(TokenLabel label);
+extern CompilationStatus DefineLexemeAction(TokenLabel label);
 extern CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label);
 extern CompilationStatus EnterImportExpressionLexemeAction(FlexContext context);
 extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
@@ -533,7 +543,7 @@ extern CompilationStatus ParenthesisLexemeAction(TokenLabel label);
 extern CompilationStatus SubexpressionLexemeAction();
 extern CompilationStatus UnknownLexemeAction();
 
-#line 537 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
+#line 547 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
 /**
  * Flex contexts (a.k.a. start conditions).
  *
@@ -546,7 +556,7 @@ extern CompilationStatus UnknownLexemeAction();
  * @see https://westes.github.io/flex/manual/Matching.html
  * @see https://westes.github.io/flex/manual/Patterns.html
  */
-#line 550 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
+#line 560 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
 
 #define INITIAL 0
 #define IMPORT_EXPRESSION 1
@@ -830,19 +840,19 @@ YY_DECL
 		}
 
 	{
-#line 47 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 49 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 
 
 
 
-#line 52 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 54 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 /**
  * @see https://westes.github.io/flex/manual/Rules-Section.html#Rules-Section
  */
 
 
 
-#line 846 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
+#line 856 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -869,13 +879,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 58 )
+				if ( yy_current_state >= 69 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 80 );
+		while ( yy_base[yy_current_state] != 93 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -913,124 +923,144 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 58 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 60 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return EnterImportExpressionLexemeAction(IMPORT_EXPRESSION); }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 59 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 61 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return SubexpressionLexemeAction(); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 60 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 62 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return LeaveImportExpressionLexemeAction(); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 61 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 63 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return UnknownLexemeAction(); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 63 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 65 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return EnterMultilineCommentLexemeAction(MULTILINE_COMMENT); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 64 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 66 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return LeaveMultilineCommentLexemeAction(); }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 65 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 67 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return IgnoredLexemeAction(); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 66 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 68 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return IgnoredLexemeAction(); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 68 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 70 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return KeywordLexemeAction(AUTOMATON); }   
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 69 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 71 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return KeywordLexemeAction(CONVERT); }       
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 70 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 72 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return KeywordLexemeAction(PRINT); }   
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 71 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return KeywordLexemeAction(SHOW); }                 
+#line 73 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return KeywordLexemeAction(SHOW); }        
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 73 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return ArithmeticOperatorLexemeAction(SUB); }
+#line 75 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return KeywordLexemeAction(TYPE_DFA); }         
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 74 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return ArithmeticOperatorLexemeAction(MUL); }
+#line 76 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return KeywordLexemeAction(TYPE_NFA); }         
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 75 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return ArithmeticOperatorLexemeAction(DIV); }
+#line 77 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return KeywordLexemeAction(TYPE_LNFA); }   
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 76 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return ArithmeticOperatorLexemeAction(ADD); }
+#line 79 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return DefineLexemeAction(DEFINE_AUTOMATON); }      
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 78 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return ParenthesisLexemeAction(OPEN_PARENTHESIS); }
+#line 81 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return ArithmeticOperatorLexemeAction(SUB); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 79 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return ParenthesisLexemeAction(CLOSE_PARENTHESIS); }
+#line 82 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return ArithmeticOperatorLexemeAction(MUL); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 81 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return IntegerLexemeAction(); }
+#line 83 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return ArithmeticOperatorLexemeAction(DIV); }
 	YY_BREAK
 case 20:
-/* rule 20 can match eol */
 YY_RULE_SETUP
-#line 83 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return IgnoredLexemeAction(); }
+#line 84 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return ArithmeticOperatorLexemeAction(ADD); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 84 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 86 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return ParenthesisLexemeAction(OPEN_PARENTHESIS); }
+	YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 87 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return ParenthesisLexemeAction(CLOSE_PARENTHESIS); }
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 89 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return IntegerLexemeAction(); }
+	YY_BREAK
+case 24:
+/* rule 24 can match eol */
+YY_RULE_SETUP
+#line 91 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+{ return IgnoredLexemeAction(); }
+	YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 92 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return UnknownLexemeAction(); }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IMPORT_EXPRESSION):
 case YY_STATE_EOF(MULTILINE_COMMENT):
-#line 86 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 94 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 { return EOFLexemeAction(); }
 	YY_BREAK
-case 22:
+case 26:
 YY_RULE_SETUP
-#line 88 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 96 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 ECHO;
 	YY_BREAK
-#line 1034 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
+#line 1064 "src/main/c/frontend/lexical-analysis/FlexScanner.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1327,7 +1357,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 58 )
+			if ( yy_current_state >= 69 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1356,11 +1386,11 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 58 )
+		if ( yy_current_state >= 69 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 57);
+	yy_is_jam = (yy_current_state == 68);
 
 	(void)yyg;
 	return yy_is_jam ? 0 : yy_current_state;
@@ -2273,7 +2303,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 88 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
+#line 96 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 
 
 /**

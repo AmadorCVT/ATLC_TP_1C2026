@@ -31,6 +31,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 	/** Non-terminals. */
 
+	Automaton * automaton;
+	Definition * definition;
 	Constant * constant;
 	Expression * expression;
 	Factor * factor;
@@ -54,7 +56,11 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> CONVERT
 %token <token> PRINT
 %token <token> SHOW
-%token <string> STRING
+%token <token> TYPE_DFA
+%token <token> TYPE_NFA
+%token <token> TYPE_LNFA
+%token <token> DEFINE_AUTOMATON
+%token <string> ID
 %token <integer> INTEGER
 %token <token> ADD
 %token <token> CLOSE_BRACE
@@ -72,6 +78,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 /** Non-terminals. */
 %type <automaton> automaton
+%type <definition> definition
 %type <constant> constant
 %type <expression> expression
 %type <factor> factor
@@ -93,8 +100,15 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
 	;
 
-automaton: AUTOMATON STRING { $$ = AutomatonSemanticAction($2); }
+automaton: AUTOMATON ID DEFINE_AUTOMATON TYPE_DFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
+		{ $$ = AutomatonSemanticAction($2, DFA); }
+	| AUTOMATON ID DEFINE_AUTOMATON TYPE_NFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
+		{ $$ = AutomatonSemanticAction($2, NFA); }
+	| AUTOMATON ID DEFINE_AUTOMATON TYPE_LNFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
+		{ $$ = AutomatonSemanticAction($2, LNFA); }
 	; // TODO: Finish
+
+definition: ID { $$ = DefinitionSemanticAction($1); };
 
 expression: expression[left] ADD expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }

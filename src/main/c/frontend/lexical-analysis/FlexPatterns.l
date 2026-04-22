@@ -14,6 +14,8 @@
  * @see https://westes.github.io/flex/manual/Definitions-Section.html#Definitions-Section
  */
 
+extern CompilationStatus KeywordLexemeAction(TokenLabel label);
+extern CompilationStatus DefineLexemeAction(TokenLabel label);
 extern CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label);
 extern CompilationStatus EnterImportExpressionLexemeAction(FlexContext context);
 extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
@@ -67,7 +69,13 @@ whitespace			[[:space:]]+
 "automaton"                         { return KeywordLexemeAction(AUTOMATON); }   
 "convert"                           { return KeywordLexemeAction(CONVERT); }       
 "print"                             { return KeywordLexemeAction(PRINT); }   
-"show"                              { return KeywordLexemeAction(SHOW); }                 
+"show"                              { return KeywordLexemeAction(SHOW); }        
+
+"DFA"                               { return KeywordLexemeAction(TYPE_DFA); }         
+"NFA"                               { return KeywordLexemeAction(TYPE_NFA); }         
+"LNFA"                              { return KeywordLexemeAction(TYPE_LNFA); }   
+
+":"                                 { return DefineLexemeAction(DEFINE_AUTOMATON); }      
 
 "-"									{ return ArithmeticOperatorLexemeAction(SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(MUL); }
