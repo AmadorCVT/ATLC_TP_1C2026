@@ -36,6 +36,19 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
+Automaton * AutomatonSemanticAction(Definition * definition, AutomatonType type) {
+	// TODO: Finish
+	Automaton * automaton = calloc(1, sizeof(Automaton));
+	return automaton;
+}
+
+
+Definition * DefinitionSemanticAction(const int value) {
+	// TODO: Finish
+	Definition * definition = calloc(1, sizeof(Definition));
+	return definition;
+}
+
 Constant * IntegerConstantSemanticAction(const int value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
@@ -74,6 +87,13 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	factor->expression = expression;
 	factor->type = EXPRESSION;
 	return factor;
+}
+
+Program * AutomatonProgramSemanticAction(Automaton * automaton) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	_compilerState->abstractSyntaxtTree = program;
+	return program;
 }
 
 Program * ExpressionProgramSemanticAction(Expression * expression) {

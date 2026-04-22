@@ -20,6 +20,20 @@ ModuleDestructor initializeAbstractSyntaxTreeModule() {
 
 /* PUBLIC FUNCTIONS */
 
+void destroyAutomaton(Automaton * automaton) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (automaton != NULL) {
+		free(automaton);
+	}
+}
+
+void destroyDefinition(Definition * definition) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (definition != NULL) {
+		free(definition);
+	}
+}
+
 void destroyConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant != NULL) {

@@ -98,6 +98,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
 program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
+	| automaton 											{ $$ = AutomatonProgramSemanticAction($1); }
 	;
 
 automaton: AUTOMATON ID DEFINE_AUTOMATON TYPE_DFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
@@ -108,7 +109,8 @@ automaton: AUTOMATON ID DEFINE_AUTOMATON TYPE_DFA OPEN_PARENTHESIS definition CL
 		{ $$ = AutomatonSemanticAction($2, LNFA); }
 	; // TODO: Finish
 
-definition: ID { $$ = DefinitionSemanticAction($1); };
+definition: ID { $$ = DefinitionSemanticAction($1); }
+	;
 
 expression: expression[left] ADD expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }

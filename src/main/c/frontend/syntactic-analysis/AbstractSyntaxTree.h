@@ -14,6 +14,7 @@ ModuleDestructor initializeAbstractSyntaxTreeModule();
  * person, but without the madness).
  */
 
+typedef enum AutomatonType AutomatonType;
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 
@@ -51,6 +52,16 @@ struct Constant {
 	int value;
 };
 
+struct Automaton {
+	AutomatonType type;
+	Definition * definiton;
+};
+
+struct Definition {
+	int value;
+	// FIXME: Add some values
+};
+
 struct Factor {
 	union {
 		Constant * constant;
@@ -78,6 +89,8 @@ struct Program {
  * Node recursive super-duper-trambolik-destructors.
  */
 
+void destroyAutomaton(Automaton * automaton);
+void destroyDefinition(Definition * definition);
 void destroyConstant(Constant * constant);
 void destroyExpression(Expression * expression);
 void destroyFactor(Factor * factor);
