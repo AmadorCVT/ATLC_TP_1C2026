@@ -101,15 +101,12 @@ program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
 	| automaton 											{ $$ = AutomatonProgramSemanticAction($1); }
 	;
 
-automaton: AUTOMATON ID DEFINE_AUTOMATON TYPE_DFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
-		{ $$ = AutomatonSemanticAction($2, DFA); }
-	| AUTOMATON ID DEFINE_AUTOMATON TYPE_NFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
-		{ $$ = AutomatonSemanticAction($2, NFA); }
-	| AUTOMATON ID DEFINE_AUTOMATON TYPE_LNFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS 
-		{ $$ = AutomatonSemanticAction($2, LNFA); }
+automaton: AUTOMATON ID DEFINE_AUTOMATON TYPE_DFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($1, DFA); }
+	| AUTOMATON ID DEFINE_AUTOMATON TYPE_NFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($1, NFA); }
+	| AUTOMATON ID DEFINE_AUTOMATON TYPE_LNFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($1, LNFA); }
 	; // TODO: Finish
 
-definition: ID { $$ = DefinitionSemanticAction($1); }
+definition: ID { $$ = DefinitionSemanticAction("test"); }
 	;
 
 expression: expression[left] ADD expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
