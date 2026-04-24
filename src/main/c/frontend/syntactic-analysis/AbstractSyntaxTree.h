@@ -53,6 +53,7 @@ struct Constant {
 };
 
 struct Automaton {
+	const char id;
 	AutomatonType type;
 	Definition * definiton;
 };

@@ -61,7 +61,7 @@ extern int yydebug;
     TYPE_DFA = 262,                /* TYPE_DFA  */
     TYPE_NFA = 263,                /* TYPE_NFA  */
     TYPE_LNFA = 264,               /* TYPE_LNFA  */
-    DEFINE_AUTOMATON = 265,        /* DEFINE_AUTOMATON  */
+    COLON = 265,                   /* COLON  */
     ID = 266,                      /* ID  */
     INTEGER = 267,                 /* INTEGER  */
     ADD = 268,                     /* ADD  */
@@ -90,6 +90,8 @@ union SemanticValue
 	/** Terminals. */
 
 	signed int integer;
+	char* string;
+	AutomatonType type;
 	TokenLabel token;
 
 	/** Non-terminals. */
@@ -101,7 +103,7 @@ union SemanticValue
 	Factor * factor;
 	Program * program;
 
-#line 105 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 107 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 22 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

@@ -15,7 +15,7 @@
  */
 
 extern CompilationStatus KeywordLexemeAction(TokenLabel label);
-extern CompilationStatus DefineLexemeAction(TokenLabel label);
+extern CompilationStatus ColonLexemeAction(TokenLabel label);
 extern CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label);
 extern CompilationStatus EnterImportExpressionLexemeAction(FlexContext context);
 extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
@@ -75,7 +75,7 @@ whitespace			[[:space:]]+
 "NFA"                               { return KeywordLexemeAction(TYPE_NFA); }         
 "LNFA"                              { return KeywordLexemeAction(TYPE_LNFA); }   
 
-":"                                 { return DefineLexemeAction(DEFINE_AUTOMATON); }      
+":"                                 { return ColonLexemeAction(COLON); }      
 
 "-"									{ return ArithmeticOperatorLexemeAction(SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(MUL); }

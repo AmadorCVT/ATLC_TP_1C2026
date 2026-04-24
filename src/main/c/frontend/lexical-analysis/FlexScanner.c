@@ -530,7 +530,7 @@ static const flex_int32_t yy_rule_can_match_eol[27] =
  */
 
 extern CompilationStatus KeywordLexemeAction(TokenLabel label);
-extern CompilationStatus DefineLexemeAction(TokenLabel label);
+extern CompilationStatus ColonLexemeAction(TokenLabel label);
 extern CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label);
 extern CompilationStatus EnterImportExpressionLexemeAction(FlexContext context);
 extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
@@ -1001,7 +1001,7 @@ YY_RULE_SETUP
 case 16:
 YY_RULE_SETUP
 #line 79 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
-{ return DefineLexemeAction(DEFINE_AUTOMATON); }      
+{ return ColonLexemeAction(COLON); }      
 	YY_BREAK
 case 17:
 YY_RULE_SETUP

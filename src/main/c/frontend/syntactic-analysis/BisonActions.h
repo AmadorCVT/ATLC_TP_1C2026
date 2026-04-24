@@ -16,7 +16,7 @@ ModuleDestructor initializeBisonActionsModule();
  * Bison semantic actions.
  */
 
-Automaton * AutomatonSemanticAction(Definition * definition, AutomatonType type);
+Automaton * AutomatonSemanticAction(const char* id, AutomatonType type, Definition * definition);
 Definition * DefinitionSemanticAction(const int value);
 Constant * IntegerConstantSemanticAction(const int value);
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);

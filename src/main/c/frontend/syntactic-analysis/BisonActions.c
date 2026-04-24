@@ -36,7 +36,8 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-Automaton * AutomatonSemanticAction(Definition * definition, AutomatonType type) {
+Automaton * AutomatonSemanticAction(const char* id, AutomatonType type, Definition * definition) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	// TODO: Finish
 	Automaton * automaton = calloc(1, sizeof(Automaton));
 	return automaton;

@@ -27,6 +27,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	/** Terminals. */
 
 	signed int integer;
+	char* string;
+	AutomatonType type;
 	TokenLabel token;
 
 	/** Non-terminals. */
@@ -47,6 +49,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
  *
  * @see https://www.gnu.org/software/bison/manual/html_node/Destructor-Decl.html
  */
+%destructor { destroyAutomaton($$); } <automaton>
+%destructor { destroyDefinition($$); } <definition>
 %destructor { destroyConstant($$); } <constant>
 %destructor { destroyExpression($$); } <expression>
 %destructor { destroyFactor($$); } <factor>
@@ -59,7 +63,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_DFA
 %token <token> TYPE_NFA
 %token <token> TYPE_LNFA
-%token <token> DEFINE_AUTOMATON
+%token <token> COLON
 %token <string> ID
 %token <integer> INTEGER
 %token <token> ADD
@@ -78,6 +82,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 /** Non-terminals. */
 %type <automaton> automaton
+%type <type> type
 %type <definition> definition
 %type <constant> constant
 %type <expression> expression
@@ -101,12 +106,15 @@ program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
 	| automaton 											{ $$ = AutomatonProgramSemanticAction($1); }
 	;
 
-automaton: AUTOMATON ID DEFINE_AUTOMATON TYPE_DFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($1, DFA); }
-	| AUTOMATON ID DEFINE_AUTOMATON TYPE_NFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($1, NFA); }
-	| AUTOMATON ID DEFINE_AUTOMATON TYPE_LNFA OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($1, LNFA); }
-	; // TODO: Finish
+automaton: AUTOMATON ID COLON type OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($2, $4, $6); }
+	;
 
-definition: ID { $$ = DefinitionSemanticAction("test"); }
+type: TYPE_DFA 											
+	| TYPE_NFA 										
+	| TYPE_LNFA 
+	;
+
+definition: ID { $$ = DefinitionSemanticAction(5); }
 	;
 
 expression: expression[left] ADD expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
