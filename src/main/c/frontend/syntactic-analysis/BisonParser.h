@@ -62,20 +62,23 @@ extern int yydebug;
     TYPE_NFA = 263,                /* TYPE_NFA  */
     TYPE_LNFA = 264,               /* TYPE_LNFA  */
     COLON = 265,                   /* COLON  */
-    ID = 266,                      /* ID  */
-    INTEGER = 267,                 /* INTEGER  */
-    ADD = 268,                     /* ADD  */
-    CLOSE_BRACE = 269,             /* CLOSE_BRACE  */
-    CLOSE_COMMENT = 270,           /* CLOSE_COMMENT  */
-    CLOSE_PARENTHESIS = 271,       /* CLOSE_PARENTHESIS  */
-    DIV = 272,                     /* DIV  */
-    MUL = 273,                     /* MUL  */
-    OPEN_BRACE = 274,              /* OPEN_BRACE  */
-    OPEN_COMMENT = 275,            /* OPEN_COMMENT  */
-    OPEN_PARENTHESIS = 276,        /* OPEN_PARENTHESIS  */
-    SUB = 277,                     /* SUB  */
-    IGNORED = 278,                 /* IGNORED  */
-    UNKNOWN = 279                  /* UNKNOWN  */
+    SEMICOLON = 266,               /* SEMICOLON  */
+    ID = 267,                      /* ID  */
+    INTEGER = 268,                 /* INTEGER  */
+    ADD = 269,                     /* ADD  */
+    CLOSE_BRACE = 270,             /* CLOSE_BRACE  */
+    CLOSE_COMMENT = 271,           /* CLOSE_COMMENT  */
+    CLOSE_PARENTHESIS = 272,       /* CLOSE_PARENTHESIS  */
+    CLOSE_CURLY_BRACKET = 273,     /* CLOSE_CURLY_BRACKET  */
+    DIV = 274,                     /* DIV  */
+    MUL = 275,                     /* MUL  */
+    OPEN_BRACE = 276,              /* OPEN_BRACE  */
+    OPEN_COMMENT = 277,            /* OPEN_COMMENT  */
+    OPEN_PARENTHESIS = 278,        /* OPEN_PARENTHESIS  */
+    OPEN_CURLY_BRACKET = 279,      /* OPEN_CURLY_BRACKET  */
+    SUB = 280,                     /* SUB  */
+    IGNORED = 281,                 /* IGNORED  */
+    UNKNOWN = 282                  /* UNKNOWN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -90,7 +93,7 @@ union SemanticValue
 	/** Terminals. */
 
 	signed int integer;
-	char* string;
+	char string[200];
 	AutomatonType type;
 	TokenLabel token;
 
@@ -103,7 +106,7 @@ union SemanticValue
 	Factor * factor;
 	Program * program;
 
-#line 107 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 110 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 22 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

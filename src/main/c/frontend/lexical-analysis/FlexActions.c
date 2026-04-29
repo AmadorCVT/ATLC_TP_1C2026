@@ -68,6 +68,14 @@ CompilationStatus ColonLexemeAction(TokenLabel label) {
 	return status;
 }
 
+CompilationStatus SemicolonLexemeAction(TokenLabel label) {
+	Token * token = createToken(_lexicalAnalyzer, label);
+	_logTokenAction(__FUNCTION__, token);
+	CompilationStatus status = pushToken(_lexicalAnalyzer, token);
+	destroyToken(token);
+	return status;
+}
+
 CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label) {
 	Token * token = createToken(_lexicalAnalyzer, label);
 	_logTokenAction(__FUNCTION__, token);
@@ -130,6 +138,15 @@ CompilationStatus IntegerLexemeAction() {
 	return status;
 }
 
+CompilationStatus StringLexemeAction() {
+	Token * token = createToken(_lexicalAnalyzer, ID);
+	strcpy(token->semanticValue->string, token->lexeme);
+	_logTokenAction(__FUNCTION__, token);
+	CompilationStatus status = pushToken(_lexicalAnalyzer, token);
+	destroyToken(token);
+	return status;
+}
+
 CompilationStatus LeaveImportExpressionLexemeAction() {
 	pushInputBuffer(_inputBuffer);
 	leaveLexicalAnalyzerContext(_lexicalAnalyzer);
@@ -152,6 +169,14 @@ CompilationStatus LeaveMultilineCommentLexemeAction() {
 }
 
 CompilationStatus ParenthesisLexemeAction(TokenLabel label) {
+	Token * token = createToken(_lexicalAnalyzer, label);
+	_logTokenAction(__FUNCTION__, token);
+	CompilationStatus status = pushToken(_lexicalAnalyzer, token);
+	destroyToken(token);
+	return status;
+}
+
+CompilationStatus CurlyBracketLexemeAction(TokenLabel label) {
 	Token * token = createToken(_lexicalAnalyzer, label);
 	_logTokenAction(__FUNCTION__, token);
 	CompilationStatus status = pushToken(_lexicalAnalyzer, token);

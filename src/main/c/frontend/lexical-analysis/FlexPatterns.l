@@ -16,15 +16,18 @@
 
 extern CompilationStatus KeywordLexemeAction(TokenLabel label);
 extern CompilationStatus ColonLexemeAction(TokenLabel label);
+extern CompilationStatus SemicolonLexemeAction(TokenLabel label);
 extern CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label);
 extern CompilationStatus EnterImportExpressionLexemeAction(FlexContext context);
 extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
 extern CompilationStatus EOFLexemeAction();
 extern CompilationStatus IgnoredLexemeAction();
 extern CompilationStatus IntegerLexemeAction();
+extern CompilationStatus StringLexemeAction();
 extern CompilationStatus LeaveImportExpressionLexemeAction();
 extern CompilationStatus LeaveMultilineCommentLexemeAction();
 extern CompilationStatus ParenthesisLexemeAction(TokenLabel label);
+extern CompilationStatus CurlyBracketLexemeAction(TokenLabel label);
 extern CompilationStatus SubexpressionLexemeAction();
 extern CompilationStatus UnknownLexemeAction();
 
@@ -56,11 +59,6 @@ whitespace			[[:space:]]+
 
 %}
 
-"{"									{ return EnterImportExpressionLexemeAction(IMPORT_EXPRESSION); }
-<IMPORT_EXPRESSION>[^{}]+			{ return SubexpressionLexemeAction(); }
-<IMPORT_EXPRESSION>"}"				{ return LeaveImportExpressionLexemeAction(); }
-<IMPORT_EXPRESSION>.				{ return UnknownLexemeAction(); }
-
 "/*"								{ return EnterMultilineCommentLexemeAction(MULTILINE_COMMENT); }
 <MULTILINE_COMMENT>"*/"				{ return LeaveMultilineCommentLexemeAction(); }
 <MULTILINE_COMMENT>[^*]+			{ return IgnoredLexemeAction(); }
@@ -76,14 +74,20 @@ whitespace			[[:space:]]+
 "LNFA"                              { return KeywordLexemeAction(TYPE_LNFA); }   
 
 ":"                                 { return ColonLexemeAction(COLON); }      
+";"                                 { return SemicolonLexemeAction(SEMICOLON); }     
 
 "-"									{ return ArithmeticOperatorLexemeAction(SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(ADD); }
 
+"{"									{ return CurlyBracketLexemeAction(OPEN_CURLY_BRACKET); }
+"}"									{ return CurlyBracketLexemeAction(CLOSE_CURLY_BRACKET); }
+
 "("									{ return ParenthesisLexemeAction(OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(CLOSE_PARENTHESIS); }
+
+[A-Za-z_][A-Za-z_0-9]*              { return StringLexemeAction(); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(); }
 

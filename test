@@ -1,1 +1,1 @@
-automaton test : DFA { DFA }
+automaton test : DFA { test_definition };

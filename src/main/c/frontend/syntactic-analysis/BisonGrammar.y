@@ -27,7 +27,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	/** Terminals. */
 
 	signed int integer;
-	char* string;
+	char string[200];
 	AutomatonType type;
 	TokenLabel token;
 
@@ -64,17 +64,20 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_NFA
 %token <token> TYPE_LNFA
 %token <token> COLON
+%token <token> SEMICOLON
 %token <string> ID
 %token <integer> INTEGER
 %token <token> ADD
 %token <token> CLOSE_BRACE
 %token <token> CLOSE_COMMENT
 %token <token> CLOSE_PARENTHESIS
+%token <token> CLOSE_CURLY_BRACKET
 %token <token> DIV
 %token <token> MUL
 %token <token> OPEN_BRACE
 %token <token> OPEN_COMMENT
 %token <token> OPEN_PARENTHESIS
+%token <token> OPEN_CURLY_BRACKET
 %token <token> SUB
 
 %token <token> IGNORED
@@ -106,7 +109,9 @@ program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
 	| automaton 											{ $$ = AutomatonProgramSemanticAction($1); }
 	;
 
-automaton: AUTOMATON ID COLON type OPEN_PARENTHESIS definition CLOSE_PARENTHESIS { $$ = AutomatonSemanticAction($2, $4, $6); }
+automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET 
+	definition 
+	CLOSE_CURLY_BRACKET SEMICOLON { $$ = AutomatonSemanticAction($2, $4, $6); }
 	;
 
 type: TYPE_DFA 											
