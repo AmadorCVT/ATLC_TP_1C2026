@@ -78,6 +78,7 @@ void destroyFactor(Factor * factor) {
 void destroyProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (program != NULL) {
+		//destroyAutomaton(program->automaton);
 		destroyExpression(program->expression);
 		free(program);
 	}

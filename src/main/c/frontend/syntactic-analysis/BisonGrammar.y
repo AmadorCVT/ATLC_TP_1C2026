@@ -114,9 +114,9 @@ automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET
 	CLOSE_CURLY_BRACKET SEMICOLON { $$ = AutomatonSemanticAction($2, $4, $6); }
 	;
 
-type: TYPE_DFA 											
-	| TYPE_NFA 										
-	| TYPE_LNFA 
+type: TYPE_DFA 												{ $$ = AutomatonTypeSemanticAction(DFA); }
+	| TYPE_NFA 												{ $$ = AutomatonTypeSemanticAction(NFA); }
+	| TYPE_LNFA 											{ $$ = AutomatonTypeSemanticAction(LNFA); }
 	;
 
 definition: ID { $$ = DefinitionSemanticAction(5); }

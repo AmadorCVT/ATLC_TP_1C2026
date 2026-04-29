@@ -83,7 +83,10 @@ struct Expression {
 };
 
 struct Program {
-	Expression * expression;
+	union {
+		Expression * expression;
+		Automaton * automaton;
+	};
 };
 
 /**

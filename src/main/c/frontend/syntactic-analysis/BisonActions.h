@@ -18,6 +18,7 @@ ModuleDestructor initializeBisonActionsModule();
 
 Automaton * AutomatonSemanticAction(const char* id, AutomatonType type, Definition * definition);
 Definition * DefinitionSemanticAction(const int value);
+AutomatonType AutomatonTypeSemanticAction(AutomatonType type);  // TODO: Check
 Constant * IntegerConstantSemanticAction(const int value);
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);

@@ -50,6 +50,10 @@ Definition * DefinitionSemanticAction(const int value) {
 	return definition;
 }
 
+AutomatonType AutomatonTypeSemanticAction(AutomatonType type) {
+	return type;
+}
+
 Constant * IntegerConstantSemanticAction(const int value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
@@ -93,6 +97,7 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 Program * AutomatonProgramSemanticAction(Automaton * automaton) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
+	program->automaton = automaton;
 	_compilerState->abstractSyntaxtTree = program;
 	return program;
 }

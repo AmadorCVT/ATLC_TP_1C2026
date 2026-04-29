@@ -38,7 +38,6 @@ extern CompilationStatus UnknownLexemeAction();
  *
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
-%x IMPORT_EXPRESSION
 %x MULTILINE_COMMENT
 
 /**

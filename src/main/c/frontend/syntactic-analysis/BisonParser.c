@@ -1591,62 +1591,80 @@ yyreduce:
 #line 1592 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
+  case 5: /* type: TYPE_DFA  */
+#line 117 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                        { (yyval.type) = AutomatonTypeSemanticAction(DFA); }
+#line 1598 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 6: /* type: TYPE_NFA  */
+#line 118 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                { (yyval.type) = AutomatonTypeSemanticAction(NFA); }
+#line 1604 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 7: /* type: TYPE_LNFA  */
+#line 119 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                        { (yyval.type) = AutomatonTypeSemanticAction(LNFA); }
+#line 1610 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
   case 8: /* definition: ID  */
 #line 122 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                { (yyval.definition) = DefinitionSemanticAction(5); }
-#line 1598 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1616 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 9: /* expression: expression ADD expression  */
 #line 125 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                         { (yyval.expression) = ArithmeticExpressionSemanticAction((yyvsp[-2].expression), (yyvsp[0].expression), ADDITION); }
-#line 1604 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1622 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 10: /* expression: expression DIV expression  */
 #line 126 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                 { (yyval.expression) = ArithmeticExpressionSemanticAction((yyvsp[-2].expression), (yyvsp[0].expression), DIVISION); }
-#line 1610 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1628 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 11: /* expression: expression MUL expression  */
 #line 127 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                 { (yyval.expression) = ArithmeticExpressionSemanticAction((yyvsp[-2].expression), (yyvsp[0].expression), MULTIPLICATION); }
-#line 1616 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1634 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 12: /* expression: expression SUB expression  */
 #line 128 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                 { (yyval.expression) = ArithmeticExpressionSemanticAction((yyvsp[-2].expression), (yyvsp[0].expression), SUBTRACTION); }
-#line 1622 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1640 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 13: /* expression: factor  */
 #line 129 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                 { (yyval.expression) = FactorExpressionSemanticAction((yyvsp[0].factor)); }
-#line 1628 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1646 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 14: /* factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  */
 #line 132 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                 { (yyval.factor) = ExpressionFactorSemanticAction((yyvsp[-1].expression)); }
-#line 1634 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1652 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 15: /* factor: constant  */
 #line 133 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                 { (yyval.factor) = ConstantFactorSemanticAction((yyvsp[0].constant)); }
-#line 1640 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1658 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 16: /* constant: INTEGER  */
 #line 136 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                         { (yyval.constant) = IntegerConstantSemanticAction((yyvsp[0].integer)); }
-#line 1646 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1664 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
 
-#line 1650 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1668 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
 
       default: break;
     }
