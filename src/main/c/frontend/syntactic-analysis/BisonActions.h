@@ -9,23 +9,26 @@
 #include "BisonParser.h"
 #include <stdlib.h>
 
-/** Initialize module's internal state. */
-ModuleDestructor initializeBisonActionsModule();
+ModuleDestructor initializeBisonActionsModule(CompilerState * compilerState);
 
-/**
- * Bison semantic actions.
- */
-
-Automaton * AutomatonSemanticAction(const char* id, AutomatonType type, Definition * definition);
-Definition * DefinitionSemanticAction(const int value);
-AutomatonType AutomatonTypeSemanticAction(AutomatonType type);  // TODO: Check
-Constant * IntegerConstantSemanticAction(const int value);
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
-Expression * FactorExpressionSemanticAction(Factor * factor);
-Factor * ConstantFactorSemanticAction(Constant * constant);
-Factor * ExpressionFactorSemanticAction(Expression * expression);
-
-Program * AutomatonProgramSemanticAction(Automaton * automaton); // FIXME: Incomplete
-Program * ExpressionProgramSemanticAction(Expression * expression);
+Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * definition);
+AutomatonType AutomatonTypeSemanticAction(AutomatonType type);
+Definition * DefinitionSemanticAction(
+	StringList * alphabet,
+	StringList * states,
+	char * startState,
+	StringList * acceptStates,
+	Transition * transitions);
+Program * StatementListProgramSemanticAction(Statement * statements);
+Statement * AppendStatementListSemanticAction(Statement * list, Statement * statement);
+Statement * AutomatonStatementSemanticAction(Automaton * automaton);
+StringList * AppendStringListSemanticAction(StringList * list, char * value);
+StringList * SingleStringListSemanticAction(char * value);
+Transition * AppendTransitionListSemanticAction(Transition * list, Transition * transition);
+Transition * TransitionSemanticAction(char * source, TransitionSymbol * symbol, TransitionDestination * destination);
+TransitionDestination * MultipleTransitionDestinationSemanticAction(StringList * states);
+TransitionDestination * SingleTransitionDestinationSemanticAction(char * state);
+TransitionSymbol * LambdaTransitionSymbolSemanticAction();
+TransitionSymbol * SymbolTransitionSymbolSemanticAction(char * value);
 
 #endif

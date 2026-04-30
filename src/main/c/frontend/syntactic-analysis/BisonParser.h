@@ -54,62 +54,60 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    AUTOMATON = 258,               /* AUTOMATON  */
-    CONVERT = 259,                 /* CONVERT  */
-    PRINT = 260,                   /* PRINT  */
-    SHOW = 261,                    /* SHOW  */
-    TYPE_DFA = 262,                /* TYPE_DFA  */
-    TYPE_NFA = 263,                /* TYPE_NFA  */
-    TYPE_LNFA = 264,               /* TYPE_LNFA  */
+    ACCEPT = 258,                  /* ACCEPT  */
+    ALPHABET = 259,                /* ALPHABET  */
+    ARROW = 260,                   /* ARROW  */
+    ASSIGN = 261,                  /* ASSIGN  */
+    AUTOMATON = 262,               /* AUTOMATON  */
+    CLOSE_COMMENT = 263,           /* CLOSE_COMMENT  */
+    CLOSE_CURLY_BRACKET = 264,     /* CLOSE_CURLY_BRACKET  */
     COLON = 265,                   /* COLON  */
-    SEMICOLON = 266,               /* SEMICOLON  */
-    ID = 267,                      /* ID  */
-    INTEGER = 268,                 /* INTEGER  */
-    ADD = 269,                     /* ADD  */
-    CLOSE_BRACE = 270,             /* CLOSE_BRACE  */
-    CLOSE_COMMENT = 271,           /* CLOSE_COMMENT  */
-    CLOSE_PARENTHESIS = 272,       /* CLOSE_PARENTHESIS  */
-    CLOSE_CURLY_BRACKET = 273,     /* CLOSE_CURLY_BRACKET  */
-    DIV = 274,                     /* DIV  */
-    MUL = 275,                     /* MUL  */
-    OPEN_BRACE = 276,              /* OPEN_BRACE  */
-    OPEN_COMMENT = 277,            /* OPEN_COMMENT  */
-    OPEN_PARENTHESIS = 278,        /* OPEN_PARENTHESIS  */
-    OPEN_CURLY_BRACKET = 279,      /* OPEN_CURLY_BRACKET  */
-    SUB = 280,                     /* SUB  */
-    IGNORED = 281,                 /* IGNORED  */
-    UNKNOWN = 282                  /* UNKNOWN  */
+    COMMA = 266,                   /* COMMA  */
+    CONVERT = 267,                 /* CONVERT  */
+    ID = 268,                      /* ID  */
+    IGNORED = 269,                 /* IGNORED  */
+    LAMBDA = 270,                  /* LAMBDA  */
+    NUMERIC_SYMBOL = 271,          /* NUMERIC_SYMBOL  */
+    OPEN_COMMENT = 272,            /* OPEN_COMMENT  */
+    OPEN_CURLY_BRACKET = 273,      /* OPEN_CURLY_BRACKET  */
+    PRINT = 274,                   /* PRINT  */
+    SEMICOLON = 275,               /* SEMICOLON  */
+    SHOW = 276,                    /* SHOW  */
+    START = 277,                   /* START  */
+    STATES = 278,                  /* STATES  */
+    TRANSITIONS = 279,             /* TRANSITIONS  */
+    TYPE_DFA = 280,                /* TYPE_DFA  */
+    TYPE_LNFA = 281,               /* TYPE_LNFA  */
+    TYPE_NFA = 282,                /* TYPE_NFA  */
+    UNKNOWN = 283                  /* UNKNOWN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-#line 22 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 13 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
 union SemanticValue
 {
-#line 26 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 17 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
 
-	/** Terminals. */
-
-	signed int integer;
-	char string[200];
+	char * string;
 	AutomatonType type;
 	TokenLabel token;
 
-	/** Non-terminals. */
-
 	Automaton * automaton;
 	Definition * definition;
-	Constant * constant;
-	Expression * expression;
-	Factor * factor;
 	Program * program;
+	Statement * statement;
+	StringList * stringList;
+	Transition * transition;
+	TransitionDestination * transitionDestination;
+	TransitionSymbol * transitionSymbol;
 
-#line 110 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 108 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
-#line 22 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 13 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
 typedef union SemanticValue YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

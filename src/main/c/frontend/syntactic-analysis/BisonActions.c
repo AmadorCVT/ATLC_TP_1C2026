@@ -21,8 +21,6 @@ ModuleDestructor initializeBisonActionsModule(CompilerState * compilerState) {
 	return _shutdownBisonActionsModule;
 }
 
-/* IMPORTED FUNCTIONS */
-
 /* PRIVATE FUNCTIONS */
 
 static void _logSyntacticAnalyzerAction(const char * functionName);
@@ -36,76 +34,135 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-Automaton * AutomatonSemanticAction(const char* id, AutomatonType type, Definition * definition) {
+Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * definition) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	// TODO: Finish
 	Automaton * automaton = calloc(1, sizeof(Automaton));
+	automaton->id = id;
+	automaton->type = type;
+	automaton->definition = definition;
 	return automaton;
 }
 
-
-Definition * DefinitionSemanticAction(const int value) {
-	// TODO: Finish
-	Definition * definition = calloc(1, sizeof(Definition));
-	return definition;
-}
-
 AutomatonType AutomatonTypeSemanticAction(AutomatonType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return type;
 }
 
-Constant * IntegerConstantSemanticAction(const int value) {
+Definition * DefinitionSemanticAction(
+	StringList * alphabet,
+	StringList * states,
+	char * startState,
+	StringList * acceptStates,
+	Transition * transitions) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Constant * constant = calloc(1, sizeof(Constant));
-	constant->value = value;
-	return constant;
+	Definition * definition = calloc(1, sizeof(Definition));
+	definition->alphabet = alphabet;
+	definition->states = states;
+	definition->startState = startState;
+	definition->acceptStates = acceptStates;
+	definition->transitions = transitions;
+	return definition;
 }
 
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->leftExpression = leftExpression;
-	expression->rightExpression = rightExpression;
-	expression->type = type;
-	return expression;
-}
-
-Expression * FactorExpressionSemanticAction(Factor * factor) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->factor = factor;
-	expression->type = FACTOR;
-	return expression;
-}
-
-Factor * ConstantFactorSemanticAction(Constant * constant) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->constant = constant;
-	factor->type = CONSTANT;
-	return factor;
-}
-
-Factor * ExpressionFactorSemanticAction(Expression * expression) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->expression = expression;
-	factor->type = EXPRESSION;
-	return factor;
-}
-
-Program * AutomatonProgramSemanticAction(Automaton * automaton) {
+Program * StatementListProgramSemanticAction(Statement * statements) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
-	program->automaton = automaton;
+	program->statements = statements;
 	_compilerState->abstractSyntaxtTree = program;
 	return program;
 }
 
-Program * ExpressionProgramSemanticAction(Expression * expression) {
+Statement * AppendStatementListSemanticAction(Statement * list, Statement * statement) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->expression = expression;
-	_compilerState->abstractSyntaxtTree = program;
-	return program;
+	if (list == NULL) {
+		return statement;
+	}
+	Statement * last = list;
+	while (last->next != NULL) {
+		last = last->next;
+	}
+	last->next = statement;
+	return list;
+}
+
+Statement * AutomatonStatementSemanticAction(Automaton * automaton) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->automaton = automaton;
+	statement->type = AUTOMATON_STATEMENT;
+	return statement;
+}
+
+StringList * AppendStringListSemanticAction(StringList * list, char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * next = SingleStringListSemanticAction(value);
+	if (list == NULL) {
+		return next;
+	}
+	StringList * last = list;
+	while (last->next != NULL) {
+		last = last->next;
+	}
+	last->next = next;
+	return list;
+}
+
+StringList * SingleStringListSemanticAction(char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * stringList = calloc(1, sizeof(StringList));
+	stringList->value = value;
+	return stringList;
+}
+
+Transition * AppendTransitionListSemanticAction(Transition * list, Transition * transition) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	if (list == NULL) {
+		return transition;
+	}
+	Transition * last = list;
+	while (last->next != NULL) {
+		last = last->next;
+	}
+	last->next = transition;
+	return list;
+}
+
+Transition * TransitionSemanticAction(char * source, TransitionSymbol * symbol, TransitionDestination * destination) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Transition * transition = calloc(1, sizeof(Transition));
+	transition->source = source;
+	transition->symbol = symbol;
+	transition->destination = destination;
+	return transition;
+}
+
+TransitionDestination * MultipleTransitionDestinationSemanticAction(StringList * states) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	TransitionDestination * destination = calloc(1, sizeof(TransitionDestination));
+	destination->states = states;
+	destination->type = MULTIPLE_TRANSITION_DESTINATIONS;
+	return destination;
+}
+
+TransitionDestination * SingleTransitionDestinationSemanticAction(char * state) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	TransitionDestination * destination = calloc(1, sizeof(TransitionDestination));
+	destination->state = state;
+	destination->type = SINGLE_TRANSITION_DESTINATION;
+	return destination;
+}
+
+TransitionSymbol * LambdaTransitionSymbolSemanticAction() {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	TransitionSymbol * symbol = calloc(1, sizeof(TransitionSymbol));
+	symbol->isLambda = true;
+	return symbol;
+}
+
+TransitionSymbol * SymbolTransitionSymbolSemanticAction(char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	TransitionSymbol * symbol = calloc(1, sizeof(TransitionSymbol));
+	symbol->value = value;
+	symbol->isLambda = false;
+	return symbol;
 }

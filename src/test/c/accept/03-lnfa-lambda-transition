@@ -1,0 +1,11 @@
+automaton LambdaEjemplo : LNFA {
+    alphabet = {a, b}
+    states = {q0, q1, q2}
+    start = q0
+    accept = {q2}
+    transitions {
+        q0 -> lambda : {q1}
+        q1 -> a : {q1}
+        q1 -> b : {q2}
+    }
+};

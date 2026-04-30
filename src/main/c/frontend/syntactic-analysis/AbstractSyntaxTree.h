@@ -3,31 +3,23 @@
 
 #include "../../support/logging/Logger.h"
 #include "../../support/type/ModuleDestructor.h"
+#include <stdbool.h>
 #include <stdlib.h>
 
-/** Initialize module's internal state. */
 ModuleDestructor initializeAbstractSyntaxTreeModule();
 
-/**
- * This type definitions allows self-referencing types (e.g., an expression
- * that is made of another expressions, such as talking about you in 3rd
- * person, but without the madness).
- */
-
 typedef enum AutomatonType AutomatonType;
-typedef enum ExpressionType ExpressionType;
-typedef enum FactorType FactorType;
+typedef enum StatementType StatementType;
+typedef enum TransitionDestinationType TransitionDestinationType;
 
 typedef struct Automaton Automaton;
 typedef struct Definition Definition;
-typedef struct Constant Constant;
-typedef struct Expression Expression;
-typedef struct Factor Factor;
 typedef struct Program Program;
-
-/**
- * Node types for the Abstract Syntax Tree (AST).
- */
+typedef struct Statement Statement;
+typedef struct StringList StringList;
+typedef struct Transition Transition;
+typedef struct TransitionDestination TransitionDestination;
+typedef struct TransitionSymbol TransitionSymbol;
 
 enum AutomatonType {
 	DFA,
@@ -35,69 +27,73 @@ enum AutomatonType {
 	LNFA
 };
 
-enum ExpressionType {
-	ADDITION,
-	DIVISION,
-	FACTOR,
-	MULTIPLICATION,
-	SUBTRACTION
+enum StatementType {
+	AUTOMATON_STATEMENT
 };
 
-enum FactorType {
-	CONSTANT,
-	EXPRESSION
+enum TransitionDestinationType {
+	SINGLE_TRANSITION_DESTINATION,
+	MULTIPLE_TRANSITION_DESTINATIONS
 };
 
-struct Constant {
-	int value;
+struct StringList {
+	char * value;
+	StringList * next;
 };
 
-struct Automaton {
-	const char id;
-	AutomatonType type;
-	Definition * definiton;
+struct TransitionSymbol {
+	char * value;
+	bool isLambda;
+};
+
+struct TransitionDestination {
+	union {
+		char * state;
+		StringList * states;
+	};
+	TransitionDestinationType type;
+};
+
+struct Transition {
+	char * source;
+	TransitionSymbol * symbol;
+	TransitionDestination * destination;
+	Transition * next;
 };
 
 struct Definition {
-	int value;
-	// FIXME: Add some values
+	StringList * alphabet;
+	StringList * states;
+	char * startState;
+	StringList * acceptStates;
+	Transition * transitions;
 };
 
-struct Factor {
-	union {
-		Constant * constant;
-		Expression * expression;
-	};
-	FactorType type;
+struct Automaton {
+	char * id;
+	AutomatonType type;
+	Definition * definition;
 };
 
-struct Expression {
+struct Statement {
 	union {
-		Factor * factor;
-		struct {
-			Expression * leftExpression;
-			Expression * rightExpression;
-		};
+		Automaton * automaton;
 	};
-	ExpressionType type;
+	StatementType type;
+	Statement * next;
 };
 
 struct Program {
-	union {
-		Expression * expression;
-		Automaton * automaton;
-	};
+	Statement * statements;
 };
-
-/**
- * Node recursive super-duper-trambolik-destructors.
- */
 
 void destroyAutomaton(Automaton * automaton);
 void destroyDefinition(Definition * definition);
-void destroyConstant(Constant * constant);
-void destroyExpression(Expression * expression);
-void destroyFactor(Factor * factor);
 void destroyProgram(Program * program);
+void destroyStatement(Statement * statement);
+void destroyStringList(StringList * stringList);
+void destroyTransition(Transition * transition);
+void destroyTransitionDestination(TransitionDestination * destination);
+void destroyTransitionSymbol(TransitionSymbol * symbol);
 
 #endif

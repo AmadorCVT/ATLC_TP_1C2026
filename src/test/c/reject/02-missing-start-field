@@ -1,0 +1,7 @@
+automaton SinStart : DFA {
+    alphabet = {a}
+    states = {q0}
+    accept = {q0}
+    transitions {
+    }
+};

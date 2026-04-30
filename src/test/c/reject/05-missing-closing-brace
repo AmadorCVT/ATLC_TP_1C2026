@@ -1,0 +1,9 @@
+automaton LlaveFaltante : LNFA {
+    alphabet = {a}
+    states = {q0}
+    start = q0
+    accept = {q0}
+    transitions {
+        q0 -> lambda : {q0}
+    }
+;

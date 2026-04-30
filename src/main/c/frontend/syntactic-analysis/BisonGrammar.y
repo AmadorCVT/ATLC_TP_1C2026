@@ -4,19 +4,10 @@
 #include "AbstractSyntaxTree.h"
 #include "BisonActions.h"
 
-/**
- * The error reporting function for Bison parser.
- *
- * @todo Add location to the grammar and "pushToken" API function.
- *
- * @see https://www.gnu.org/software/bison/manual/html_node/Error-Reporting-Function.html
- * @see https://www.gnu.org/software/bison/manual/html_node/Tracking-Locations.html
- */
 void yyerror(const YYLTYPE * location, const char * message) {}
 
 %}
 
-// You touch this, and you die.
 %define api.pure full
 %define api.push-pull push
 %define api.value.union.name SemanticValue
@@ -24,116 +15,135 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %locations
 
 %union {
-	/** Terminals. */
-
-	signed int integer;
-	char string[200];
+	char * string;
 	AutomatonType type;
 	TokenLabel token;
 
-	/** Non-terminals. */
-
 	Automaton * automaton;
 	Definition * definition;
-	Constant * constant;
-	Expression * expression;
-	Factor * factor;
 	Program * program;
+	Statement * statement;
+	StringList * stringList;
+	Transition * transition;
+	TransitionDestination * transitionDestination;
+	TransitionSymbol * transitionSymbol;
 }
 
-/**
- * Destructors. This functions are executed after the parsing ends, so if the
- * AST must be used in the following phases of the compiler you shouldn't used
- * this approach for the AST root node ("program" non-terminal, in this
- * grammar), or it will drop the entire tree even if the parsing succeeds.
- *
- * @see https://www.gnu.org/software/bison/manual/html_node/Destructor-Decl.html
- */
+%destructor { free($$); } <string>
 %destructor { destroyAutomaton($$); } <automaton>
 %destructor { destroyDefinition($$); } <definition>
-%destructor { destroyConstant($$); } <constant>
-%destructor { destroyExpression($$); } <expression>
-%destructor { destroyFactor($$); } <factor>
+%destructor { destroyStatement($$); } <statement>
+%destructor { destroyStringList($$); } <stringList>
+%destructor { destroyTransition($$); } <transition>
+%destructor { destroyTransitionDestination($$); } <transitionDestination>
+%destructor { destroyTransitionSymbol($$); } <transitionSymbol>
 
-/** Terminals. */
+%token <token> ACCEPT
+%token <token> ALPHABET
+%token <token> ARROW
+%token <token> ASSIGN
 %token <token> AUTOMATON
-%token <token> CONVERT
-%token <token> PRINT
-%token <token> SHOW
-%token <token> TYPE_DFA
-%token <token> TYPE_NFA
-%token <token> TYPE_LNFA
-%token <token> COLON
-%token <token> SEMICOLON
-%token <string> ID
-%token <integer> INTEGER
-%token <token> ADD
-%token <token> CLOSE_BRACE
 %token <token> CLOSE_COMMENT
-%token <token> CLOSE_PARENTHESIS
 %token <token> CLOSE_CURLY_BRACKET
-%token <token> DIV
-%token <token> MUL
-%token <token> OPEN_BRACE
-%token <token> OPEN_COMMENT
-%token <token> OPEN_PARENTHESIS
-%token <token> OPEN_CURLY_BRACKET
-%token <token> SUB
-
+%token <token> COLON
+%token <token> COMMA
+%token <token> CONVERT
+%token <string> ID
 %token <token> IGNORED
+%token <token> LAMBDA
+%token <string> NUMERIC_SYMBOL
+%token <token> OPEN_COMMENT
+%token <token> OPEN_CURLY_BRACKET
+%token <token> PRINT
+%token <token> SEMICOLON
+%token <token> SHOW
+%token <token> START
+%token <token> STATES
+%token <token> TRANSITIONS
+%token <token> TYPE_DFA
+%token <token> TYPE_LNFA
+%token <token> TYPE_NFA
 %token <token> UNKNOWN
 
-/** Non-terminals. */
 %type <automaton> automaton
 %type <type> type
 %type <definition> definition
-%type <constant> constant
-%type <expression> expression
-%type <factor> factor
 %type <program> program
-
-/**
- * Precedence and associativity.
- *
- * @see https://en.cppreference.com/w/cpp/language/operator_precedence.html
- * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
- */
-%left ADD SUB
-%left MUL DIV
+%type <statement> statement
+%type <statement> statement_list
+%type <string> alphabet_symbol
+%type <string> state
+%type <stringList> alphabet_set
+%type <stringList> alphabet_symbol_list
+%type <stringList> state_set
+%type <stringList> state_list
+%type <transition> transition
+%type <transition> transition_list
+%type <transitionDestination> transition_destination
+%type <transitionSymbol> transition_symbol
 
 %%
 
-// IMPORTANT: To use λ in the following grammar, use the %empty symbol.
-
-program: expression											{ $$ = ExpressionProgramSemanticAction($1); }
-	| automaton 											{ $$ = AutomatonProgramSemanticAction($1); }
+program: statement_list															{ $$ = StatementListProgramSemanticAction($1); }
 	;
 
-automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET 
-	definition 
-	CLOSE_CURLY_BRACKET SEMICOLON { $$ = AutomatonSemanticAction($2, $4, $6); }
+statement_list: statement														{ $$ = $1; }
+	| statement_list statement													{ $$ = AppendStatementListSemanticAction($1, $2); }
 	;
 
-type: TYPE_DFA 												{ $$ = AutomatonTypeSemanticAction(DFA); }
-	| TYPE_NFA 												{ $$ = AutomatonTypeSemanticAction(NFA); }
-	| TYPE_LNFA 											{ $$ = AutomatonTypeSemanticAction(LNFA); }
+statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); }
 	;
 
-definition: ID { $$ = DefinitionSemanticAction(5); }
+automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
+																				{ $$ = AutomatonSemanticAction($2, $4, $6); }
 	;
 
-expression: expression[left] ADD expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
-	| expression[left] DIV expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
-	| expression[left] MUL expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
-	| expression[left] SUB expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
-	| factor												{ $$ = FactorExpressionSemanticAction($1); }
+type: TYPE_DFA																	{ $$ = AutomatonTypeSemanticAction(DFA); }
+	| TYPE_NFA																	{ $$ = AutomatonTypeSemanticAction(NFA); }
+	| TYPE_LNFA																	{ $$ = AutomatonTypeSemanticAction(LNFA); }
 	;
 
-factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = ExpressionFactorSemanticAction($2); }
-	| constant												{ $$ = ConstantFactorSemanticAction($1); }
+definition: ALPHABET ASSIGN alphabet_set
+		STATES ASSIGN state_set
+		START ASSIGN state
+		ACCEPT ASSIGN state_set
+		TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET		{ $$ = DefinitionSemanticAction($3, $6, $9, $12, $15); }
 	;
 
-constant: INTEGER											{ $$ = IntegerConstantSemanticAction($1); }
+alphabet_set: OPEN_CURLY_BRACKET alphabet_symbol_list CLOSE_CURLY_BRACKET		{ $$ = $2; }
+	;
+
+alphabet_symbol_list: alphabet_symbol											{ $$ = SingleStringListSemanticAction($1); }
+	| alphabet_symbol_list COMMA alphabet_symbol								{ $$ = AppendStringListSemanticAction($1, $3); }
+	;
+
+alphabet_symbol: ID																{ $$ = $1; }
+	| NUMERIC_SYMBOL															{ $$ = $1; }
+	;
+
+state_set: OPEN_CURLY_BRACKET state_list CLOSE_CURLY_BRACKET					{ $$ = $2; }
+	;
+
+state_list: state																{ $$ = SingleStringListSemanticAction($1); }
+	| state_list COMMA state													{ $$ = AppendStringListSemanticAction($1, $3); }
+	;
+
+state: ID																		{ $$ = $1; }
+	;
+
+transition_list: %empty														{ $$ = NULL; }
+	| transition_list transition												{ $$ = AppendTransitionListSemanticAction($1, $2); }
+	;
+
+transition: state ARROW transition_symbol COLON transition_destination			{ $$ = TransitionSemanticAction($1, $3, $5); }
+	;
+
+transition_symbol: alphabet_symbol												{ $$ = SymbolTransitionSymbolSemanticAction($1); }
+	| LAMBDA																	{ $$ = LambdaTransitionSymbolSemanticAction(); }
+	;
+
+transition_destination: state													{ $$ = SingleTransitionDestinationSemanticAction($1); }
+	| state_set																	{ $$ = MultipleTransitionDestinationSemanticAction($1); }
 	;
 
 %%
