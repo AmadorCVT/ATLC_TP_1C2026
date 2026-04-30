@@ -64,6 +64,23 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_LNFA
 %token <token> TYPE_NFA
 %token <token> UNKNOWN
+%token <token> TEST
+%token <token> WITH
+%token <token> TO
+%token <token> AS
+%token <token> TABLE
+%token <token> OF
+%token <token> CLOSURE
+%token <token> IN
+%token <token> EQUIVALENT
+%token <token> OP_LEQ
+%token <token> OP_GEQ
+%token <token> OP_NEQ
+%token <token> OP_LT
+%token <token> OP_GT
+%token <token> OPEN_PARENTHESIS
+%token <token> CLOSE_PARENTHESIS
+%token <string> STRING
 
 %type <automaton> automaton
 %type <type> type
