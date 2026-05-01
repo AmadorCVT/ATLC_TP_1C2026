@@ -47,6 +47,23 @@ void destroyConversion(Conversion * conversion) {
 	}
 }
 
+void destroyShow(Show * show) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (show != NULL) {
+		free(show->id);
+		free(show->state);
+		free(show);
+	}
+}
+
+void destroyPrint(Print * print) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (print != NULL) {
+		free(print->id);
+		free(print);
+	}
+}
+
 void destroyDefinition(Definition * definition) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (definition != NULL) {
@@ -80,6 +97,12 @@ void destroyStatement(Statement * statement) {
 				break;
 			case CONVERSION_STATEMENT:
 				destroyConversion(statement->conversion);
+				break;
+			case SHOW_STATEMENT:
+				destroyShow(statement->show);
+				break;
+			case PRINT_STATEMENT:
+				destroyPrint(statement->print);
 				break;
 		}
 		free(statement);

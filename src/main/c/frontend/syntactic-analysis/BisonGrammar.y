@@ -22,6 +22,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	Automaton * automaton;
 	Test * test;
 	Conversion * conversion;
+	Show * show;
+	Print * print;
 	Definition * definition;
 	Program * program;
 	Statement * statement;
@@ -35,6 +37,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %destructor { destroyAutomaton($$); } <automaton>
 %destructor { destroyTest($$); } <test>
 %destructor { destroyConversion($$); } <conversion>
+%destructor { destroyShow($$); } <show>
+%destructor { destroyPrint($$); } <print>
 %destructor { destroyDefinition($$); } <definition>
 %destructor { destroyStatement($$); } <statement>
 %destructor { destroyStringList($$); } <stringList>
@@ -90,6 +94,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %type <automaton> automaton
 %type <test> test
 %type <conversion> conversion
+%type <show> show
+%type <print> print
 %type <type> type
 %type <definition> definition
 %type <program> program
@@ -118,6 +124,8 @@ statement_list: statement														{ $$ = $1; }
 statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); }
 	| test																		{ $$ = TestStatementSemanticAction($1); }
 	| conversion																{ $$ = ConversionStatementSemanticAction($1); }
+	| show																		{ $$ = ShowStatementSemanticAction($1); }
+	| print																		{ $$ = PrintStatementSemanticAction($1); }
 	;
 
 automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
@@ -175,4 +183,11 @@ transition_destination: state													{ $$ = SingleTransitionDestinationSema
 test: TEST ID WITH STRING SEMICOLON												{ $$ = TestSemanticAction($2, $4); }
 
 conversion: CONVERT ID TO type AS ID SEMICOLON										{ $$ = ConversionSemanticAction($2, $4, $6); }
+
+show: SHOW TRANSITIONS OF ID SEMICOLON												{ $$ = ShowTransitionsSemanticAction($4); }
+	| SHOW TABLE OF ID SEMICOLON													{ $$ = ShowTableSemanticAction($4); }
+	| SHOW CLOSURE OPEN_PARENTHESIS ID CLOSE_PARENTHESIS IN ID SEMICOLON			{ $$ = ShowClosureSemanticAction($4, $7); }
+	;
+
+print: PRINT ID SEMICOLON															{ $$ = PrintSemanticAction($2); }
 %%

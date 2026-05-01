@@ -126,6 +126,22 @@ Statement * ConversionStatementSemanticAction(Conversion * conversion) {
 	return statement;
 }
 
+Statement * ShowStatementSemanticAction(Show * show) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->show = show;
+	statement->type = SHOW_STATEMENT;
+	return statement;
+}
+
+Statement * PrintStatementSemanticAction(Print * print) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->print = print;
+	statement->type = PRINT_STATEMENT;
+	return statement;
+}
+
 StringList * AppendStringListSemanticAction(StringList * list, char * value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	StringList * next = SingleStringListSemanticAction(value);
@@ -198,4 +214,38 @@ TransitionSymbol * SymbolTransitionSymbolSemanticAction(char * value) {
 	symbol->value = value;
 	symbol->isLambda = false;
 	return symbol;
+}
+
+Show * ShowTransitionsSemanticAction(char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Show * show = calloc(1, sizeof(Show));
+	show->id = id;
+	show->type = SHOW_TRANSITIONS;
+	show->state = NULL;
+	return show;
+}
+
+Show * ShowTableSemanticAction(char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Show * show = calloc(1, sizeof(Show));
+	show->id = id;
+	show->type = SHOW_TABLE;
+	show->state = NULL;
+	return show;
+}
+
+Show * ShowClosureSemanticAction(char * state, char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Show * show = calloc(1, sizeof(Show));
+	show->id = id;
+	show->type = SHOW_CLOSURE;
+	show->state = state;
+	return show;
+}
+
+Print * PrintSemanticAction(char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Print * print = calloc(1, sizeof(Print));
+	print->id = id;
+	return print;
 }

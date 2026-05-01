@@ -26,6 +26,8 @@ Statement * AppendStatementListSemanticAction(Statement * list, Statement * stat
 Statement * AutomatonStatementSemanticAction(Automaton * automaton);
 Statement * TestStatementSemanticAction(Test * test);
 Statement * ConversionStatementSemanticAction(Conversion * conversion);
+Statement * ShowStatementSemanticAction(Show * show);
+Statement * PrintStatementSemanticAction(Print * print);
 StringList * AppendStringListSemanticAction(StringList * list, char * value);
 StringList * SingleStringListSemanticAction(char * value);
 Transition * AppendTransitionListSemanticAction(Transition * list, Transition * transition);
@@ -34,5 +36,9 @@ TransitionDestination * MultipleTransitionDestinationSemanticAction(StringList *
 TransitionDestination * SingleTransitionDestinationSemanticAction(char * state);
 TransitionSymbol * LambdaTransitionSymbolSemanticAction();
 TransitionSymbol * SymbolTransitionSymbolSemanticAction(char * value);
+Show * ShowTransitionsSemanticAction(char * id);
+Show * ShowTableSemanticAction(char * id);
+Show * ShowClosureSemanticAction(char * state, char * id);
+Print * PrintSemanticAction(char * id);
 
 #endif
