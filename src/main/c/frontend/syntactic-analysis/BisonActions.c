@@ -43,6 +43,14 @@ Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * 
 	return automaton;
 }
 
+Test * TestSemanticAction(char * id, char * string) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Test * test = calloc(1, sizeof(Test));
+	test->id = id;
+	test->string = string;
+	return test;
+}
+
 AutomatonType AutomatonTypeSemanticAction(AutomatonType type) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return type;
@@ -90,6 +98,14 @@ Statement * AutomatonStatementSemanticAction(Automaton * automaton) {
 	Statement * statement = calloc(1, sizeof(Statement));
 	statement->automaton = automaton;
 	statement->type = AUTOMATON_STATEMENT;
+	return statement;
+}
+
+Statement * TestStatementSemanticAction(Test * test) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->test = test;
+	statement->type = TEST_STATEMENT;
 	return statement;
 }
 

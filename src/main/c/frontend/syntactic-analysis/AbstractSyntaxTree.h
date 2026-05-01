@@ -13,6 +13,7 @@ typedef enum StatementType StatementType;
 typedef enum TransitionDestinationType TransitionDestinationType;
 
 typedef struct Automaton Automaton;
+typedef struct Test Test;
 typedef struct Definition Definition;
 typedef struct Program Program;
 typedef struct Statement Statement;
@@ -28,7 +29,8 @@ enum AutomatonType {
 };
 
 enum StatementType {
-	AUTOMATON_STATEMENT
+	AUTOMATON_STATEMENT,
+	TEST_STATEMENT
 };
 
 enum TransitionDestinationType {
@@ -75,9 +77,15 @@ struct Automaton {
 	Definition * definition;
 };
 
+struct Test{
+	char * id;
+	char * string;
+};
+
 struct Statement {
 	union {
 		Automaton * automaton;
+		Test * test;
 	};
 	StatementType type;
 	Statement * next;
@@ -88,6 +96,7 @@ struct Program {
 };
 
 void destroyAutomaton(Automaton * automaton);
+void destroyTest(Test * test);
 void destroyDefinition(Definition * definition);
 void destroyProgram(Program * program);
 void destroyStatement(Statement * statement);

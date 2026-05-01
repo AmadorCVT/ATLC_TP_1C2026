@@ -70,16 +70,34 @@ extern int yydebug;
     NUMERIC_SYMBOL = 271,          /* NUMERIC_SYMBOL  */
     OPEN_COMMENT = 272,            /* OPEN_COMMENT  */
     OPEN_CURLY_BRACKET = 273,      /* OPEN_CURLY_BRACKET  */
-    PRINT = 274,                   /* PRINT  */
-    SEMICOLON = 275,               /* SEMICOLON  */
-    SHOW = 276,                    /* SHOW  */
-    START = 277,                   /* START  */
-    STATES = 278,                  /* STATES  */
-    TRANSITIONS = 279,             /* TRANSITIONS  */
-    TYPE_DFA = 280,                /* TYPE_DFA  */
-    TYPE_LNFA = 281,               /* TYPE_LNFA  */
-    TYPE_NFA = 282,                /* TYPE_NFA  */
-    UNKNOWN = 283                  /* UNKNOWN  */
+    QUOTATION_MARK = 274,          /* QUOTATION_MARK  */
+    PRINT = 275,                   /* PRINT  */
+    SEMICOLON = 276,               /* SEMICOLON  */
+    SHOW = 277,                    /* SHOW  */
+    START = 278,                   /* START  */
+    STATES = 279,                  /* STATES  */
+    TRANSITIONS = 280,             /* TRANSITIONS  */
+    TYPE_DFA = 281,                /* TYPE_DFA  */
+    TYPE_LNFA = 282,               /* TYPE_LNFA  */
+    TYPE_NFA = 283,                /* TYPE_NFA  */
+    UNKNOWN = 284,                 /* UNKNOWN  */
+    TEST = 285,                    /* TEST  */
+    WITH = 286,                    /* WITH  */
+    TO = 287,                      /* TO  */
+    AS = 288,                      /* AS  */
+    TABLE = 289,                   /* TABLE  */
+    OF = 290,                      /* OF  */
+    CLOSURE = 291,                 /* CLOSURE  */
+    IN = 292,                      /* IN  */
+    EQUIVALENT = 293,              /* EQUIVALENT  */
+    OP_LEQ = 294,                  /* OP_LEQ  */
+    OP_GEQ = 295,                  /* OP_GEQ  */
+    OP_NEQ = 296,                  /* OP_NEQ  */
+    OP_LT = 297,                   /* OP_LT  */
+    OP_GT = 298,                   /* OP_GT  */
+    OPEN_PARENTHESIS = 299,        /* OPEN_PARENTHESIS  */
+    CLOSE_PARENTHESIS = 300,       /* CLOSE_PARENTHESIS  */
+    STRING = 301                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -96,6 +114,7 @@ union SemanticValue
 	TokenLabel token;
 
 	Automaton * automaton;
+	Test * test;
 	Definition * definition;
 	Program * program;
 	Statement * statement;
@@ -104,7 +123,7 @@ union SemanticValue
 	TransitionDestination * transitionDestination;
 	TransitionSymbol * transitionSymbol;
 
-#line 108 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 127 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 13 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

@@ -29,6 +29,15 @@ void destroyAutomaton(Automaton * automaton) {
 	}
 }
 
+void destroyTest(Test * test) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (test != NULL) {
+		free(test->id);
+		free(test->string);
+		free(test);
+	}
+}
+
 void destroyDefinition(Definition * definition) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (definition != NULL) {
@@ -56,6 +65,9 @@ void destroyStatement(Statement * statement) {
 		switch (statement->type) {
 			case AUTOMATON_STATEMENT:
 				destroyAutomaton(statement->automaton);
+				break;
+			case TEST_STATEMENT:
+				destroyTest(statement->test);
 				break;
 		}
 		free(statement);

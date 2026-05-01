@@ -124,33 +124,52 @@ enum yysymbol_kind_t
   YYSYMBOL_NUMERIC_SYMBOL = 16,            /* NUMERIC_SYMBOL  */
   YYSYMBOL_OPEN_COMMENT = 17,              /* OPEN_COMMENT  */
   YYSYMBOL_OPEN_CURLY_BRACKET = 18,        /* OPEN_CURLY_BRACKET  */
-  YYSYMBOL_PRINT = 19,                     /* PRINT  */
-  YYSYMBOL_SEMICOLON = 20,                 /* SEMICOLON  */
-  YYSYMBOL_SHOW = 21,                      /* SHOW  */
-  YYSYMBOL_START = 22,                     /* START  */
-  YYSYMBOL_STATES = 23,                    /* STATES  */
-  YYSYMBOL_TRANSITIONS = 24,               /* TRANSITIONS  */
-  YYSYMBOL_TYPE_DFA = 25,                  /* TYPE_DFA  */
-  YYSYMBOL_TYPE_LNFA = 26,                 /* TYPE_LNFA  */
-  YYSYMBOL_TYPE_NFA = 27,                  /* TYPE_NFA  */
-  YYSYMBOL_UNKNOWN = 28,                   /* UNKNOWN  */
-  YYSYMBOL_YYACCEPT = 29,                  /* $accept  */
-  YYSYMBOL_program = 30,                   /* program  */
-  YYSYMBOL_statement_list = 31,            /* statement_list  */
-  YYSYMBOL_statement = 32,                 /* statement  */
-  YYSYMBOL_automaton = 33,                 /* automaton  */
-  YYSYMBOL_type = 34,                      /* type  */
-  YYSYMBOL_definition = 35,                /* definition  */
-  YYSYMBOL_alphabet_set = 36,              /* alphabet_set  */
-  YYSYMBOL_alphabet_symbol_list = 37,      /* alphabet_symbol_list  */
-  YYSYMBOL_alphabet_symbol = 38,           /* alphabet_symbol  */
-  YYSYMBOL_state_set = 39,                 /* state_set  */
-  YYSYMBOL_state_list = 40,                /* state_list  */
-  YYSYMBOL_state = 41,                     /* state  */
-  YYSYMBOL_transition_list = 42,           /* transition_list  */
-  YYSYMBOL_transition = 43,                /* transition  */
-  YYSYMBOL_transition_symbol = 44,         /* transition_symbol  */
-  YYSYMBOL_transition_destination = 45     /* transition_destination  */
+  YYSYMBOL_QUOTATION_MARK = 19,            /* QUOTATION_MARK  */
+  YYSYMBOL_PRINT = 20,                     /* PRINT  */
+  YYSYMBOL_SEMICOLON = 21,                 /* SEMICOLON  */
+  YYSYMBOL_SHOW = 22,                      /* SHOW  */
+  YYSYMBOL_START = 23,                     /* START  */
+  YYSYMBOL_STATES = 24,                    /* STATES  */
+  YYSYMBOL_TRANSITIONS = 25,               /* TRANSITIONS  */
+  YYSYMBOL_TYPE_DFA = 26,                  /* TYPE_DFA  */
+  YYSYMBOL_TYPE_LNFA = 27,                 /* TYPE_LNFA  */
+  YYSYMBOL_TYPE_NFA = 28,                  /* TYPE_NFA  */
+  YYSYMBOL_UNKNOWN = 29,                   /* UNKNOWN  */
+  YYSYMBOL_TEST = 30,                      /* TEST  */
+  YYSYMBOL_WITH = 31,                      /* WITH  */
+  YYSYMBOL_TO = 32,                        /* TO  */
+  YYSYMBOL_AS = 33,                        /* AS  */
+  YYSYMBOL_TABLE = 34,                     /* TABLE  */
+  YYSYMBOL_OF = 35,                        /* OF  */
+  YYSYMBOL_CLOSURE = 36,                   /* CLOSURE  */
+  YYSYMBOL_IN = 37,                        /* IN  */
+  YYSYMBOL_EQUIVALENT = 38,                /* EQUIVALENT  */
+  YYSYMBOL_OP_LEQ = 39,                    /* OP_LEQ  */
+  YYSYMBOL_OP_GEQ = 40,                    /* OP_GEQ  */
+  YYSYMBOL_OP_NEQ = 41,                    /* OP_NEQ  */
+  YYSYMBOL_OP_LT = 42,                     /* OP_LT  */
+  YYSYMBOL_OP_GT = 43,                     /* OP_GT  */
+  YYSYMBOL_OPEN_PARENTHESIS = 44,          /* OPEN_PARENTHESIS  */
+  YYSYMBOL_CLOSE_PARENTHESIS = 45,         /* CLOSE_PARENTHESIS  */
+  YYSYMBOL_STRING = 46,                    /* STRING  */
+  YYSYMBOL_YYACCEPT = 47,                  /* $accept  */
+  YYSYMBOL_program = 48,                   /* program  */
+  YYSYMBOL_statement_list = 49,            /* statement_list  */
+  YYSYMBOL_statement = 50,                 /* statement  */
+  YYSYMBOL_automaton = 51,                 /* automaton  */
+  YYSYMBOL_type = 52,                      /* type  */
+  YYSYMBOL_definition = 53,                /* definition  */
+  YYSYMBOL_alphabet_set = 54,              /* alphabet_set  */
+  YYSYMBOL_alphabet_symbol_list = 55,      /* alphabet_symbol_list  */
+  YYSYMBOL_alphabet_symbol = 56,           /* alphabet_symbol  */
+  YYSYMBOL_state_set = 57,                 /* state_set  */
+  YYSYMBOL_state_list = 58,                /* state_list  */
+  YYSYMBOL_state = 59,                     /* state  */
+  YYSYMBOL_transition_list = 60,           /* transition_list  */
+  YYSYMBOL_transition = 61,                /* transition  */
+  YYSYMBOL_transition_symbol = 62,         /* transition_symbol  */
+  YYSYMBOL_transition_destination = 63,    /* transition_destination  */
+  YYSYMBOL_test = 64                       /* test  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -455,21 +474,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  7
+#define YYFINAL  10
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   46
+#define YYLAST   51
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  29
+#define YYNTOKENS  47
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  17
+#define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  26
+#define YYNRULES  28
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  59
+#define YYNSTATES  65
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   283
+#define YYMAXUTOK   301
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -511,16 +530,18 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28
+      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
+      35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
+      45,    46
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    87,    87,    90,    91,    94,    97,   101,   102,   103,
-     106,   113,   116,   117,   120,   121,   124,   127,   128,   131,
-     134,   135,   138,   141,   142,   145,   146
+       0,   107,   107,   110,   111,   114,   115,   118,   122,   123,
+     124,   127,   134,   137,   138,   141,   142,   145,   148,   149,
+     152,   155,   156,   159,   162,   163,   166,   167,   170
 };
 #endif
 
@@ -540,19 +561,21 @@ yysymbol_name (yysymbol_kind_t yysymbol)
   "end of file", "error", "invalid token", "ACCEPT", "ALPHABET", "ARROW",
   "ASSIGN", "AUTOMATON", "CLOSE_COMMENT", "CLOSE_CURLY_BRACKET", "COLON",
   "COMMA", "CONVERT", "ID", "IGNORED", "LAMBDA", "NUMERIC_SYMBOL",
-  "OPEN_COMMENT", "OPEN_CURLY_BRACKET", "PRINT", "SEMICOLON", "SHOW",
-  "START", "STATES", "TRANSITIONS", "TYPE_DFA", "TYPE_LNFA", "TYPE_NFA",
-  "UNKNOWN", "$accept", "program", "statement_list", "statement",
-  "automaton", "type", "definition", "alphabet_set",
-  "alphabet_symbol_list", "alphabet_symbol", "state_set", "state_list",
-  "state", "transition_list", "transition", "transition_symbol",
-  "transition_destination", YY_NULLPTR
+  "OPEN_COMMENT", "OPEN_CURLY_BRACKET", "QUOTATION_MARK", "PRINT",
+  "SEMICOLON", "SHOW", "START", "STATES", "TRANSITIONS", "TYPE_DFA",
+  "TYPE_LNFA", "TYPE_NFA", "UNKNOWN", "TEST", "WITH", "TO", "AS", "TABLE",
+  "OF", "CLOSURE", "IN", "EQUIVALENT", "OP_LEQ", "OP_GEQ", "OP_NEQ",
+  "OP_LT", "OP_GT", "OPEN_PARENTHESIS", "CLOSE_PARENTHESIS", "STRING",
+  "$accept", "program", "statement_list", "statement", "automaton", "type",
+  "definition", "alphabet_set", "alphabet_symbol_list", "alphabet_symbol",
+  "state_set", "state_list", "state", "transition_list", "transition",
+  "transition_symbol", "transition_destination", "test", YY_NULLPTR
   };
   return yy_sname[yysymbol];
 }
 #endif
 
-#define YYPACT_NINF (-41)
+#define YYPACT_NINF (-46)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -566,12 +589,13 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -1,     0,    12,    -1,   -41,   -41,    18,   -41,   -41,    -6,
-     -41,   -41,   -41,     8,    25,    24,    22,    14,    15,    -8,
-      10,   -41,   -41,   -41,    13,   -41,    28,   -41,    -8,    19,
-     -41,    23,    17,   -41,    16,   -41,    32,   -41,    23,    23,
-     -41,    37,    35,    19,    20,    27,   -41,    -2,   -41,    38,
-     -41,     1,   -41,   -41,    36,    -9,   -41,   -41,   -41
+      -7,     1,     7,     6,    -7,   -46,   -46,   -46,     3,   -10,
+     -46,   -46,     0,   -16,   -46,   -46,   -46,    14,    12,    30,
+     -46,    29,    27,    19,    17,     9,    15,   -46,   -46,   -46,
+      -2,   -46,    34,   -46,     9,    23,   -46,    31,    22,   -46,
+      20,   -46,    36,   -46,    31,    31,   -46,    40,    41,    23,
+      21,    32,   -46,    -1,   -46,    43,   -46,     2,   -46,   -46,
+      39,    -8,   -46,   -46,   -46
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -579,26 +603,27 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     2,     3,     5,     0,     1,     4,     0,
-       7,     9,     8,     0,     0,     0,     0,     0,     0,     0,
-       0,     6,    14,    15,     0,    12,     0,    11,     0,     0,
-      13,     0,     0,    19,     0,    17,     0,    16,     0,     0,
-      18,     0,     0,     0,     0,     0,    20,     0,    10,     0,
-      21,     0,    24,    23,     0,     0,    26,    25,    22
+       0,     0,     0,     0,     2,     3,     5,     6,     0,     0,
+       1,     4,     0,     0,     8,    10,     9,     0,     0,     0,
+      28,     0,     0,     0,     0,     0,     0,     7,    15,    16,
+       0,    13,     0,    12,     0,     0,    14,     0,     0,    20,
+       0,    18,     0,    17,     0,     0,    19,     0,     0,     0,
+       0,     0,    21,     0,    11,     0,    22,     0,    25,    24,
+       0,     0,    27,    26,    23
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -41,   -41,   -41,    39,   -41,   -41,   -41,   -41,   -41,   -28,
-     -40,   -41,   -37,   -41,   -41,   -41,   -41
+     -46,   -46,   -46,    47,   -46,   -46,   -46,   -46,   -46,   -33,
+     -45,   -46,   -42,   -46,   -46,   -46,   -46,   -46
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     3,     4,     5,    13,    16,    20,    24,    25,
-      32,    34,    35,    47,    50,    54,    58
+       0,     3,     4,     5,     6,    17,    22,    26,    30,    31,
+      38,    40,    41,    53,    56,    60,    64,     7
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -606,48 +631,51 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      30,    40,    41,    44,    33,    22,     1,    48,    23,    31,
-      49,    33,     7,     6,    22,    56,    52,    23,    57,    10,
-      11,    12,    27,    53,    28,    37,    14,    38,     9,    15,
-      17,    18,    19,    26,    29,    21,    33,    31,    39,    36,
-      42,    43,     8,    51,    45,    46,    55
+       1,    36,    46,    47,    50,    39,    10,    33,    54,    34,
+      37,    55,    39,    12,     8,    28,    62,    58,    29,    63,
+       9,    13,    28,     2,    59,    29,    14,    15,    16,    43,
+      18,    44,    19,    20,    21,    23,    24,    25,    27,    32,
+      35,    37,    45,    48,    39,    42,    51,    49,    57,    61,
+      52,    11
 };
 
 static const yytype_int8 yycheck[] =
 {
-      28,    38,    39,    43,    13,    13,     7,     9,    16,    18,
-      47,    13,     0,    13,    13,    55,    15,    16,    55,    25,
-      26,    27,     9,    51,    11,     9,    18,    11,    10,     4,
-       6,     9,    18,    23,     6,    20,    13,    18,     6,    22,
-       3,     6,     3,     5,    24,    18,    10
+       7,    34,    44,    45,    49,    13,     0,     9,     9,    11,
+      18,    53,    13,    10,    13,    13,    61,    15,    16,    61,
+      13,    31,    13,    30,    57,    16,    26,    27,    28,     9,
+      46,    11,    18,    21,     4,     6,     9,    18,    21,    24,
+       6,    18,     6,     3,    13,    23,    25,     6,     5,    10,
+      18,     4
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     7,    30,    31,    32,    33,    13,     0,    32,    10,
-      25,    26,    27,    34,    18,     4,    35,     6,     9,    18,
-      36,    20,    13,    16,    37,    38,    23,     9,    11,     6,
-      38,    18,    39,    13,    40,    41,    22,     9,    11,     6,
-      41,    41,     3,     6,    39,    24,    18,    42,     9,    41,
-      43,     5,    15,    38,    44,    10,    39,    41,    45
+       0,     7,    30,    48,    49,    50,    51,    64,    13,    13,
+       0,    50,    10,    31,    26,    27,    28,    52,    46,    18,
+      21,     4,    53,     6,     9,    18,    54,    21,    13,    16,
+      55,    56,    24,     9,    11,     6,    56,    18,    57,    13,
+      58,    59,    23,     9,    11,     6,    59,    59,     3,     6,
+      57,    25,    18,    60,     9,    59,    61,     5,    15,    56,
+      62,    10,    57,    59,    63
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    29,    30,    31,    31,    32,    33,    34,    34,    34,
-      35,    36,    37,    37,    38,    38,    39,    40,    40,    41,
-      42,    42,    43,    44,    44,    45,    45
+       0,    47,    48,    49,    49,    50,    50,    51,    52,    52,
+      52,    53,    54,    55,    55,    56,    56,    57,    58,    58,
+      59,    60,    60,    61,    62,    62,    63,    63,    64
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     2,     1,     8,     1,     1,     1,
-      16,     3,     1,     3,     1,     1,     3,     1,     3,     1,
-       0,     2,     5,     1,     1,     1,     1
+       0,     2,     1,     1,     2,     1,     1,     8,     1,     1,
+       1,    16,     3,     1,     3,     1,     1,     3,     1,     3,
+       1,     0,     2,     5,     1,     1,     1,     1,     5
 };
 
 
@@ -1199,99 +1227,105 @@ yydestruct (const char *yymsg,
   switch (yykind)
     {
     case YYSYMBOL_ID: /* ID  */
-#line 32 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 33 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { free(((*yyvaluep).string)); }
-#line 1205 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1233 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_NUMERIC_SYMBOL: /* NUMERIC_SYMBOL  */
-#line 32 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 33 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { free(((*yyvaluep).string)); }
-#line 1211 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1239 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+        break;
+
+    case YYSYMBOL_STRING: /* STRING  */
+#line 33 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+            { free(((*yyvaluep).string)); }
+#line 1245 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_statement_list: /* statement_list  */
-#line 35 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 36 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyStatement(((*yyvaluep).statement)); }
-#line 1217 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1251 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_statement: /* statement  */
-#line 35 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 36 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyStatement(((*yyvaluep).statement)); }
-#line 1223 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1257 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_automaton: /* automaton  */
-#line 33 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 34 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyAutomaton(((*yyvaluep).automaton)); }
-#line 1229 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1263 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_definition: /* definition  */
-#line 34 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 35 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyDefinition(((*yyvaluep).definition)); }
-#line 1235 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1269 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_alphabet_set: /* alphabet_set  */
-#line 36 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 37 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyStringList(((*yyvaluep).stringList)); }
-#line 1241 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1275 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_alphabet_symbol_list: /* alphabet_symbol_list  */
-#line 36 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 37 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyStringList(((*yyvaluep).stringList)); }
-#line 1247 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1281 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_alphabet_symbol: /* alphabet_symbol  */
-#line 32 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 33 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { free(((*yyvaluep).string)); }
-#line 1253 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1287 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_state_set: /* state_set  */
-#line 36 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 37 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyStringList(((*yyvaluep).stringList)); }
-#line 1259 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1293 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_state_list: /* state_list  */
-#line 36 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 37 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyStringList(((*yyvaluep).stringList)); }
-#line 1265 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1299 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_state: /* state  */
-#line 32 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 33 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { free(((*yyvaluep).string)); }
-#line 1271 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1305 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_transition_list: /* transition_list  */
-#line 37 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 38 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyTransition(((*yyvaluep).transition)); }
-#line 1277 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1311 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_transition: /* transition  */
-#line 37 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 38 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyTransition(((*yyvaluep).transition)); }
-#line 1283 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1317 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_transition_symbol: /* transition_symbol  */
-#line 39 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 40 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyTransitionSymbol(((*yyvaluep).transitionSymbol)); }
-#line 1289 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1323 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
     case YYSYMBOL_transition_destination: /* transition_destination  */
-#line 38 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 39 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
             { destroyTransitionDestination(((*yyvaluep).transitionDestination)); }
-#line 1295 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1329 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
         break;
 
       default:
@@ -1658,157 +1692,169 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: statement_list  */
-#line 87 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 107 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                         { (yyval.program) = StatementListProgramSemanticAction((yyvsp[0].statement)); }
-#line 1664 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1698 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 3: /* statement_list: statement  */
-#line 90 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 110 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                         { (yyval.statement) = (yyvsp[0].statement); }
-#line 1670 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1704 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 4: /* statement_list: statement_list statement  */
-#line 91 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 111 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                         { (yyval.statement) = AppendStatementListSemanticAction((yyvsp[-1].statement), (yyvsp[0].statement)); }
-#line 1676 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1710 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
   case 5: /* statement: automaton  */
-#line 94 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 114 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                         { (yyval.statement) = AutomatonStatementSemanticAction((yyvsp[0].automaton)); }
-#line 1682 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1716 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 6: /* automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON  */
-#line 98 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+  case 6: /* statement: test  */
+#line 115 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                                        { (yyval.statement) = TestStatementSemanticAction((yyvsp[0].test)); }
+#line 1722 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 7: /* automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON  */
+#line 119 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                                                 { (yyval.automaton) = AutomatonSemanticAction((yyvsp[-6].string), (yyvsp[-4].type), (yyvsp[-2].definition)); }
-#line 1688 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1728 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 7: /* type: TYPE_DFA  */
-#line 101 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+  case 8: /* type: TYPE_DFA  */
+#line 122 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                                 { (yyval.type) = AutomatonTypeSemanticAction(DFA); }
-#line 1694 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1734 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 8: /* type: TYPE_NFA  */
-#line 102 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+  case 9: /* type: TYPE_NFA  */
+#line 123 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
                                                                                                                                                         { (yyval.type) = AutomatonTypeSemanticAction(NFA); }
-#line 1700 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+#line 1740 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 9: /* type: TYPE_LNFA  */
-#line 103 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                        { (yyval.type) = AutomatonTypeSemanticAction(LNFA); }
-#line 1706 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 10: /* definition: ALPHABET ASSIGN alphabet_set STATES ASSIGN state_set START ASSIGN state ACCEPT ASSIGN state_set TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET  */
-#line 110 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                { (yyval.definition) = DefinitionSemanticAction((yyvsp[-13].stringList), (yyvsp[-10].stringList), (yyvsp[-7].string), (yyvsp[-4].stringList), (yyvsp[-1].transition)); }
-#line 1712 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 11: /* alphabet_set: OPEN_CURLY_BRACKET alphabet_symbol_list CLOSE_CURLY_BRACKET  */
-#line 113 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                        { (yyval.stringList) = (yyvsp[-1].stringList); }
-#line 1718 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 12: /* alphabet_symbol_list: alphabet_symbol  */
-#line 116 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                        { (yyval.stringList) = SingleStringListSemanticAction((yyvsp[0].string)); }
-#line 1724 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 13: /* alphabet_symbol_list: alphabet_symbol_list COMMA alphabet_symbol  */
-#line 117 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                { (yyval.stringList) = AppendStringListSemanticAction((yyvsp[-2].stringList), (yyvsp[0].string)); }
-#line 1730 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 14: /* alphabet_symbol: ID  */
-#line 120 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                { (yyval.string) = (yyvsp[0].string); }
-#line 1736 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 15: /* alphabet_symbol: NUMERIC_SYMBOL  */
-#line 121 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                { (yyval.string) = (yyvsp[0].string); }
-#line 1742 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 16: /* state_set: OPEN_CURLY_BRACKET state_list CLOSE_CURLY_BRACKET  */
+  case 10: /* type: TYPE_LNFA  */
 #line 124 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                { (yyval.stringList) = (yyvsp[-1].stringList); }
-#line 1748 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                                                                                        { (yyval.type) = AutomatonTypeSemanticAction(LNFA); }
+#line 1746 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 17: /* state_list: state  */
-#line 127 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                { (yyval.stringList) = SingleStringListSemanticAction((yyvsp[0].string)); }
-#line 1754 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 18: /* state_list: state_list COMMA state  */
-#line 128 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                        { (yyval.stringList) = AppendStringListSemanticAction((yyvsp[-2].stringList), (yyvsp[0].string)); }
-#line 1760 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
-    break;
-
-  case 19: /* state: ID  */
+  case 11: /* definition: ALPHABET ASSIGN alphabet_set STATES ASSIGN state_set START ASSIGN state ACCEPT ASSIGN state_set TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET  */
 #line 131 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                        { (yyval.string) = (yyvsp[0].string); }
-#line 1766 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                                { (yyval.definition) = DefinitionSemanticAction((yyvsp[-13].stringList), (yyvsp[-10].stringList), (yyvsp[-7].string), (yyvsp[-4].stringList), (yyvsp[-1].transition)); }
+#line 1752 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 20: /* transition_list: %empty  */
+  case 12: /* alphabet_set: OPEN_CURLY_BRACKET alphabet_symbol_list CLOSE_CURLY_BRACKET  */
 #line 134 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                { (yyval.transition) = NULL; }
-#line 1772 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                        { (yyval.stringList) = (yyvsp[-1].stringList); }
+#line 1758 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 21: /* transition_list: transition_list transition  */
-#line 135 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                { (yyval.transition) = AppendTransitionListSemanticAction((yyvsp[-1].transition), (yyvsp[0].transition)); }
-#line 1778 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+  case 13: /* alphabet_symbol_list: alphabet_symbol  */
+#line 137 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                        { (yyval.stringList) = SingleStringListSemanticAction((yyvsp[0].string)); }
+#line 1764 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 22: /* transition: state ARROW transition_symbol COLON transition_destination  */
+  case 14: /* alphabet_symbol_list: alphabet_symbol_list COMMA alphabet_symbol  */
 #line 138 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                        { (yyval.transition) = TransitionSemanticAction((yyvsp[-4].string), (yyvsp[-2].transitionSymbol), (yyvsp[0].transitionDestination)); }
-#line 1784 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                                                { (yyval.stringList) = AppendStringListSemanticAction((yyvsp[-2].stringList), (yyvsp[0].string)); }
+#line 1770 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 23: /* transition_symbol: alphabet_symbol  */
+  case 15: /* alphabet_symbol: ID  */
 #line 141 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                { (yyval.transitionSymbol) = SymbolTransitionSymbolSemanticAction((yyvsp[0].string)); }
-#line 1790 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                                                                                { (yyval.string) = (yyvsp[0].string); }
+#line 1776 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 24: /* transition_symbol: LAMBDA  */
+  case 16: /* alphabet_symbol: NUMERIC_SYMBOL  */
 #line 142 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                        { (yyval.transitionSymbol) = LambdaTransitionSymbolSemanticAction(); }
-#line 1796 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                                                                                { (yyval.string) = (yyvsp[0].string); }
+#line 1782 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 25: /* transition_destination: state  */
+  case 17: /* state_set: OPEN_CURLY_BRACKET state_list CLOSE_CURLY_BRACKET  */
 #line 145 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                { (yyval.transitionDestination) = SingleTransitionDestinationSemanticAction((yyvsp[0].string)); }
-#line 1802 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+                                                                                                { (yyval.stringList) = (yyvsp[-1].stringList); }
+#line 1788 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
-  case 26: /* transition_destination: state_set  */
-#line 146 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
-                                                                                                                                                        { (yyval.transitionDestination) = MultipleTransitionDestinationSemanticAction((yyvsp[0].stringList)); }
-#line 1808 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+  case 18: /* state_list: state  */
+#line 148 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                                { (yyval.stringList) = SingleStringListSemanticAction((yyvsp[0].string)); }
+#line 1794 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
     break;
 
+  case 19: /* state_list: state_list COMMA state  */
+#line 149 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                        { (yyval.stringList) = AppendStringListSemanticAction((yyvsp[-2].stringList), (yyvsp[0].string)); }
+#line 1800 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
 
+  case 20: /* state: ID  */
+#line 152 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                                        { (yyval.string) = (yyvsp[0].string); }
+#line 1806 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 21: /* transition_list: %empty  */
+#line 155 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                { (yyval.transition) = NULL; }
 #line 1812 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 22: /* transition_list: transition_list transition  */
+#line 156 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                { (yyval.transition) = AppendTransitionListSemanticAction((yyvsp[-1].transition), (yyvsp[0].transition)); }
+#line 1818 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 23: /* transition: state ARROW transition_symbol COLON transition_destination  */
+#line 159 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                        { (yyval.transition) = TransitionSemanticAction((yyvsp[-4].string), (yyvsp[-2].transitionSymbol), (yyvsp[0].transitionDestination)); }
+#line 1824 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 24: /* transition_symbol: alphabet_symbol  */
+#line 162 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                { (yyval.transitionSymbol) = SymbolTransitionSymbolSemanticAction((yyvsp[0].string)); }
+#line 1830 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 25: /* transition_symbol: LAMBDA  */
+#line 163 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                                        { (yyval.transitionSymbol) = LambdaTransitionSymbolSemanticAction(); }
+#line 1836 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 26: /* transition_destination: state  */
+#line 166 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                { (yyval.transitionDestination) = SingleTransitionDestinationSemanticAction((yyvsp[0].string)); }
+#line 1842 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 27: /* transition_destination: state_set  */
+#line 167 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                                        { (yyval.transitionDestination) = MultipleTransitionDestinationSemanticAction((yyvsp[0].stringList)); }
+#line 1848 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+  case 28: /* test: TEST ID WITH STRING SEMICOLON  */
+#line 170 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+                                                                                                                                { (yyval.test) = TestSemanticAction((yyvsp[-3].string), (yyvsp[-1].string)); }
+#line 1854 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
+    break;
+
+
+#line 1858 "src/main/c/frontend/syntactic-analysis/BisonParser.c"
 
       default: break;
     }
@@ -2053,5 +2099,5 @@ yypushreturn:
 #undef yyls
 #undef yylsp
 #undef yystacksize
-#line 149 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
+#line 172 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"
 

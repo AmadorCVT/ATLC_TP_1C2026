@@ -12,6 +12,7 @@
 ModuleDestructor initializeBisonActionsModule(CompilerState * compilerState);
 
 Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * definition);
+Test * TestSemanticAction(char * id, char * string);
 AutomatonType AutomatonTypeSemanticAction(AutomatonType type);
 Definition * DefinitionSemanticAction(
 	StringList * alphabet,
@@ -22,6 +23,7 @@ Definition * DefinitionSemanticAction(
 Program * StatementListProgramSemanticAction(Statement * statements);
 Statement * AppendStatementListSemanticAction(Statement * list, Statement * statement);
 Statement * AutomatonStatementSemanticAction(Automaton * automaton);
+Statement * TestStatementSemanticAction(Test * test);
 StringList * AppendStringListSemanticAction(StringList * list, char * value);
 StringList * SingleStringListSemanticAction(char * value);
 Transition * AppendTransitionListSemanticAction(Transition * list, Transition * transition);

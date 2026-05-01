@@ -20,6 +20,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	TokenLabel token;
 
 	Automaton * automaton;
+	Test * test;
 	Definition * definition;
 	Program * program;
 	Statement * statement;
@@ -54,6 +55,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <string> NUMERIC_SYMBOL
 %token <token> OPEN_COMMENT
 %token <token> OPEN_CURLY_BRACKET
+%token <token> QUOTATION_MARK
 %token <token> PRINT
 %token <token> SEMICOLON
 %token <token> SHOW
@@ -83,6 +85,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <string> STRING
 
 %type <automaton> automaton
+%type <test> test
 %type <type> type
 %type <definition> definition
 %type <program> program
@@ -109,6 +112,7 @@ statement_list: statement														{ $$ = $1; }
 	;
 
 statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); }
+	| test																		{ $$ = TestStatementSemanticAction($1); }
 	;
 
 automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
@@ -162,5 +166,7 @@ transition_symbol: alphabet_symbol												{ $$ = SymbolTransitionSymbolSeman
 transition_destination: state													{ $$ = SingleTransitionDestinationSemanticAction($1); }
 	| state_set																	{ $$ = MultipleTransitionDestinationSemanticAction($1); }
 	;
+
+test: TEST ID WITH STRING SEMICOLON												{ $$ = TestSemanticAction($2, $4); }
 
 %%
