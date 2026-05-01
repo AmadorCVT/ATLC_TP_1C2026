@@ -21,6 +21,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 	Automaton * automaton;
 	Test * test;
+	Conversion * conversion;
 	Definition * definition;
 	Program * program;
 	Statement * statement;
@@ -32,6 +33,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 %destructor { free($$); } <string>
 %destructor { destroyAutomaton($$); } <automaton>
+%destructor { destroyTest($$); } <test>
+%destructor { destroyConversion($$); } <conversion>
 %destructor { destroyDefinition($$); } <definition>
 %destructor { destroyStatement($$); } <statement>
 %destructor { destroyStringList($$); } <stringList>
@@ -86,6 +89,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 %type <automaton> automaton
 %type <test> test
+%type <conversion> conversion
 %type <type> type
 %type <definition> definition
 %type <program> program
@@ -113,6 +117,7 @@ statement_list: statement														{ $$ = $1; }
 
 statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); }
 	| test																		{ $$ = TestStatementSemanticAction($1); }
+	| conversion																{ $$ = ConversionStatementSemanticAction($1); }
 	;
 
 automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
@@ -169,4 +174,5 @@ transition_destination: state													{ $$ = SingleTransitionDestinationSema
 
 test: TEST ID WITH STRING SEMICOLON												{ $$ = TestSemanticAction($2, $4); }
 
+conversion: CONVERT ID TO type AS ID SEMICOLON										{ $$ = ConversionSemanticAction($2, $4, $6); }
 %%

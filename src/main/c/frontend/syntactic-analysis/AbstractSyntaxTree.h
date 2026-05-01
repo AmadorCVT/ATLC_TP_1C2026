@@ -14,6 +14,7 @@ typedef enum TransitionDestinationType TransitionDestinationType;
 
 typedef struct Automaton Automaton;
 typedef struct Test Test;
+typedef struct Conversion Conversion;
 typedef struct Definition Definition;
 typedef struct Program Program;
 typedef struct Statement Statement;
@@ -30,7 +31,8 @@ enum AutomatonType {
 
 enum StatementType {
 	AUTOMATON_STATEMENT,
-	TEST_STATEMENT
+	TEST_STATEMENT,
+	CONVERSION_STATEMENT
 };
 
 enum TransitionDestinationType {
@@ -82,10 +84,17 @@ struct Test{
 	char * string;
 };
 
+struct Conversion {
+	char * input;
+	AutomatonType type;
+	char * output;
+};
+
 struct Statement {
 	union {
 		Automaton * automaton;
 		Test * test;
+		Conversion * conversion;
 	};
 	StatementType type;
 	Statement * next;
@@ -97,6 +106,7 @@ struct Program {
 
 void destroyAutomaton(Automaton * automaton);
 void destroyTest(Test * test);
+void destroyConversion(Conversion * conversion);
 void destroyDefinition(Definition * definition);
 void destroyProgram(Program * program);
 void destroyStatement(Statement * statement);

@@ -38,6 +38,15 @@ void destroyTest(Test * test) {
 	}
 }
 
+void destroyConversion(Conversion * conversion) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (conversion != NULL) {
+		free(conversion->input);
+		free(conversion->output);
+		free(conversion);
+	}
+}
+
 void destroyDefinition(Definition * definition) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (definition != NULL) {
@@ -68,6 +77,9 @@ void destroyStatement(Statement * statement) {
 				break;
 			case TEST_STATEMENT:
 				destroyTest(statement->test);
+				break;
+			case CONVERSION_STATEMENT:
+				destroyConversion(statement->conversion);
 				break;
 		}
 		free(statement);
