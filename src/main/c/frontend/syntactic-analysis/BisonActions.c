@@ -249,3 +249,35 @@ Print * PrintSemanticAction(char * id) {
 	print->id = id;
 	return print;
 }
+
+Equivalent * EquivalentSemanticAction(char * name1, char * name2) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Equivalent * node = calloc(1, sizeof(Equivalent));
+	node->name1 = name1;
+	node->name2 = name2;
+	return node;
+}
+
+Statement * EquivalentStatementSemanticAction(Equivalent * equivalent) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->equivalent = equivalent;
+	statement->type = EQUIVALENT_STATEMENT;
+	return statement;
+}
+
+Update * UpdateSemanticAction(char * name, Transition * transitions) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Update * node = calloc(1, sizeof(Update));
+	node->automatonName = name;
+	node->transitions = transitions;
+	return node;
+}
+
+Statement * UpdateStatementSemanticAction(Update * update) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->update = update;
+	statement->type = UPDATE_STATEMENT;
+	return statement;
+}

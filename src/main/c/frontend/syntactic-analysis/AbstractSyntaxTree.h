@@ -25,6 +25,8 @@ typedef struct StringList StringList;
 typedef struct Transition Transition;
 typedef struct TransitionDestination TransitionDestination;
 typedef struct TransitionSymbol TransitionSymbol;
+typedef struct Equivalent Equivalent;
+typedef struct Update     Update;
 
 enum AutomatonType {
 	DFA,
@@ -37,7 +39,9 @@ enum StatementType {
 	TEST_STATEMENT,
 	CONVERSION_STATEMENT,
 	SHOW_STATEMENT,
-	PRINT_STATEMENT
+	PRINT_STATEMENT,
+	EQUIVALENT_STATEMENT,
+	UPDATE_STATEMENT
 };
 
 enum TransitionDestinationType {
@@ -111,16 +115,28 @@ struct Print {
 	char * id;
 };
 
+struct Equivalent {
+	char * name1;
+	char * name2;
+};
+
+struct Update {
+	char *       automatonName;
+	Transition * transitions;
+};
+
 struct Statement {
 	union {
-		Automaton * automaton;
-		Test * test;
+		Automaton *  automaton;
+		Test *       test;
 		Conversion * conversion;
-		Show * show;
-		Print * print;
+		Show *       show;
+		Print *      print;
+		Equivalent * equivalent;
+		Update *     update;
 	};
 	StatementType type;
-	Statement * next;
+	Statement *   next;
 };
 
 struct Program {
@@ -132,6 +148,8 @@ void destroyTest(Test * test);
 void destroyConversion(Conversion * conversion);
 void destroyShow(Show * show);
 void destroyPrint(Print * print);
+void destroyEquivalent(Equivalent * node);
+void destroyUpdate(Update * node);
 void destroyDefinition(Definition * definition);
 void destroyProgram(Program * program);
 void destroyStatement(Statement * statement);

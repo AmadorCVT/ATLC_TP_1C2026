@@ -40,5 +40,9 @@ Show * ShowTransitionsSemanticAction(char * id);
 Show * ShowTableSemanticAction(char * id);
 Show * ShowClosureSemanticAction(char * state, char * id);
 Print * PrintSemanticAction(char * id);
+Equivalent * EquivalentSemanticAction(char * name1, char * name2);
+Statement *  EquivalentStatementSemanticAction(Equivalent * equivalent);
+Update *     UpdateSemanticAction(char * name, Transition * transitions);
+Statement *  UpdateStatementSemanticAction(Update * update);
 
 #endif

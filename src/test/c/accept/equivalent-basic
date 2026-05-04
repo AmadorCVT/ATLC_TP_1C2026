@@ -1,0 +1,19 @@
+automaton A : DFA {
+    alphabet = {a}
+    states = {q0, q1}
+    start = q0
+    accept = {q1}
+    transitions {
+        q0 -> a : q1
+    }
+};
+automaton B : DFA {
+    alphabet = {a}
+    states = {p0, p1}
+    start = p0
+    accept = {p1}
+    transitions {
+        p0 -> a : p1
+    }
+};
+equivalent A B;

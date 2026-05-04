@@ -31,6 +31,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	Transition * transition;
 	TransitionDestination * transitionDestination;
 	TransitionSymbol * transitionSymbol;
+	Equivalent * equivalent;
+	Update *     update;
 }
 
 %destructor { free($$); } <string>
@@ -45,6 +47,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %destructor { destroyTransition($$); } <transition>
 %destructor { destroyTransitionDestination($$); } <transitionDestination>
 %destructor { destroyTransitionSymbol($$); } <transitionSymbol>
+%destructor { destroyEquivalent($$); } <equivalent>
+%destructor { destroyUpdate($$); }     <update>
 
 %token <token> ACCEPT
 %token <token> ALPHABET
@@ -111,6 +115,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %type <transition> transition_list
 %type <transitionDestination> transition_destination
 %type <transitionSymbol> transition_symbol
+%type <equivalent> equivalent
+%type <update>     update
 
 %%
 
@@ -126,6 +132,8 @@ statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); 
 	| conversion																{ $$ = ConversionStatementSemanticAction($1); }
 	| show																		{ $$ = ShowStatementSemanticAction($1); }
 	| print																		{ $$ = PrintStatementSemanticAction($1); }
+	| equivalent																{ $$ = EquivalentStatementSemanticAction($1); }
+	| update																	{ $$ = UpdateStatementSemanticAction($1); }
 	;
 
 automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
@@ -190,4 +198,11 @@ show: SHOW TRANSITIONS OF ID SEMICOLON												{ $$ = ShowTransitionsSemantic
 	;
 
 print: PRINT ID SEMICOLON															{ $$ = PrintSemanticAction($2); }
+
+equivalent: EQUIVALENT ID ID SEMICOLON											{ $$ = EquivalentSemanticAction($2, $3); }
+	;
+
+update: ID OPEN_CURLY_BRACKET TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET CLOSE_CURLY_BRACKET SEMICOLON
+																				{ $$ = UpdateSemanticAction($1, $5); }
+	;
 %%

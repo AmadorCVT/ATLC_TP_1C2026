@@ -64,6 +64,24 @@ void destroyPrint(Print * print) {
 	}
 }
 
+void destroyEquivalent(Equivalent * node) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (node != NULL) {
+		free(node->name1);
+		free(node->name2);
+		free(node);
+	}
+}
+
+void destroyUpdate(Update * node) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (node != NULL) {
+		free(node->automatonName);
+		destroyTransition(node->transitions);
+		free(node);
+	}
+}
+
 void destroyDefinition(Definition * definition) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (definition != NULL) {
@@ -103,6 +121,12 @@ void destroyStatement(Statement * statement) {
 				break;
 			case PRINT_STATEMENT:
 				destroyPrint(statement->print);
+				break;
+			case EQUIVALENT_STATEMENT:
+				destroyEquivalent(statement->equivalent);
+				break;
+			case UPDATE_STATEMENT:
+				destroyUpdate(statement->update);
 				break;
 		}
 		free(statement);
