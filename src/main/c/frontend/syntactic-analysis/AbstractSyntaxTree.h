@@ -122,7 +122,9 @@ struct Equivalent {
 
 struct Update {
 	char *       automatonName;
-	Transition * transitions;
+	StringList * states;       /* NULL if not specified */
+	StringList * acceptStates; /* NULL if not specified */
+	Transition * transitions;  /* NULL if not specified */
 };
 
 struct Statement {

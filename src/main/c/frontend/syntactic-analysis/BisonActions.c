@@ -266,12 +266,33 @@ Statement * EquivalentStatementSemanticAction(Equivalent * equivalent) {
 	return statement;
 }
 
-Update * UpdateSemanticAction(char * name, Transition * transitions) {
+Update * EmptyUpdateBodySemanticAction() {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Update * node = calloc(1, sizeof(Update));
-	node->automatonName = name;
-	node->transitions = transitions;
-	return node;
+	return calloc(1, sizeof(Update));
+}
+
+Update * StatesUpdateBodySemanticAction(Update * body, StringList * states) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->states = states;
+	return body;
+}
+
+Update * AcceptUpdateBodySemanticAction(Update * body, StringList * acceptStates) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->acceptStates = acceptStates;
+	return body;
+}
+
+Update * TransitionsUpdateBodySemanticAction(Update * body, Transition * transitions) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->transitions = transitions;
+	return body;
+}
+
+Update * UpdateSemanticAction(char * name, Update * body) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->automatonName = name;
+	return body;
 }
 
 Statement * UpdateStatementSemanticAction(Update * update) {

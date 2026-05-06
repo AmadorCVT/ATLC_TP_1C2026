@@ -117,6 +117,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %type <transitionSymbol> transition_symbol
 %type <equivalent> equivalent
 %type <update>     update
+%type <update>     update_body
 
 %%
 
@@ -205,7 +206,13 @@ print: PRINT ID SEMICOLON															{ $$ = PrintSemanticAction($2); }
 equivalent: EQUIVALENT ID ID SEMICOLON											{ $$ = EquivalentSemanticAction($2, $3); }
 	;
 
-update: ID OPEN_CURLY_BRACKET TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET CLOSE_CURLY_BRACKET SEMICOLON
-																				{ $$ = UpdateSemanticAction($1, $5); }
+update: ID OPEN_CURLY_BRACKET update_body CLOSE_CURLY_BRACKET SEMICOLON		{ $$ = UpdateSemanticAction($1, $3); }
+	;
+
+update_body: %empty																{ $$ = EmptyUpdateBodySemanticAction(); }
+	| update_body STATES ASSIGN state_set										{ $$ = StatesUpdateBodySemanticAction($1, $4); }
+	| update_body ACCEPT ASSIGN state_set										{ $$ = AcceptUpdateBodySemanticAction($1, $4); }
+	| update_body TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET
+																				{ $$ = TransitionsUpdateBodySemanticAction($1, $4); }
 	;
 %%

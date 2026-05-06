@@ -77,6 +77,8 @@ void destroyUpdate(Update * node) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (node != NULL) {
 		free(node->automatonName);
+		destroyStringList(node->states);
+		destroyStringList(node->acceptStates);
 		destroyTransition(node->transitions);
 		free(node);
 	}

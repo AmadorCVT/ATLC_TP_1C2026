@@ -42,7 +42,11 @@ Show * ShowClosureSemanticAction(char * state, char * id);
 Print * PrintSemanticAction(char * id);
 Equivalent * EquivalentSemanticAction(char * name1, char * name2);
 Statement *  EquivalentStatementSemanticAction(Equivalent * equivalent);
-Update *     UpdateSemanticAction(char * name, Transition * transitions);
+Update *     EmptyUpdateBodySemanticAction();
+Update *     StatesUpdateBodySemanticAction(Update * body, StringList * states);
+Update *     AcceptUpdateBodySemanticAction(Update * body, StringList * acceptStates);
+Update *     TransitionsUpdateBodySemanticAction(Update * body, Transition * transitions);
+Update *     UpdateSemanticAction(char * name, Update * body);
 Statement *  UpdateStatementSemanticAction(Update * update);
 
 #endif
