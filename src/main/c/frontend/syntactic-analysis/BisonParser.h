@@ -116,6 +116,8 @@ union SemanticValue
 	Automaton * automaton;
 	Test * test;
 	Conversion * conversion;
+	Show * show;
+	Print * print;
 	Definition * definition;
 	Program * program;
 	Statement * statement;
@@ -123,8 +125,10 @@ union SemanticValue
 	Transition * transition;
 	TransitionDestination * transitionDestination;
 	TransitionSymbol * transitionSymbol;
+	Equivalent * equivalent;
+	Update *     update;
 
-#line 128 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 132 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 13 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

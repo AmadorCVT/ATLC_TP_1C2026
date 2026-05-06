@@ -61,10 +61,12 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> COMMA
 %token <token> CONVERT
 %token <string> ID
+%token <token> IGNORED
 %token <token> LAMBDA
 %token <string> NUMERIC_SYMBOL
 %token <token> OPEN_COMMENT
 %token <token> OPEN_CURLY_BRACKET
+%token <token> QUOTATION_MARK
 %token <token> PRINT
 %token <token> SEMICOLON
 %token <token> SHOW
@@ -74,6 +76,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_DFA
 %token <token> TYPE_LNFA
 %token <token> TYPE_NFA
+%token <token> UNKNOWN
 %token <token> TEST
 %token <token> WITH
 %token <token> TO
@@ -83,6 +86,11 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> CLOSURE
 %token <token> IN
 %token <token> EQUIVALENT
+%token <token> OP_LEQ
+%token <token> OP_GEQ
+%token <token> OP_NEQ
+%token <token> OP_LT
+%token <token> OP_GT
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
 %token <string> STRING
