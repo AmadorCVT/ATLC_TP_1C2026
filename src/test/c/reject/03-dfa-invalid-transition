@@ -1,4 +1,3 @@
-/* Defines an automaton */
 automaton ParidadCeros : DFA {
     alphabet = {0, 1}
     states = {q0, q1}
@@ -6,12 +5,9 @@ automaton ParidadCeros : DFA {
     accept = {q0}
     transitions {
         q0 -> 0 : q1
+        q0 -> 0 : q0
         q0 -> 1 : q0
         q1 -> 0 : q0
         q1 -> 1 : q1
     }
 };
-
-test ParidadCeros with "0010011";
-test ParidadCeros with "00";
-test ParidadCeros with "11101111110";

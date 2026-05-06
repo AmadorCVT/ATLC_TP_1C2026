@@ -1,7 +1,6 @@
-automaton SinTransiciones : DFA {
+automaton SinEstadoInicial : DFA {
     alphabet = {a}
     states = {q0}
-    start = q0
     accept = {q0}
     transitions {
     }

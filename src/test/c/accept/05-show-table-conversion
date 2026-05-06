@@ -11,3 +11,7 @@ automaton TieneAB : NFA {
         q2 -> b : {q2}
     }
 };
+
+convert TieneAB to DFA as TieneABDFA;
+
+show table of TieneABDFA;

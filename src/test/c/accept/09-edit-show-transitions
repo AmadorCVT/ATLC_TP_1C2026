@@ -1,0 +1,19 @@
+automaton Editado : DFA {
+    alphabet = {a}
+    states = {q0}
+    start = q0
+    accept = {q0}
+    transitions {
+        q0 -> a : q0
+    }
+};
+
+show transitions of Editado;
+
+Editado {
+    transitions {
+        s0 -> 1 : {s0, s1}
+    }
+};
+
+show transitions of Editado;

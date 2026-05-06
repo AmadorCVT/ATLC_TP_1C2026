@@ -1,0 +1,9 @@
+automaton SimboloInvalido: DFA {
+    alphabet = {a}
+    states = {q0}
+    start = q0
+    accept = {q0}
+    transitions {
+        q0 -> b : {q0}
+    }
+}

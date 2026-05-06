@@ -4,8 +4,8 @@ automaton LambdaEjemplo : LNFA {
     start = q0
     accept = {q2}
     transitions {
-        q0 -> lambda : {q1}
-        q1 -> a : {q1}
-        q1 -> b : {q2}
+        q0 -> lambda : q1
+        q1 -> a : q1
+        q1 -> b : q2
     }
 };
