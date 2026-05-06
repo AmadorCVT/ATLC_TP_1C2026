@@ -24,6 +24,7 @@ extern CompilationStatus UnknownLexemeAction();
 identifier			[[:alpha:]_][[:alnum:]_]*
 numeric_symbol		[[:digit:]]+
 whitespace			[[:space:]]+
+line_comment		"//"[^\r\n]*
 
 %%
 
@@ -75,6 +76,7 @@ whitespace			[[:space:]]+
 {identifier}						{ return TokenWithStringLexemeAction(ID); }
 {numeric_symbol}					{ return TokenWithStringLexemeAction(NUMERIC_SYMBOL); }
 
+{line_comment}						{ return IgnoredLexemeAction(); }
 {whitespace}						{ return IgnoredLexemeAction(); }
 .									{ return UnknownLexemeAction(); }
 

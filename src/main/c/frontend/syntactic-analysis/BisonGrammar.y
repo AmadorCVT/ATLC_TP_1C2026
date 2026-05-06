@@ -189,8 +189,10 @@ transition_destination: state													{ $$ = SingleTransitionDestinationSema
 	;
 
 test: TEST ID WITH STRING SEMICOLON												{ $$ = TestSemanticAction($2, $4); }
+	;
 
 conversion: CONVERT ID TO type AS ID SEMICOLON										{ $$ = ConversionSemanticAction($2, $4, $6); }
+	;
 
 show: SHOW TRANSITIONS OF ID SEMICOLON												{ $$ = ShowTransitionsSemanticAction($4); }
 	| SHOW TABLE OF ID SEMICOLON													{ $$ = ShowTableSemanticAction($4); }
@@ -198,6 +200,7 @@ show: SHOW TRANSITIONS OF ID SEMICOLON												{ $$ = ShowTransitionsSemantic
 	;
 
 print: PRINT ID SEMICOLON															{ $$ = PrintSemanticAction($2); }
+	;
 
 equivalent: EQUIVALENT ID ID SEMICOLON											{ $$ = EquivalentSemanticAction($2, $3); }
 	;
