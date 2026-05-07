@@ -33,6 +33,7 @@ void destroyTest(Test * test) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (test != NULL) {
 		free(test->id);
+		free(test->input);
 		free(test);
 	}
 }
