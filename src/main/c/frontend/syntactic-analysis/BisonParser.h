@@ -80,24 +80,25 @@ extern int yydebug;
     TYPE_DFA = 281,                /* TYPE_DFA  */
     TYPE_LNFA = 282,               /* TYPE_LNFA  */
     TYPE_NFA = 283,                /* TYPE_NFA  */
-    UNKNOWN = 284,                 /* UNKNOWN  */
-    TEST = 285,                    /* TEST  */
-    WITH = 286,                    /* WITH  */
-    TO = 287,                      /* TO  */
-    AS = 288,                      /* AS  */
-    TABLE = 289,                   /* TABLE  */
-    OF = 290,                      /* OF  */
-    CLOSURE = 291,                 /* CLOSURE  */
-    IN = 292,                      /* IN  */
-    EQUIVALENT = 293,              /* EQUIVALENT  */
-    OP_LEQ = 294,                  /* OP_LEQ  */
-    OP_GEQ = 295,                  /* OP_GEQ  */
-    OP_NEQ = 296,                  /* OP_NEQ  */
-    OP_LT = 297,                   /* OP_LT  */
-    OP_GT = 298,                   /* OP_GT  */
-    OPEN_PARENTHESIS = 299,        /* OPEN_PARENTHESIS  */
-    CLOSE_PARENTHESIS = 300,       /* CLOSE_PARENTHESIS  */
-    STRING = 301                   /* STRING  */
+    TYPE_STRING = 284,             /* TYPE_STRING  */
+    UNKNOWN = 285,                 /* UNKNOWN  */
+    TEST = 286,                    /* TEST  */
+    WITH = 287,                    /* WITH  */
+    TO = 288,                      /* TO  */
+    AS = 289,                      /* AS  */
+    TABLE = 290,                   /* TABLE  */
+    OF = 291,                      /* OF  */
+    CLOSURE = 292,                 /* CLOSURE  */
+    IN = 293,                      /* IN  */
+    EQUIVALENT = 294,              /* EQUIVALENT  */
+    OP_LEQ = 295,                  /* OP_LEQ  */
+    OP_GEQ = 296,                  /* OP_GEQ  */
+    OP_NEQ = 297,                  /* OP_NEQ  */
+    OP_LT = 298,                   /* OP_LT  */
+    OP_GT = 299,                   /* OP_GT  */
+    OPEN_PARENTHESIS = 300,        /* OPEN_PARENTHESIS  */
+    CLOSE_PARENTHESIS = 301,       /* CLOSE_PARENTHESIS  */
+    STRING = 302                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -115,6 +116,7 @@ union SemanticValue
 
 	Automaton * automaton;
 	Test * test;
+	StringDeclaration * stringDeclaration;
 	Conversion * conversion;
 	Show * show;
 	Print * print;
@@ -128,7 +130,7 @@ union SemanticValue
 	Equivalent * equivalent;
 	Update *     update;
 
-#line 132 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 134 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 13 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

@@ -21,6 +21,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 	Automaton * automaton;
 	Test * test;
+	StringDeclaration * stringDeclaration;
 	Conversion * conversion;
 	Show * show;
 	Print * print;
@@ -38,6 +39,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %destructor { free($$); } <string>
 %destructor { destroyAutomaton($$); } <automaton>
 %destructor { destroyTest($$); } <test>
+%destructor { destroyStringDeclaration($$); } <stringDeclaration>
 %destructor { destroyConversion($$); } <conversion>
 %destructor { destroyShow($$); } <show>
 %destructor { destroyPrint($$); } <print>
@@ -76,6 +78,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_DFA
 %token <token> TYPE_LNFA
 %token <token> TYPE_NFA
+%token <token> TYPE_STRING
 %token <token> UNKNOWN
 %token <token> TEST
 %token <token> WITH
@@ -97,6 +100,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 %type <automaton> automaton
 %type <test> test
+%type <stringDeclaration> string_declaration
 %type <conversion> conversion
 %type <show> show
 %type <print> print
@@ -130,6 +134,7 @@ statement_list: statement														{ $$ = $1; }
 
 statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); }
 	| test																		{ $$ = TestStatementSemanticAction($1); }
+	| string_declaration														{ $$ = StringDeclarationStatementSemanticAction($1); }
 	| conversion																{ $$ = ConversionStatementSemanticAction($1); }
 	| show																		{ $$ = ShowStatementSemanticAction($1); }
 	| print																		{ $$ = PrintStatementSemanticAction($1); }
@@ -190,6 +195,10 @@ transition_destination: state													{ $$ = SingleTransitionDestinationSema
 	;
 
 test: TEST ID WITH STRING SEMICOLON												{ $$ = TestSemanticAction($2, $4); }
+	| TEST ID WITH ID SEMICOLON													{ $$ = TestVariableSemanticAction($2, $4); }
+	;
+
+string_declaration: TYPE_STRING ID ASSIGN STRING SEMICOLON						{ $$ = StringDeclarationSemanticAction($2, $4); }
 	;
 
 conversion: CONVERT ID TO type AS ID SEMICOLON										{ $$ = ConversionSemanticAction($2, $4, $6); }

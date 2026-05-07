@@ -11,10 +11,12 @@ ModuleDestructor initializeAbstractSyntaxTreeModule();
 typedef enum AutomatonType AutomatonType;
 typedef enum ShowType ShowType;
 typedef enum StatementType StatementType;
+typedef enum TestInputType TestInputType;
 typedef enum TransitionDestinationType TransitionDestinationType;
 
 typedef struct Automaton Automaton;
 typedef struct Test Test;
+typedef struct StringDeclaration StringDeclaration;
 typedef struct Conversion Conversion;
 typedef struct Show Show;
 typedef struct Print Print;
@@ -41,7 +43,13 @@ enum StatementType {
 	SHOW_STATEMENT,
 	PRINT_STATEMENT,
 	EQUIVALENT_STATEMENT,
-	UPDATE_STATEMENT
+	UPDATE_STATEMENT,
+	STRING_DECLARATION_STATEMENT
+};
+
+enum TestInputType {
+	TEST_INPUT_LITERAL,
+	TEST_INPUT_VARIABLE
 };
 
 enum TransitionDestinationType {
@@ -96,7 +104,13 @@ struct Automaton {
 
 struct Test{
 	char * id;
-	char * string;
+	char * input;
+	TestInputType inputType;
+};
+
+struct StringDeclaration {
+	char * id;
+	char * value;
 };
 
 struct Conversion {
@@ -136,6 +150,7 @@ struct Statement {
 		Print *      print;
 		Equivalent * equivalent;
 		Update *     update;
+		StringDeclaration * stringDeclaration;
 	};
 	StatementType type;
 	Statement *   next;
@@ -147,6 +162,7 @@ struct Program {
 
 void destroyAutomaton(Automaton * automaton);
 void destroyTest(Test * test);
+void destroyStringDeclaration(StringDeclaration * declaration);
 void destroyConversion(Conversion * conversion);
 void destroyShow(Show * show);
 void destroyPrint(Print * print);

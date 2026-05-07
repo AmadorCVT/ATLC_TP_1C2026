@@ -43,12 +43,30 @@ Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * 
 	return automaton;
 }
 
-Test * TestSemanticAction(char * id, char * string) {
+Test * TestSemanticAction(char * id, char * input) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Test * test = calloc(1, sizeof(Test));
 	test->id = id;
-	test->string = string;
+	test->input = input;
+	test->inputType = TEST_INPUT_LITERAL;
 	return test;
+}
+
+Test * TestVariableSemanticAction(char * id, char * input) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Test * test = calloc(1, sizeof(Test));
+	test->id = id;
+	test->input = input;
+	test->inputType = TEST_INPUT_VARIABLE;
+	return test;
+}
+
+StringDeclaration * StringDeclarationSemanticAction(char * id, char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringDeclaration * declaration = calloc(1, sizeof(StringDeclaration));
+	declaration->id = id;
+	declaration->value = value;
+	return declaration;
 }
 
 Conversion * ConversionSemanticAction(char * input, AutomatonType type, char * output) {
@@ -115,6 +133,14 @@ Statement * TestStatementSemanticAction(Test * test) {
 	Statement * statement = calloc(1, sizeof(Statement));
 	statement->test = test;
 	statement->type = TEST_STATEMENT;
+	return statement;
+}
+
+Statement * StringDeclarationStatementSemanticAction(StringDeclaration * declaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->stringDeclaration = declaration;
+	statement->type = STRING_DECLARATION_STATEMENT;
 	return statement;
 }
 
