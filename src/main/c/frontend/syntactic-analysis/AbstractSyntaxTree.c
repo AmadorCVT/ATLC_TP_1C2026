@@ -33,8 +33,17 @@ void destroyTest(Test * test) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (test != NULL) {
 		free(test->id);
-		free(test->string);
+		free(test->input);
 		free(test);
+	}
+}
+
+void destroyStringDeclaration(StringDeclaration * declaration) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (declaration != NULL) {
+		free(declaration->id);
+		free(declaration->value);
+		free(declaration);
 	}
 }
 
@@ -139,6 +148,9 @@ void destroyStatement(Statement * statement) {
 				break;
 			case UPDATE_STATEMENT:
 				destroyUpdate(statement->update);
+				break;
+			case STRING_DECLARATION_STATEMENT:
+				destroyStringDeclaration(statement->stringDeclaration);
 				break;
 		}
 		free(statement);

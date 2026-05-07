@@ -58,6 +58,7 @@ line_comment		"//"[^\r\n]*
 "DFA"								{ return TokenLexemeAction(TYPE_DFA); }
 "NFA"								{ return TokenLexemeAction(TYPE_NFA); }
 "LNFA"								{ return TokenLexemeAction(TYPE_LNFA); }
+"String"							{ return TokenLexemeAction(TYPE_STRING); }
 
 "->"								{ return TokenLexemeAction(ARROW); }
 "<="								{ return TokenLexemeAction(OP_LEQ); }

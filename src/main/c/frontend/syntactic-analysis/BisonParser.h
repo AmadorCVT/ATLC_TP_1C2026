@@ -80,6 +80,7 @@ extern int yydebug;
     TYPE_DFA = 281,                /* TYPE_DFA  */
     TYPE_LNFA = 282,               /* TYPE_LNFA  */
     TYPE_NFA = 283,                /* TYPE_NFA  */
+<<<<<<< HEAD
     UNKNOWN = 284,                 /* UNKNOWN  */
     TEST = 285,                    /* TEST  */
     FOR = 286,                     /* FOR  */
@@ -90,6 +91,18 @@ extern int yydebug;
     CLOSURE = 291,                 /* CLOSURE  */
     IN = 292,                      /* IN  */
     WITH = 293,                    /* WITH  */
+=======
+    TYPE_STRING = 284,             /* TYPE_STRING  */
+    UNKNOWN = 285,                 /* UNKNOWN  */
+    TEST = 286,                    /* TEST  */
+    WITH = 287,                    /* WITH  */
+    TO = 288,                      /* TO  */
+    AS = 289,                      /* AS  */
+    TABLE = 290,                   /* TABLE  */
+    OF = 291,                      /* OF  */
+    CLOSURE = 292,                 /* CLOSURE  */
+    IN = 293,                      /* IN  */
+>>>>>>> be209b8824e0f7050916f057e2966a76425abd8e
     EQUIVALENT = 294,              /* EQUIVALENT  */
     OP_LEQ = 295,                  /* OP_LEQ  */
     OP_GEQ = 296,                  /* OP_GEQ  */
@@ -117,6 +130,7 @@ union SemanticValue
 	Automaton * automaton;
 	For * for_loop;
 	Test * test;
+	StringDeclaration * stringDeclaration;
 	Conversion * conversion;
 	Show * show;
 	Print * print;

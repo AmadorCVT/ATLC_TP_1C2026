@@ -517,6 +517,7 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
+#line 86 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 #line 87 "src/main/c/frontend/lexical-analysis/FlexPatterns.l"
 
 
