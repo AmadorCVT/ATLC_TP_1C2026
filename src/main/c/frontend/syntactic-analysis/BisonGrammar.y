@@ -37,6 +37,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	Update *     update;
 }
 
+%left TEST
+
 %destructor { free($$); } <string>
 %destructor { destroyAutomaton($$); } <automaton>
 %destructor { destroyFor($$); } <for_loop>
@@ -148,7 +150,7 @@ statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); 
 	| for_loop																	{ $$ = ForStatementSemanticAction($1); }
 	;
 
-for_loop: FOR ID IN OPEN_CURLY_BRACKET array_list CLOSE_CURLY_BRACKET OPEN_CURLY_BRACKET statement CLOSE_CURLY_BRACKET      
+for_loop: FOR ID IN OPEN_CURLY_BRACKET array_list CLOSE_CURLY_BRACKET OPEN_CURLY_BRACKET statement_list CLOSE_CURLY_BRACKET      
 																				{ $$ = ForSemanticAction($2, $5, $8); }
 	;
 
