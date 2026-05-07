@@ -184,8 +184,10 @@ alphabet_symbol: ID																{ $$ = $1; }
 state_set: OPEN_CURLY_BRACKET state_list CLOSE_CURLY_BRACKET					{ $$ = $2; }
 	;
 
-array_list: ID																	{ $$ = SingleStringListSemanticAction($1); }
-	| array_list COMMA ID														{ $$ = AppendStringListSemanticAction($1, $3); }
+array_list: STRING																{ $$ = SingleStringListSemanticAction($1); }
+	| ID																		{ $$ = SingleVariableListSemanticAction($1); }
+	| array_list COMMA STRING													{ $$ = AppendStringListSemanticAction($1, $3); }
+	| array_list COMMA ID														{ $$ = AppendVariableListSemanticAction($1, $3); }
 	;
 
 state_list: state																{ $$ = SingleStringListSemanticAction($1); }

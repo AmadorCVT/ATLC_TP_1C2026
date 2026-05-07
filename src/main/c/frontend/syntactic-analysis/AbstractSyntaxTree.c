@@ -149,6 +149,9 @@ void destroyStatement(Statement * statement) {
 			case UPDATE_STATEMENT:
 				destroyUpdate(statement->update);
 				break;
+			case FOR_STATEMENT:
+				destroyFor(statement->for_loop);
+				break;
 			case STRING_DECLARATION_STATEMENT:
 				destroyStringDeclaration(statement->stringDeclaration);
 				break;

@@ -199,6 +199,27 @@ StringList * AppendStringListSemanticAction(StringList * list, char * value) {
 	return list;
 }
 
+StringList * AppendVariableListSemanticAction(StringList * list, char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * next = SingleStringListSemanticAction(id);
+	if (list == NULL) {
+		return next;
+	}
+	StringList * last = list;
+	while (last->next != NULL) {
+		last = last->next;
+	}
+	last->next = next;
+	return list;
+}
+
+StringList * SingleVariableListSemanticAction(char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * stringList = calloc(1, sizeof(StringList));
+	stringList->value = id;
+	return stringList;
+}
+
 StringList * SingleStringListSemanticAction(char * value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	StringList * stringList = calloc(1, sizeof(StringList));

@@ -34,6 +34,8 @@ Statement * ConversionStatementSemanticAction(Conversion * conversion);
 Statement * ShowStatementSemanticAction(Show * show);
 Statement * PrintStatementSemanticAction(Print * print);
 StringList * AppendStringListSemanticAction(StringList * list, char * value);
+StringList * AppendVariableListSemanticAction(StringList * list, char * id);
+StringList * SingleVariableListSemanticAction(char * id);
 StringList * SingleStringListSemanticAction(char * value);
 Transition * AppendTransitionListSemanticAction(Transition * list, Transition * transition);
 Transition * TransitionSemanticAction(char * source, TransitionSymbol * symbol, TransitionDestination * destination);

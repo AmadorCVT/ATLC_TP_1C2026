@@ -11,6 +11,6 @@ automaton ParidadCeros : DFA {
     }
 };
 
-for i with {"0010011", "00", "11101111110"} {
-    test ParidadCeros with "1919";
+for i in {"0010011", "00", "11101111110"} {
+    test ParidadCeros with i;
 }
