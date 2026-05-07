@@ -155,6 +155,9 @@ void destroyStatement(Statement * statement) {
 			case STRING_DECLARATION_STATEMENT:
 				destroyStringDeclaration(statement->stringDeclaration);
 				break;
+			default:
+				logError(_logger, "Unknown statement type: %d", statement->type);
+				break;
 		}
 		free(statement);
 		statement = next;
@@ -192,6 +195,9 @@ void destroyTransitionDestination(TransitionDestination * destination) {
 				break;
 			case MULTIPLE_TRANSITION_DESTINATIONS:
 				destroyStringList(destination->states);
+				break;
+			default:
+				logError(_logger, "Unknown transition destination type: %d", destination->type);
 				break;
 		}
 		free(destination);
