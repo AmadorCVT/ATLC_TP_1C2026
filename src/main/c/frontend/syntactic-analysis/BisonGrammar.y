@@ -20,6 +20,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	TokenLabel token;
 
 	Automaton * automaton;
+	For * for_loop;
 	Test * test;
 	Conversion * conversion;
 	Show * show;
@@ -37,6 +38,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 %destructor { free($$); } <string>
 %destructor { destroyAutomaton($$); } <automaton>
+%destructor { destroyFor($$); } <for_loop>
 %destructor { destroyTest($$); } <test>
 %destructor { destroyConversion($$); } <conversion>
 %destructor { destroyShow($$); } <show>
@@ -78,13 +80,14 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_NFA
 %token <token> UNKNOWN
 %token <token> TEST
-%token <token> WITH
+%token <token> FOR
 %token <token> TO
 %token <token> AS
 %token <token> TABLE
 %token <token> OF
 %token <token> CLOSURE
 %token <token> IN
+%token <token> WITH
 %token <token> EQUIVALENT
 %token <token> OP_LEQ
 %token <token> OP_GEQ
@@ -97,6 +100,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 %type <automaton> automaton
 %type <test> test
+%type <for_loop> for_loop
 %type <conversion> conversion
 %type <show> show
 %type <print> print
@@ -111,6 +115,7 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %type <stringList> alphabet_symbol_list
 %type <stringList> state_set
 %type <stringList> state_list
+%type <stringList> array_list
 %type <transition> transition
 %type <transition> transition_list
 %type <transitionDestination> transition_destination
@@ -135,6 +140,11 @@ statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); 
 	| print																		{ $$ = PrintStatementSemanticAction($1); }
 	| equivalent																{ $$ = EquivalentStatementSemanticAction($1); }
 	| update																	{ $$ = UpdateStatementSemanticAction($1); }
+	| for_loop																	{ $$ = ForStatementSemanticAction($1); }
+	;
+
+for_loop: FOR ID IN OPEN_CURLY_BRACKET array_list CLOSE_CURLY_BRACKET OPEN_CURLY_BRACKET statement CLOSE_CURLY_BRACKET      
+																				{ $$ = ForSemanticAction($2, $5, $8); }
 	;
 
 automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
@@ -167,6 +177,10 @@ alphabet_symbol: ID																{ $$ = $1; }
 state_set: OPEN_CURLY_BRACKET state_list CLOSE_CURLY_BRACKET					{ $$ = $2; }
 	;
 
+array_list: ID																	{ $$ = SingleStringListSemanticAction($1); }
+	| array_list COMMA ID														{ $$ = AppendStringListSemanticAction($1, $3); }
+	;
+
 state_list: state																{ $$ = SingleStringListSemanticAction($1); }
 	| state_list COMMA state													{ $$ = AppendStringListSemanticAction($1, $3); }
 	;
@@ -174,7 +188,7 @@ state_list: state																{ $$ = SingleStringListSemanticAction($1); }
 state: ID																		{ $$ = $1; }
 	;
 
-transition_list: %empty														{ $$ = NULL; }
+transition_list: %empty															{ $$ = NULL; }
 	| transition_list transition												{ $$ = AppendTransitionListSemanticAction($1, $2); }
 	;
 

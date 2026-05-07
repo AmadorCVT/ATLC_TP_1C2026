@@ -52,6 +52,8 @@ line_comment		"//"[^\r\n]*
 "closure"							{ return TokenLexemeAction(CLOSURE); }
 "in"								{ return TokenLexemeAction(IN); }
 "equivalent"						{ return TokenLexemeAction(EQUIVALENT); }
+"for"						        { return TokenLexemeAction(FOR); }
+"IN"						        { return TokenLexemeAction(IN); }
 
 "DFA"								{ return TokenLexemeAction(TYPE_DFA); }
 "NFA"								{ return TokenLexemeAction(TYPE_NFA); }

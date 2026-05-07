@@ -34,6 +34,15 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
+For * ForSemanticAction(char * index, StringList * values, Statement * statements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	For * for_loop = calloc(1, sizeof(For));
+	for_loop->index = index;
+	for_loop->values = values;
+	for_loop->statements= statements;
+	return for_loop;
+}
+
 Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * definition) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Automaton * automaton = calloc(1, sizeof(Automaton));
@@ -100,6 +109,14 @@ Statement * AppendStatementListSemanticAction(Statement * list, Statement * stat
 	}
 	last->next = statement;
 	return list;
+}
+
+Statement * ForStatementSemanticAction(For * for_loop) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->for_loop = for_loop;
+	statement->type = FOR_STATEMENT;
+	return statement;
 }
 
 Statement * AutomatonStatementSemanticAction(Automaton * automaton) {

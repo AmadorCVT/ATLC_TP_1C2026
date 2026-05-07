@@ -82,22 +82,23 @@ extern int yydebug;
     TYPE_NFA = 283,                /* TYPE_NFA  */
     UNKNOWN = 284,                 /* UNKNOWN  */
     TEST = 285,                    /* TEST  */
-    WITH = 286,                    /* WITH  */
+    FOR = 286,                     /* FOR  */
     TO = 287,                      /* TO  */
     AS = 288,                      /* AS  */
     TABLE = 289,                   /* TABLE  */
     OF = 290,                      /* OF  */
     CLOSURE = 291,                 /* CLOSURE  */
     IN = 292,                      /* IN  */
-    EQUIVALENT = 293,              /* EQUIVALENT  */
-    OP_LEQ = 294,                  /* OP_LEQ  */
-    OP_GEQ = 295,                  /* OP_GEQ  */
-    OP_NEQ = 296,                  /* OP_NEQ  */
-    OP_LT = 297,                   /* OP_LT  */
-    OP_GT = 298,                   /* OP_GT  */
-    OPEN_PARENTHESIS = 299,        /* OPEN_PARENTHESIS  */
-    CLOSE_PARENTHESIS = 300,       /* CLOSE_PARENTHESIS  */
-    STRING = 301                   /* STRING  */
+    WITH = 293,                    /* WITH  */
+    EQUIVALENT = 294,              /* EQUIVALENT  */
+    OP_LEQ = 295,                  /* OP_LEQ  */
+    OP_GEQ = 296,                  /* OP_GEQ  */
+    OP_NEQ = 297,                  /* OP_NEQ  */
+    OP_LT = 298,                   /* OP_LT  */
+    OP_GT = 299,                   /* OP_GT  */
+    OPEN_PARENTHESIS = 300,        /* OPEN_PARENTHESIS  */
+    CLOSE_PARENTHESIS = 301,       /* CLOSE_PARENTHESIS  */
+    STRING = 302                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -114,6 +115,7 @@ union SemanticValue
 	TokenLabel token;
 
 	Automaton * automaton;
+	For * for_loop;
 	Test * test;
 	Conversion * conversion;
 	Show * show;
@@ -128,7 +130,7 @@ union SemanticValue
 	Equivalent * equivalent;
 	Update *     update;
 
-#line 132 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
+#line 134 "src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
 };
 #line 13 "src/main/c/frontend/syntactic-analysis/BisonGrammar.y"

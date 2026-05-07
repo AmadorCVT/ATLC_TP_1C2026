@@ -96,6 +96,16 @@ void destroyDefinition(Definition * definition) {
 	}
 }
 
+void destroyFor(For * for_loop) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (for_loop != NULL) {
+		free(for_loop->index);
+		destroyStringList(for_loop->values);
+		destroyStatement(for_loop->statements);
+		free(for_loop);
+	}
+}
+
 void destroyProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (program != NULL) {

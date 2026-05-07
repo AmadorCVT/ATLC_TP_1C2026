@@ -15,6 +15,8 @@ typedef enum TransitionDestinationType TransitionDestinationType;
 
 typedef struct Automaton Automaton;
 typedef struct Test Test;
+typedef struct For For;
+typedef struct Array Array;
 typedef struct Conversion Conversion;
 typedef struct Show Show;
 typedef struct Print Print;
@@ -41,7 +43,8 @@ enum StatementType {
 	SHOW_STATEMENT,
 	PRINT_STATEMENT,
 	EQUIVALENT_STATEMENT,
-	UPDATE_STATEMENT
+	UPDATE_STATEMENT,
+	FOR_STATEMENT
 };
 
 enum TransitionDestinationType {
@@ -53,6 +56,12 @@ enum ShowType {
 	SHOW_TRANSITIONS,
 	SHOW_TABLE,
 	SHOW_CLOSURE
+};
+
+struct For {
+	char * index;
+	StringList * values;
+	Statement * statements;
 };
 
 struct StringList {
@@ -136,6 +145,7 @@ struct Statement {
 		Print *      print;
 		Equivalent * equivalent;
 		Update *     update;
+		For *     	 for_loop;
 	};
 	StatementType type;
 	Statement *   next;
@@ -147,6 +157,7 @@ struct Program {
 
 void destroyAutomaton(Automaton * automaton);
 void destroyTest(Test * test);
+void destroyFor(For * for_loop);
 void destroyConversion(Conversion * conversion);
 void destroyShow(Show * show);
 void destroyPrint(Print * print);
