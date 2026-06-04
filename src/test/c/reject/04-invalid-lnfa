@@ -1,4 +1,4 @@
-automaton LambdaEjemplo : LNFA {
+automaton LambdaEjemplo : DFA {
     alphabet = {a, b}
     states = {q0, q1, q2}
     start = q0
