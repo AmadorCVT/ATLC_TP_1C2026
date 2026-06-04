@@ -1,5 +1,6 @@
 #include "backend/code-generation/Generator.h"
 #include "backend/domain-specific/Automaton.h"
+#include "backend/semantic-analysis/SemanticAnalyzer.h"
 #include "frontend/Frontend.h"
 #include "frontend/lexical-analysis/FlexActions.h"
 #include "frontend/syntactic-analysis/BisonActions.h"
@@ -15,20 +16,31 @@ const int main(const int length, const char ** arguments) {
 		logDebugging(logger, "Argument %d: \"%s\"", k, arguments[k]);
 	}
 	CompilerState compilerState = {
-		.abstractSyntaxtTree = NULL
+		.abstractSyntaxtTree = NULL,
+		.symbolTable = NULL,
+		.scopeStack = NULL,
+		.hasSemanticErrors = false
 	};
 	ModuleDestructor moduleDestructors[] = {
 		initializeAbstractSyntaxTreeModule(),
 		initializeFlexActionsModule(lexicalAnalyzer),
 		initializeBisonActionsModule(&compilerState),
 		initializeFrontendModule(lexicalAnalyzer),
-		initializeAutomatonModule()
+		initializeAutomatonModule(),
+		initializeSemanticAnalyzerModule()
 	};
 	CompilationStatus compilationStatus = executeSyntacticAnalysis();
 	Program * program = compilerState.abstractSyntaxtTree;
 	if (compilationStatus != SUCCEEDED) {
 		logError(logger, "The syntactic-analysis phase rejects the input program.");
 		compilationStatus = FAILED;
+	}
+	else {
+		compilationStatus = executeSemanticAnalysis(&compilerState);
+		if (compilationStatus != SUCCEEDED) {
+			logError(logger, "The semantic-analysis phase rejects the input program.");
+			compilationStatus = FAILED;
+		}
 	}
 	logDebugging(logger, "Releasing AST resources...");
 	destroyProgram(program);
