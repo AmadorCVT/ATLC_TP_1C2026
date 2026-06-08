@@ -27,7 +27,8 @@ const int main(const int length, const char ** arguments) {
 		initializeBisonActionsModule(&compilerState),
 		initializeFrontendModule(lexicalAnalyzer),
 		initializeAutomatonModule(),
-		initializeSemanticAnalyzerModule()
+		initializeSemanticAnalyzerModule(),
+		initializeGeneratorModule()
 	};
 	CompilationStatus compilationStatus = executeSyntacticAnalysis();
 	Program * program = compilerState.abstractSyntaxtTree;
@@ -40,6 +41,9 @@ const int main(const int length, const char ** arguments) {
 		if (compilationStatus != SUCCEEDED) {
 			logError(logger, "The semantic-analysis phase rejects the input program.");
 			compilationStatus = FAILED;
+		}
+		else {
+			executeGenerator(&compilerState);
 		}
 	}
 	logDebugging(logger, "Releasing AST resources...");
