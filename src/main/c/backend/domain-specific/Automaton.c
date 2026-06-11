@@ -412,6 +412,210 @@ RuntimeAutomaton * convertDFAtoNFA(RuntimeAutomaton * dfa, const char * newName)
 	return cloneRuntimeAutomaton(dfa, newName, NFA);
 }
 
+/* We need a way to name subset-states so they're consistent,
+   regardless of the order we found them*/
+
+static RuntimeStringList * _cloneStringList(RuntimeStringList * list) {
+	RuntimeStringList * clone = NULL;
+	for (RuntimeStringList * s = list; s != NULL; s = s->next) {
+		_appendRuntimeString(&clone, s->value);
+	}
+	return clone;
+}
+
+static void _sortStringList(RuntimeStringList ** list) {
+	if (*list == NULL || (*list)->next == NULL) return;
+	/* Simple bubble sort */
+	bool swapped = true;
+	while (swapped) {
+		swapped = false;
+		RuntimeStringList ** ptr = list;
+		while ((*ptr)->next != NULL) {
+			if (strcmp((*ptr)->value, (*ptr)->next->value) > 0) {
+				/* swap the two nodes */
+				RuntimeStringList * a = *ptr;
+				RuntimeStringList * b = a->next;
+				a->next = b->next;
+				b->next = a;
+				*ptr = b;
+				swapped = true;
+			}
+			ptr = &(*ptr)->next;
+		}
+	}
+}
+
+static char * _buildSubsetName(RuntimeStringList * states) {
+	RuntimeStringList * sorted = _cloneStringList(states);
+	_sortStringList(&sorted);
+
+	/* figure out how much space we need */
+	size_t length = 2; /* for the braces */
+	int count = 0;
+	for (RuntimeStringList * s = sorted; s != NULL; s = s->next) {
+		length += strlen(s->value);
+		count++;
+	}
+	if (count > 1) length += (count - 1); /* commas */
+
+	char * name = calloc(length + 1, sizeof(char));
+	strcat(name, "{");
+	for (RuntimeStringList * s = sorted; s != NULL; s = s->next) {
+		strcat(name, s->value);
+		if (s->next != NULL) strcat(name, ",");
+	}
+	strcat(name, "}");
+
+	destroyRuntimeStringList(sorted);
+	return name;
+}
+
+/* Given a set of NFA states and a symbol, find all the states
+ * we can reach by following transitions with that symbol */
+static RuntimeStringList * _moveNFA(RuntimeAutomaton * nfa, RuntimeStringList * states, const char * symbol) {
+	RuntimeStringList * result = NULL;
+	for (RuntimeStringList * state = states; state != NULL; state = state->next) {
+		for (RuntimeTransition * t = nfa->transitions; t != NULL; t = t->next) {
+			if (!t->isLambda
+				&& strcmp(t->source, state->value) == 0
+				&& strcmp(t->symbol, symbol) == 0) {
+				for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
+					_appendUniqueRuntimeString(&result, d->value);
+				}
+			}
+		}
+	}
+	return result;
+}
+
+/* Check if two string lists have the same elements, regardless of order */
+static bool _sameStringSet(RuntimeStringList * a, RuntimeStringList * b) {
+	for (RuntimeStringList * s = a; s != NULL; s = s->next) {
+		if (!_runtimeStringListContains(b, s->value)) return false;
+	}
+	for (RuntimeStringList * s = b; s != NULL; s = s->next) {
+		if (!_runtimeStringListContains(a, s->value)) return false;
+	}
+	return true;
+}
+
+/* We keep a worklist of subset-states during the NFA→DFA construction.
+ * Each entry is a set of NFA states plus the name we gave it. */
+
+typedef struct SubsetEntry {
+	RuntimeStringList * states;
+	char * name;
+	bool processed;
+	struct SubsetEntry * next;
+} SubsetEntry;
+
+static SubsetEntry * _createSubsetEntry(RuntimeStringList * states) {
+	SubsetEntry * entry = calloc(1, sizeof(SubsetEntry));
+	entry->states = _cloneStringList(states);
+	entry->name = _buildSubsetName(states);
+	return entry;
+}
+
+static void _destroySubsetList(SubsetEntry * list) {
+	while (list != NULL) {
+		SubsetEntry * next = list->next;
+		destroyRuntimeStringList(list->states);
+		free(list->name);
+		free(list);
+		list = next;
+	}
+}
+
+static SubsetEntry * _findSubset(SubsetEntry * list, RuntimeStringList * states) {
+	for (SubsetEntry * e = list; e != NULL; e = e->next) {
+		if (_sameStringSet(e->states, states)) return e;
+	}
+	return NULL;
+}
+
+RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName) {
+	RuntimeAutomaton * dfa = calloc(1, sizeof(RuntimeAutomaton));
+	dfa->name = _copyString(newName);
+	dfa->type = DFA;
+
+	/* same alphabet */
+	for (RuntimeStringList * s = nfa->alphabet; s != NULL; s = s->next) {
+		_appendRuntimeString(&dfa->alphabet, s->value);
+	}
+
+	/* the initial DFA state is just {startState} */
+	RuntimeStringList * initialSet = NULL;
+	_appendRuntimeString(&initialSet, nfa->startState);
+
+	SubsetEntry * allSubsets = _createSubsetEntry(initialSet);
+	destroyRuntimeStringList(initialSet);
+	dfa->startState = _copyString(allSubsets->name);
+	_appendRuntimeString(&dfa->states, allSubsets->name);
+
+	/* keep processing until every subset has been visited.
+	 * instead of a separate worklist we just scan for unprocessed entries. */
+	bool foundUnprocessed = true;
+	while (foundUnprocessed) {
+		foundUnprocessed = false;
+
+		SubsetEntry * current = NULL;
+		for (SubsetEntry * e = allSubsets; e != NULL; e = e->next) {
+			if (!e->processed) {
+				current = e;
+				current->processed = true;
+				foundUnprocessed = true;
+				break;
+			}
+		}
+		if (current == NULL) break;
+
+		/* try every symbol in the alphabet */
+		for (RuntimeStringList * sym = dfa->alphabet; sym != NULL; sym = sym->next) {
+			RuntimeStringList * moved = _moveNFA(nfa, current->states, sym->value);
+			if (moved == NULL) {
+				/* no transitions for this symbol, reject */
+				continue;
+			}
+
+			SubsetEntry * existing = _findSubset(allSubsets, moved);
+			if (existing == NULL) {
+				/* brand new subset */
+				SubsetEntry * newEntry = _createSubsetEntry(moved);
+				_appendRuntimeString(&dfa->states, newEntry->name);
+				newEntry->next = allSubsets;
+				allSubsets = newEntry;
+
+				RuntimeTransition * rt = calloc(1, sizeof(RuntimeTransition));
+				rt->source = _copyString(current->name);
+				rt->symbol = _copyString(sym->value);
+				_appendRuntimeString(&rt->destinations, newEntry->name);
+				_appendRuntimeTransition(dfa, rt);
+			} else {
+				RuntimeTransition * rt = calloc(1, sizeof(RuntimeTransition));
+				rt->source = _copyString(current->name);
+				rt->symbol = _copyString(sym->value);
+				_appendRuntimeString(&rt->destinations, existing->name);
+				_appendRuntimeTransition(dfa, rt);
+			}
+			destroyRuntimeStringList(moved);
+		}
+	}
+
+	/* a DFA state is accepting if any of its NFA states is accepting */
+	for (SubsetEntry * e = allSubsets; e != NULL; e = e->next) {
+		for (RuntimeStringList * s = e->states; s != NULL; s = s->next) {
+			if (_runtimeStringListContains(nfa->acceptStates, s->value)) {
+				_appendUniqueRuntimeString(&dfa->acceptStates, e->name);
+				break;
+			}
+		}
+	}
+
+	_destroySubsetList(allSubsets);
+
+	return dfa;
+}
+
 /* ------------------------------------------------------------------ */
 /* Output                                                              */
 /* ------------------------------------------------------------------ */
