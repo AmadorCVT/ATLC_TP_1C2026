@@ -469,6 +469,116 @@ void showTransitions(RuntimeAutomaton * automaton) {
 	}
 }
 
+/* Prints a transition table*/
+void showTable(RuntimeAutomaton * automaton) {
+	const char * typeName = automaton->type == DFA ? "DFA" : automaton->type == NFA ? "NFA" : "LNFA";
+	printf("Transition table of %s (%s):\n", automaton->name, typeName);
+
+	/* get column headers */
+	bool hasLambda = false;
+	for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
+		if (t->isLambda) { hasLambda = true; break; }
+	}
+
+	/* figure out column widths so things line up nicely */
+	int stateColWidth = 5; /* minimum */
+	for (RuntimeStringList * s = automaton->states; s != NULL; s = s->next) {
+		int len = (int) strlen(s->value) + 2; 
+		if (len > stateColWidth) stateColWidth = len;
+	}
+
+	/* print header row */
+	printf("  %-*s", stateColWidth, "State");
+	for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
+		printf(" | %-8s", sym->value);
+	}
+	if (hasLambda) {
+		printf(" | %-8s", "lambda");
+	}
+	printf("\n");
+
+	/* separator line */
+	printf("  ");
+	for (int i = 0; i < stateColWidth; i++) printf("-");
+	for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
+		printf("-+---------");
+	}
+	if (hasLambda) {
+		printf("-+---------");
+	}
+	printf("\n");
+
+	/* one row per state */
+	for (RuntimeStringList * state = automaton->states; state != NULL; state = state->next) {
+		/* mark the start state with -> and accept states with * */
+		bool isStart = strcmp(state->value, automaton->startState) == 0;
+		bool isAccept = _runtimeStringListContains(automaton->acceptStates, state->value);
+
+		char label[256];
+		snprintf(label, sizeof(label), "%s%s%s",
+			isStart ? "->" : "",
+			isAccept ? "*" : "",
+			state->value);
+		printf("  %-*s", stateColWidth, label);
+
+		/* for each alphabet symbol, find where this state goes */
+		for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
+			RuntimeStringList * dests = NULL;
+			for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
+				if (!t->isLambda
+					&& strcmp(t->source, state->value) == 0
+					&& strcmp(t->symbol, sym->value) == 0) {
+					for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
+						_appendUniqueRuntimeString(&dests, d->value);
+					}
+				}
+			}
+			if (dests == NULL) {
+				printf(" | %-8s", "-");
+			} else if (dests->next == NULL) {
+				printf(" | %-8s", dests->value);
+			} else {
+				/* multiple destinations, show as {q0,q1} */
+				char buf[256] = "{";
+				for (RuntimeStringList * d = dests; d != NULL; d = d->next) {
+					strcat(buf, d->value);
+					if (d->next != NULL) strcat(buf, ",");
+				}
+				strcat(buf, "}");
+				printf(" | %-8s", buf);
+			}
+			destroyRuntimeStringList(dests);
+		}
+
+		/* lambda column for LNFAs */
+		if (hasLambda) {
+			RuntimeStringList * dests = NULL;
+			for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
+				if (t->isLambda && strcmp(t->source, state->value) == 0) {
+					for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
+						_appendUniqueRuntimeString(&dests, d->value);
+					}
+				}
+			}
+			if (dests == NULL) {
+				printf(" | %-8s", "-");
+			} else if (dests->next == NULL) {
+				printf(" | %-8s", dests->value);
+			} else {
+				char buf[256] = "{";
+				for (RuntimeStringList * d = dests; d != NULL; d = d->next) {
+					strcat(buf, d->value);
+					if (d->next != NULL) strcat(buf, ",");
+				}
+				strcat(buf, "}");
+				printf(" | %-8s", buf);
+			}
+			destroyRuntimeStringList(dests);
+		}
+		printf("\n");
+	}
+}
+
 void showClosure(RuntimeAutomaton * automaton, const char * stateName) {
 	RuntimeStringList * initial = NULL;
 	_appendRuntimeString(&initial, stateName);
