@@ -106,6 +106,7 @@ RuntimeAutomaton * convertDFAtoNFA(RuntimeAutomaton * dfa, const char * newName)
 
 void printAutomaton(RuntimeAutomaton * automaton);
 void showTransitions(RuntimeAutomaton * automaton);
+void showTable(RuntimeAutomaton * automaton);
 void showClosure(RuntimeAutomaton * automaton, const char * stateName);
 
 /* ------------------------------------------------------------------ */
