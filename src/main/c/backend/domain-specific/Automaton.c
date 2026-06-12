@@ -616,6 +616,77 @@ RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName)
 	return dfa;
 }
 
+RuntimeAutomaton * convertLNFAtoNFA(RuntimeAutomaton * lnfa, const char * newName) {
+	RuntimeAutomaton * nfa = calloc(1, sizeof(RuntimeAutomaton));
+	nfa->name = _copyString(newName);
+	nfa->type = NFA;
+
+	/* same alphabet (no lambda column in an NFA) */
+	for (RuntimeStringList * s = lnfa->alphabet; s != NULL; s = s->next) {
+		_appendRuntimeString(&nfa->alphabet, s->value);
+	}
+
+	/* same states */
+	for (RuntimeStringList * s = lnfa->states; s != NULL; s = s->next) {
+		_appendRuntimeString(&nfa->states, s->value);
+	}
+
+	/* same start state */
+	nfa->startState = _copyString(lnfa->startState);
+
+	/* accept state if it contains any of the original accept states */
+	for (RuntimeStringList * state = lnfa->states; state != NULL; state = state->next) {
+		RuntimeStringList * seed = NULL;
+		_appendRuntimeString(&seed, state->value);
+		RuntimeStringList * closure = lambdaClosure(lnfa, seed);
+		destroyRuntimeStringList(seed);
+
+		bool isAccept = false;
+		for (RuntimeStringList * c = closure; c != NULL; c = c->next) {
+			if (_runtimeStringListContains(lnfa->acceptStates, c->value)) {
+				isAccept = true;
+				break;
+			}
+		}
+		destroyRuntimeStringList(closure);
+
+		if (isAccept) {
+			_appendUniqueRuntimeString(&nfa->acceptStates, state->value);
+		}
+	}
+
+	for (RuntimeStringList * state = lnfa->states; state != NULL; state = state->next) {
+		RuntimeStringList * seed = NULL;
+		_appendRuntimeString(&seed, state->value);
+		RuntimeStringList * closureOfState = lambdaClosure(lnfa, seed);
+		destroyRuntimeStringList(seed);
+
+		for (RuntimeStringList * sym = lnfa->alphabet; sym != NULL; sym = sym->next) {
+			RuntimeStringList * moved = _moveNFA(lnfa, closureOfState, sym->value);
+			if (moved == NULL) {
+				continue;
+			}
+
+			RuntimeStringList * closureOfMoved = lambdaClosure(lnfa, moved);
+			destroyRuntimeStringList(moved);
+
+			if (closureOfMoved != NULL) {
+				RuntimeTransition * rt = calloc(1, sizeof(RuntimeTransition));
+				rt->source = _copyString(state->value);
+				rt->symbol = _copyString(sym->value);
+				for (RuntimeStringList * d = closureOfMoved; d != NULL; d = d->next) {
+					_appendUniqueRuntimeString(&rt->destinations, d->value);
+				}
+				_appendRuntimeTransition(nfa, rt);
+			}
+			destroyRuntimeStringList(closureOfMoved);
+		}
+		destroyRuntimeStringList(closureOfState);
+	}
+
+	return nfa;
+}
+
 /* ------------------------------------------------------------------ */
 /* Output                                                              */
 /* ------------------------------------------------------------------ */
