@@ -687,6 +687,13 @@ RuntimeAutomaton * convertLNFAtoNFA(RuntimeAutomaton * lnfa, const char * newNam
 	return nfa;
 }
 
+RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newName) {
+	RuntimeAutomaton * intermediate = convertLNFAtoNFA(lnfa, "__intermediate__");
+	RuntimeAutomaton * dfa = convertNFAtoDFA(intermediate, newName);
+	destroyRuntimeAutomaton(intermediate);
+	return dfa;
+}
+
 /* ------------------------------------------------------------------ */
 /* Output                                                              */
 /* ------------------------------------------------------------------ */

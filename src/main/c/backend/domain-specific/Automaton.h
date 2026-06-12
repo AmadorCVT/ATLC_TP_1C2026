@@ -101,6 +101,7 @@ RuntimeStringList * lambdaClosure(RuntimeAutomaton * automaton, RuntimeStringLis
 RuntimeAutomaton * convertDFAtoNFA(RuntimeAutomaton * dfa, const char * newName);
 RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName);
 RuntimeAutomaton * convertLNFAtoNFA(RuntimeAutomaton * lnfa, const char * newName);
+RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newName);
 
 /* ------------------------------------------------------------------ */
 /* Output                                                              */
