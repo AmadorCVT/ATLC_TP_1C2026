@@ -6,6 +6,8 @@ const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
 
+static FILE *output_file;
+
 /** Shutdown module's internal state. */
 void _shutdownGeneratorModule() {
 	if (_logger != NULL) {
@@ -22,17 +24,86 @@ ModuleDestructor initializeGeneratorModule() {
 
 /** PRIVATE FUNCTIONS */
 
+static void _generateStatement(Statement* statement);
+static void _generatePrologue(void);
+static void _output(const char * const format, ...);
+
+
+static void _generateStatement(Statement* statement) {
+	switch (statement->type) {
+		case AUTOMATON_STATEMENT:
+			break;
+
+		case TEST_STATEMENT:
+			break;
+
+		case CONVERSION_STATEMENT:
+			break;
+
+		case SHOW_STATEMENT:
+			break;
+
+		case PRINT_STATEMENT:
+			break;
+
+		case EQUIVALENT_STATEMENT:
+			break;
+
+		case UPDATE_STATEMENT:
+			break;
+
+		case STRING_DECLARATION_STATEMENT:
+			break;
+
+		case FOR_STATEMENT:
+			break;
+
+		default:
+			logError(_logger, "The specified statement type is unknown: %d", statement->type);
+			break;
+	};
+}
+/**
+ * Creates the prologue of the generated output, a MarkDown document that 
+ * renders the operations being made
+ */
+static void _generatePrologue(void) {
+	_output("%s\n\n", "# Automaton program");
+}
+
 /**
  * Generates the output of the program.
  */
 static void _generateProgram(Program * program) {
-	//_generateExpression(3, program->expression);
+	// TODO: Pass all the statements
+	_generateStatement(&program->statements[0]);
+}
+
+/**
+ * Outputs a formatted string to standard output. The "fflush" instruction
+ * allows to see the output even close to a failure, because it drops the
+ * buffering.
+ */
+static void _output(const char * const format, ...) {
+	va_list arguments;
+	va_start(arguments, format);
+	vfprintf(output_file, format, arguments);
+	fflush(output_file);
+	va_end(arguments);
 }
 
 /** PUBLIC FUNCTIONS */
 
 void executeGenerator(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
+
+	// Open output file
+	output_file = fopen("output.md", "w");
+
+	_generatePrologue();
 	_generateProgram(compilerState->abstractSyntaxtTree);
+
+	fclose(output_file);
+
 	logDebugging(_logger, "Generation is done.");
 }

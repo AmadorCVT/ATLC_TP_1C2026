@@ -8,7 +8,7 @@ typedef enum {
 	SEMANTIC_SYMBOL_AUTOMATON,
 	SEMANTIC_SYMBOL_STRING
 } SemanticSymbolType;
-
+ 
 typedef struct SemanticStringList SemanticStringList;
 typedef struct SemanticTransition SemanticTransition;
 typedef struct SemanticAutomaton SemanticAutomaton;
