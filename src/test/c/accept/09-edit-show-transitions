@@ -11,8 +11,11 @@ automaton Editado : DFA {
 show transitions of Editado;
 
 Editado {
+    states = {q1}
+    accept = {q1}
     transitions {
-        s0 -> 1 : {s0, s1}
+        q0 -> a : q1
+        q1 -> a : q1
     }
 };
 

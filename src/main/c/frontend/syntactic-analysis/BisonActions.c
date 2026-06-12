@@ -34,6 +34,15 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
+For * ForSemanticAction(char * index, StringList * values, Statement * statements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	For * for_loop = calloc(1, sizeof(For));
+	for_loop->index = index;
+	for_loop->values = values;
+	for_loop->statements= statements;
+	return for_loop;
+}
+
 Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * definition) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Automaton * automaton = calloc(1, sizeof(Automaton));
@@ -43,12 +52,30 @@ Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * 
 	return automaton;
 }
 
-Test * TestSemanticAction(char * id, char * string) {
+Test * TestSemanticAction(char * id, char * input) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Test * test = calloc(1, sizeof(Test));
 	test->id = id;
-	test->string = string;
+	test->input = input;
+	test->inputType = TEST_INPUT_LITERAL;
 	return test;
+}
+
+Test * TestVariableSemanticAction(char * id, char * input) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Test * test = calloc(1, sizeof(Test));
+	test->id = id;
+	test->input = input;
+	test->inputType = TEST_INPUT_VARIABLE;
+	return test;
+}
+
+StringDeclaration * StringDeclarationSemanticAction(char * id, char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringDeclaration * declaration = calloc(1, sizeof(StringDeclaration));
+	declaration->id = id;
+	declaration->value = value;
+	return declaration;
 }
 
 Conversion * ConversionSemanticAction(char * input, AutomatonType type, char * output) {
@@ -102,6 +129,14 @@ Statement * AppendStatementListSemanticAction(Statement * list, Statement * stat
 	return list;
 }
 
+Statement * ForStatementSemanticAction(For * for_loop) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->for_loop = for_loop;
+	statement->type = FOR_STATEMENT;
+	return statement;
+}
+
 Statement * AutomatonStatementSemanticAction(Automaton * automaton) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Statement * statement = calloc(1, sizeof(Statement));
@@ -115,6 +150,14 @@ Statement * TestStatementSemanticAction(Test * test) {
 	Statement * statement = calloc(1, sizeof(Statement));
 	statement->test = test;
 	statement->type = TEST_STATEMENT;
+	return statement;
+}
+
+Statement * StringDeclarationStatementSemanticAction(StringDeclaration * declaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Statement * statement = calloc(1, sizeof(Statement));
+	statement->stringDeclaration = declaration;
+	statement->type = STRING_DECLARATION_STATEMENT;
 	return statement;
 }
 
@@ -154,6 +197,27 @@ StringList * AppendStringListSemanticAction(StringList * list, char * value) {
 	}
 	last->next = next;
 	return list;
+}
+
+StringList * AppendVariableListSemanticAction(StringList * list, char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * next = SingleStringListSemanticAction(id);
+	if (list == NULL) {
+		return next;
+	}
+	StringList * last = list;
+	while (last->next != NULL) {
+		last = last->next;
+	}
+	last->next = next;
+	return list;
+}
+
+StringList * SingleVariableListSemanticAction(char * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	StringList * stringList = calloc(1, sizeof(StringList));
+	stringList->value = id;
+	return stringList;
 }
 
 StringList * SingleStringListSemanticAction(char * value) {
@@ -266,12 +330,33 @@ Statement * EquivalentStatementSemanticAction(Equivalent * equivalent) {
 	return statement;
 }
 
-Update * UpdateSemanticAction(char * name, Transition * transitions) {
+Update * EmptyUpdateBodySemanticAction() {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Update * node = calloc(1, sizeof(Update));
-	node->automatonName = name;
-	node->transitions = transitions;
-	return node;
+	return calloc(1, sizeof(Update));
+}
+
+Update * StatesUpdateBodySemanticAction(Update * body, StringList * states) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->states = states;
+	return body;
+}
+
+Update * AcceptUpdateBodySemanticAction(Update * body, StringList * acceptStates) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->acceptStates = acceptStates;
+	return body;
+}
+
+Update * TransitionsUpdateBodySemanticAction(Update * body, Transition * transitions) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->transitions = transitions;
+	return body;
+}
+
+Update * UpdateSemanticAction(char * name, Update * body) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	body->automatonName = name;
+	return body;
 }
 
 Statement * UpdateStatementSemanticAction(Update * update) {

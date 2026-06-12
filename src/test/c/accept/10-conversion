@@ -30,5 +30,5 @@ automaton Tres : LNFA {
 };
 
 convert Uno to NFA as UnoNFA;
-convert Dos to LNFA as DosNFA;
-convert Tres to DFA as TresNFA;
+convert Dos to DFA as DosDFA;
+convert Tres to DFA as TresDFA;

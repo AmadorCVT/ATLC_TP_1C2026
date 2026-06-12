@@ -1,4 +1,4 @@
-automaton myAutomaton : DFA {
+automaton A : DFA {
     alphabet = {a}
     states = {q0}
     start = q0
@@ -7,4 +7,4 @@ automaton myAutomaton : DFA {
     }
 };
 
-print myAutomaton;
+test A with word;

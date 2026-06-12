@@ -7,4 +7,4 @@ automaton myAutomaton : DFA {
     }
 };
 
-print myAutomaton;
+show table of myAutomaton;

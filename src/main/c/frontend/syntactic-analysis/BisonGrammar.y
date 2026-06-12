@@ -20,7 +20,9 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	TokenLabel token;
 
 	Automaton * automaton;
+	For * for_loop;
 	Test * test;
+	StringDeclaration * stringDeclaration;
 	Conversion * conversion;
 	Show * show;
 	Print * print;
@@ -35,9 +37,13 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 	Update *     update;
 }
 
+%left TEST
+
 %destructor { free($$); } <string>
 %destructor { destroyAutomaton($$); } <automaton>
+%destructor { destroyFor($$); } <for_loop>
 %destructor { destroyTest($$); } <test>
+%destructor { destroyStringDeclaration($$); } <stringDeclaration>
 %destructor { destroyConversion($$); } <conversion>
 %destructor { destroyShow($$); } <show>
 %destructor { destroyPrint($$); } <print>
@@ -76,15 +82,17 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %token <token> TYPE_DFA
 %token <token> TYPE_LNFA
 %token <token> TYPE_NFA
+%token <token> TYPE_STRING
 %token <token> UNKNOWN
 %token <token> TEST
-%token <token> WITH
+%token <token> FOR
 %token <token> TO
 %token <token> AS
 %token <token> TABLE
 %token <token> OF
 %token <token> CLOSURE
 %token <token> IN
+%token <token> WITH
 %token <token> EQUIVALENT
 %token <token> OP_LEQ
 %token <token> OP_GEQ
@@ -97,6 +105,8 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 
 %type <automaton> automaton
 %type <test> test
+%type <stringDeclaration> string_declaration
+%type <for_loop> for_loop
 %type <conversion> conversion
 %type <show> show
 %type <print> print
@@ -111,12 +121,14 @@ void yyerror(const YYLTYPE * location, const char * message) {}
 %type <stringList> alphabet_symbol_list
 %type <stringList> state_set
 %type <stringList> state_list
+%type <stringList> array_list
 %type <transition> transition
 %type <transition> transition_list
 %type <transitionDestination> transition_destination
 %type <transitionSymbol> transition_symbol
 %type <equivalent> equivalent
 %type <update>     update
+%type <update>     update_body
 
 %%
 
@@ -129,11 +141,17 @@ statement_list: statement														{ $$ = $1; }
 
 statement: automaton															{ $$ = AutomatonStatementSemanticAction($1); }
 	| test																		{ $$ = TestStatementSemanticAction($1); }
+	| string_declaration														{ $$ = StringDeclarationStatementSemanticAction($1); }
 	| conversion																{ $$ = ConversionStatementSemanticAction($1); }
 	| show																		{ $$ = ShowStatementSemanticAction($1); }
 	| print																		{ $$ = PrintStatementSemanticAction($1); }
 	| equivalent																{ $$ = EquivalentStatementSemanticAction($1); }
 	| update																	{ $$ = UpdateStatementSemanticAction($1); }
+	| for_loop																	{ $$ = ForStatementSemanticAction($1); }
+	;
+
+for_loop: FOR ID IN OPEN_CURLY_BRACKET array_list CLOSE_CURLY_BRACKET OPEN_CURLY_BRACKET statement_list CLOSE_CURLY_BRACKET      
+																				{ $$ = ForSemanticAction($2, $5, $8); }
 	;
 
 automaton: AUTOMATON ID COLON type OPEN_CURLY_BRACKET definition CLOSE_CURLY_BRACKET SEMICOLON
@@ -166,6 +184,12 @@ alphabet_symbol: ID																{ $$ = $1; }
 state_set: OPEN_CURLY_BRACKET state_list CLOSE_CURLY_BRACKET					{ $$ = $2; }
 	;
 
+array_list: STRING																{ $$ = SingleStringListSemanticAction($1); }
+	| ID																		{ $$ = SingleVariableListSemanticAction($1); }
+	| array_list COMMA STRING													{ $$ = AppendStringListSemanticAction($1, $3); }
+	| array_list COMMA ID														{ $$ = AppendVariableListSemanticAction($1, $3); }
+	;
+
 state_list: state																{ $$ = SingleStringListSemanticAction($1); }
 	| state_list COMMA state													{ $$ = AppendStringListSemanticAction($1, $3); }
 	;
@@ -173,7 +197,7 @@ state_list: state																{ $$ = SingleStringListSemanticAction($1); }
 state: ID																		{ $$ = $1; }
 	;
 
-transition_list: %empty														{ $$ = NULL; }
+transition_list: %empty															{ $$ = NULL; }
 	| transition_list transition												{ $$ = AppendTransitionListSemanticAction($1, $2); }
 	;
 
@@ -189,6 +213,10 @@ transition_destination: state													{ $$ = SingleTransitionDestinationSema
 	;
 
 test: TEST ID WITH STRING SEMICOLON												{ $$ = TestSemanticAction($2, $4); }
+	| TEST ID WITH ID SEMICOLON													{ $$ = TestVariableSemanticAction($2, $4); }
+	;
+
+string_declaration: TYPE_STRING ID ASSIGN STRING SEMICOLON						{ $$ = StringDeclarationSemanticAction($2, $4); }
 	;
 
 conversion: CONVERT ID TO type AS ID SEMICOLON										{ $$ = ConversionSemanticAction($2, $4, $6); }
@@ -205,7 +233,13 @@ print: PRINT ID SEMICOLON															{ $$ = PrintSemanticAction($2); }
 equivalent: EQUIVALENT ID ID SEMICOLON											{ $$ = EquivalentSemanticAction($2, $3); }
 	;
 
-update: ID OPEN_CURLY_BRACKET TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET CLOSE_CURLY_BRACKET SEMICOLON
-																				{ $$ = UpdateSemanticAction($1, $5); }
+update: ID OPEN_CURLY_BRACKET update_body CLOSE_CURLY_BRACKET SEMICOLON		{ $$ = UpdateSemanticAction($1, $3); }
+	;
+
+update_body: %empty																{ $$ = EmptyUpdateBodySemanticAction(); }
+	| update_body STATES ASSIGN state_set										{ $$ = StatesUpdateBodySemanticAction($1, $4); }
+	| update_body ACCEPT ASSIGN state_set										{ $$ = AcceptUpdateBodySemanticAction($1, $4); }
+	| update_body TRANSITIONS OPEN_CURLY_BRACKET transition_list CLOSE_CURLY_BRACKET
+																				{ $$ = TransitionsUpdateBodySemanticAction($1, $4); }
 	;
 %%

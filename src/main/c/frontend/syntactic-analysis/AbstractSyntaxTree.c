@@ -33,8 +33,17 @@ void destroyTest(Test * test) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (test != NULL) {
 		free(test->id);
-		free(test->string);
+		free(test->input);
 		free(test);
+	}
+}
+
+void destroyStringDeclaration(StringDeclaration * declaration) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (declaration != NULL) {
+		free(declaration->id);
+		free(declaration->value);
+		free(declaration);
 	}
 }
 
@@ -77,6 +86,8 @@ void destroyUpdate(Update * node) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (node != NULL) {
 		free(node->automatonName);
+		destroyStringList(node->states);
+		destroyStringList(node->acceptStates);
 		destroyTransition(node->transitions);
 		free(node);
 	}
@@ -91,6 +102,16 @@ void destroyDefinition(Definition * definition) {
 		destroyStringList(definition->acceptStates);
 		destroyTransition(definition->transitions);
 		free(definition);
+	}
+}
+
+void destroyFor(For * for_loop) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (for_loop != NULL) {
+		free(for_loop->index);
+		destroyStringList(for_loop->values);
+		destroyStatement(for_loop->statements);
+		free(for_loop);
 	}
 }
 
@@ -127,6 +148,15 @@ void destroyStatement(Statement * statement) {
 				break;
 			case UPDATE_STATEMENT:
 				destroyUpdate(statement->update);
+				break;
+			case FOR_STATEMENT:
+				destroyFor(statement->for_loop);
+				break;
+			case STRING_DECLARATION_STATEMENT:
+				destroyStringDeclaration(statement->stringDeclaration);
+				break;
+			default:
+				logError(_logger, "Unknown statement type: %d", statement->type);
 				break;
 		}
 		free(statement);
@@ -165,6 +195,9 @@ void destroyTransitionDestination(TransitionDestination * destination) {
 				break;
 			case MULTIPLE_TRANSITION_DESTINATIONS:
 				destroyStringList(destination->states);
+				break;
+			default:
+				logError(_logger, "Unknown transition destination type: %d", destination->type);
 				break;
 		}
 		free(destination);

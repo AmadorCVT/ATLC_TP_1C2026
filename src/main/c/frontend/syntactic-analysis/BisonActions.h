@@ -12,7 +12,10 @@
 ModuleDestructor initializeBisonActionsModule(CompilerState * compilerState);
 
 Automaton * AutomatonSemanticAction(char * id, AutomatonType type, Definition * definition);
-Test * TestSemanticAction(char * id, char * string);
+For * ForSemanticAction(char * id, StringList * values, Statement * statements);
+Test * TestSemanticAction(char * id, char * input);
+Test * TestVariableSemanticAction(char * id, char * input);
+StringDeclaration * StringDeclarationSemanticAction(char * id, char * value);
 Conversion * ConversionSemanticAction(char * input, AutomatonType type, char * output);
 AutomatonType AutomatonTypeSemanticAction(AutomatonType type);
 Definition * DefinitionSemanticAction(
@@ -22,13 +25,17 @@ Definition * DefinitionSemanticAction(
 	StringList * acceptStates,
 	Transition * transitions);
 Program * StatementListProgramSemanticAction(Statement * statements);
+Statement * ForStatementSemanticAction(For * for_loop);
 Statement * AppendStatementListSemanticAction(Statement * list, Statement * statement);
 Statement * AutomatonStatementSemanticAction(Automaton * automaton);
 Statement * TestStatementSemanticAction(Test * test);
+Statement * StringDeclarationStatementSemanticAction(StringDeclaration * declaration);
 Statement * ConversionStatementSemanticAction(Conversion * conversion);
 Statement * ShowStatementSemanticAction(Show * show);
 Statement * PrintStatementSemanticAction(Print * print);
 StringList * AppendStringListSemanticAction(StringList * list, char * value);
+StringList * AppendVariableListSemanticAction(StringList * list, char * id);
+StringList * SingleVariableListSemanticAction(char * id);
 StringList * SingleStringListSemanticAction(char * value);
 Transition * AppendTransitionListSemanticAction(Transition * list, Transition * transition);
 Transition * TransitionSemanticAction(char * source, TransitionSymbol * symbol, TransitionDestination * destination);
@@ -42,7 +49,11 @@ Show * ShowClosureSemanticAction(char * state, char * id);
 Print * PrintSemanticAction(char * id);
 Equivalent * EquivalentSemanticAction(char * name1, char * name2);
 Statement *  EquivalentStatementSemanticAction(Equivalent * equivalent);
-Update *     UpdateSemanticAction(char * name, Transition * transitions);
+Update *     EmptyUpdateBodySemanticAction();
+Update *     StatesUpdateBodySemanticAction(Update * body, StringList * states);
+Update *     AcceptUpdateBodySemanticAction(Update * body, StringList * acceptStates);
+Update *     TransitionsUpdateBodySemanticAction(Update * body, Transition * transitions);
+Update *     UpdateSemanticAction(char * name, Update * body);
 Statement *  UpdateStatementSemanticAction(Update * update);
 
 #endif

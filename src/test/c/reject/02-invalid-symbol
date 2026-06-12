@@ -6,4 +6,4 @@ automaton SimboloInvalido: DFA {
     transitions {
         q0 -> b : {q0}
     }
-}
+};

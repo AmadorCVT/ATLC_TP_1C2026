@@ -1,10 +1,9 @@
-automaton myAutomaton : DFA {
+automaton BadDestination : NFA {
     alphabet = {a}
     states = {q0}
     start = q0
     accept = {q0}
     transitions {
+        q0 -> a : q1
     }
 };
-
-print myAutomaton;
