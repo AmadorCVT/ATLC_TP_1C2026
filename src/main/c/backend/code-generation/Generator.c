@@ -96,9 +96,8 @@ static void _generateStatement(Statement * statement) {
 		case AUTOMATON_STATEMENT: {
 			RuntimeAutomaton * automaton = runtimeAutomatonFromAst(statement->automaton);
 			if (runtimeSymbolTableAddAutomaton(_table, automaton->name, automaton)) {
-				_output("## automaton %s (%s)\n\n", automaton->name, _typeName(automaton->type));
-				_output("Automaton `%s` declared.\n\n", automaton->name);
-			}
+				_output("## Automaton %s (%s) declared.\n\n", automaton->name, _typeName(automaton->type));
+				}
 			else {
 				destroyRuntimeAutomaton(automaton);
 			}
@@ -108,7 +107,7 @@ static void _generateStatement(Statement * statement) {
 		case STRING_DECLARATION_STATEMENT: {
 			char * value = unquoteString(statement->stringDeclaration->value);
 			if (runtimeSymbolTableAddString(_table, statement->stringDeclaration->id, value)) {
-				_output("## string %s = \"%s\"\n\n", statement->stringDeclaration->id, value);
+				_output("### string %s = \"%s\"\n\n", statement->stringDeclaration->id, value);
 			}
 			else {
 				free(value);
