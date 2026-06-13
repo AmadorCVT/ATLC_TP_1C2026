@@ -188,9 +188,9 @@ static void _generateStatement(Statement * statement) {
 			RuntimeAutomaton * right = _lookupAutomaton(statement->equivalent->name2);
 			_output("## equivalent %s == %s\n\n", statement->equivalent->name1, statement->equivalent->name2);
 			if (left != NULL && right != NULL) {
-				automatonsAreEquivalent(left, right);
+				bool equiv = automatonsAreEquivalent(left, right);
+				_output("**Result:** %s\n\n", equiv ? "equivalent" : "not equivalent");
 			}
-			_output("**Result:** TODO (equivalence not implemented)\n\n");
 			break;
 		}
 
