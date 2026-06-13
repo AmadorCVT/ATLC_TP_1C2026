@@ -748,63 +748,63 @@ RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newNam
 /* Output                                                              */
 /* ------------------------------------------------------------------ */
 
-void printAutomaton(RuntimeAutomaton * automaton) {
+void printAutomaton(FILE * out, RuntimeAutomaton * automaton) {
 	const char * typeName = automaton->type == DFA ? "DFA" : automaton->type == NFA ? "NFA" : "LNFA";
-	printf("automaton %s : %s {\n", automaton->name, typeName);
+	fprintf(out, "automaton %s : %s {\n", automaton->name, typeName);
 
-	printf("    alphabet = {");
+	fprintf(out, "    alphabet = {");
 	for (RuntimeStringList * s = automaton->alphabet; s != NULL; s = s->next) {
-		printf("%s%s", s->value, s->next ? ", " : "");
+		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	printf("}\n");
+	fprintf(out, "}\n");
 
-	printf("    states = {");
+	fprintf(out, "    states = {");
 	for (RuntimeStringList * s = automaton->states; s != NULL; s = s->next) {
-		printf("%s%s", s->value, s->next ? ", " : "");
+		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	printf("}\n");
+	fprintf(out, "}\n");
 
-	printf("    start = %s\n", automaton->startState);
+	fprintf(out, "    start = %s\n", automaton->startState);
 
-	printf("    accept = {");
+	fprintf(out, "    accept = {");
 	for (RuntimeStringList * s = automaton->acceptStates; s != NULL; s = s->next) {
-		printf("%s%s", s->value, s->next ? ", " : "");
+		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	printf("}\n");
+	fprintf(out, "}\n");
 
-	printf("    transitions {\n");
+	fprintf(out, "    transitions {\n");
 	for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
 		const char * sym = t->isLambda ? "lambda" : t->symbol;
 		if (t->destinations != NULL && t->destinations->next != NULL) {
-			printf("        %s -> %s : {", t->source, sym);
+			fprintf(out, "        %s -> %s : {", t->source, sym);
 			for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
-				printf("%s%s", d->value, d->next ? ", " : "");
+				fprintf(out, "%s%s", d->value, d->next ? ", " : "");
 			}
-			printf("}\n");
+			fprintf(out, "}\n");
 		}
 		else if (t->destinations != NULL) {
-			printf("        %s -> %s : %s\n", t->source, sym, t->destinations->value);
+			fprintf(out, "        %s -> %s : %s\n", t->source, sym, t->destinations->value);
 		}
 	}
-	printf("    }\n};\n");
+	fprintf(out, "    }\n};\n");
 }
 
-void showTransitions(RuntimeAutomaton * automaton) {
-	printf("Transitions of %s:\n", automaton->name);
+void showTransitions(FILE * out, RuntimeAutomaton * automaton) {
+	fprintf(out, "Transitions of %s:\n", automaton->name);
 	for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
 		const char * sym = t->isLambda ? "lambda" : t->symbol;
-		printf("  %s -> %s : ", t->source, sym);
+		fprintf(out, "  %s -> %s : ", t->source, sym);
 		for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
-			printf("%s%s", d->value, d->next ? ", " : "");
+			fprintf(out, "%s%s", d->value, d->next ? ", " : "");
 		}
-		printf("\n");
+		fprintf(out, "\n");
 	}
 }
 
 /* Prints a transition table*/
-void showTable(RuntimeAutomaton * automaton) {
+void showTable(FILE * out, RuntimeAutomaton * automaton) {
 	const char * typeName = automaton->type == DFA ? "DFA" : automaton->type == NFA ? "NFA" : "LNFA";
-	printf("Transition table of %s (%s):\n", automaton->name, typeName);
+	fprintf(out, "Transition table of %s (%s):\n", automaton->name, typeName);
 
 	/* get column headers */
 	bool hasLambda = false;
@@ -815,30 +815,30 @@ void showTable(RuntimeAutomaton * automaton) {
 	/* figure out column widths so things line up nicely */
 	int stateColWidth = 5; /* minimum */
 	for (RuntimeStringList * s = automaton->states; s != NULL; s = s->next) {
-		int len = (int) strlen(s->value) + 2; 
+		int len = (int) strlen(s->value) + 2;
 		if (len > stateColWidth) stateColWidth = len;
 	}
 
 	/* print header row */
-	printf("  %-*s", stateColWidth, "State");
+	fprintf(out, "  %-*s", stateColWidth, "State");
 	for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
-		printf(" | %-8s", sym->value);
+		fprintf(out, " | %-8s", sym->value);
 	}
 	if (hasLambda) {
-		printf(" | %-8s", "lambda");
+		fprintf(out, " | %-8s", "lambda");
 	}
-	printf("\n");
+	fprintf(out, "\n");
 
 	/* separator line */
-	printf("  ");
-	for (int i = 0; i < stateColWidth; i++) printf("-");
+	fprintf(out, "  ");
+	for (int i = 0; i < stateColWidth; i++) fprintf(out, "-");
 	for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
-		printf("-+---------");
+		fprintf(out, "-+---------");
 	}
 	if (hasLambda) {
-		printf("-+---------");
+		fprintf(out, "-+---------");
 	}
-	printf("\n");
+	fprintf(out, "\n");
 
 	/* one row per state */
 	for (RuntimeStringList * state = automaton->states; state != NULL; state = state->next) {
@@ -851,7 +851,7 @@ void showTable(RuntimeAutomaton * automaton) {
 			isStart ? "->" : "",
 			isAccept ? "*" : "",
 			state->value);
-		printf("  %-*s", stateColWidth, label);
+		fprintf(out, "  %-*s", stateColWidth, label);
 
 		/* for each alphabet symbol, find where this state goes */
 		for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
@@ -866,9 +866,9 @@ void showTable(RuntimeAutomaton * automaton) {
 				}
 			}
 			if (dests == NULL) {
-				printf(" | %-8s", "-");
+				fprintf(out, " | %-8s", "-");
 			} else if (dests->next == NULL) {
-				printf(" | %-8s", dests->value);
+				fprintf(out, " | %-8s", dests->value);
 			} else {
 				/* multiple destinations, show as {q0,q1} */
 				char buf[256] = "{";
@@ -877,7 +877,7 @@ void showTable(RuntimeAutomaton * automaton) {
 					if (d->next != NULL) strcat(buf, ",");
 				}
 				strcat(buf, "}");
-				printf(" | %-8s", buf);
+				fprintf(out, " | %-8s", buf);
 			}
 			destroyRuntimeStringList(dests);
 		}
@@ -893,9 +893,9 @@ void showTable(RuntimeAutomaton * automaton) {
 				}
 			}
 			if (dests == NULL) {
-				printf(" | %-8s", "-");
+				fprintf(out, " | %-8s", "-");
 			} else if (dests->next == NULL) {
-				printf(" | %-8s", dests->value);
+				fprintf(out, " | %-8s", dests->value);
 			} else {
 				char buf[256] = "{";
 				for (RuntimeStringList * d = dests; d != NULL; d = d->next) {
@@ -903,25 +903,25 @@ void showTable(RuntimeAutomaton * automaton) {
 					if (d->next != NULL) strcat(buf, ",");
 				}
 				strcat(buf, "}");
-				printf(" | %-8s", buf);
+				fprintf(out, " | %-8s", buf);
 			}
 			destroyRuntimeStringList(dests);
 		}
-		printf("\n");
+		fprintf(out, "\n");
 	}
 }
 
-void showClosure(RuntimeAutomaton * automaton, const char * stateName) {
+void showClosure(FILE * out, RuntimeAutomaton * automaton, const char * stateName) {
 	RuntimeStringList * initial = NULL;
 	appendRuntimeString(&initial, stateName);
 	RuntimeStringList * closure = lambdaClosure(automaton, initial);
 	destroyRuntimeStringList(initial);
 
-	printf("closure(%s) in %s = {", stateName, automaton->name);
+	fprintf(out, "closure(%s) in %s = {", stateName, automaton->name);
 	for (RuntimeStringList * s = closure; s != NULL; s = s->next) {
-		printf("%s%s", s->value, s->next ? ", " : "");
+		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	printf("}\n");
+	fprintf(out, "}\n");
 
 	destroyRuntimeStringList(closure);
 }
@@ -950,6 +950,18 @@ void applyUpdateTransitions(RuntimeAutomaton * automaton, Transition * newTransi
 		_removeTransitionsWithSameKey(automaton, rt);
 		_appendRuntimeTransition(automaton, rt);
 	}
+}
+
+/* ------------------------------------------------------------------ */
+/* Equivalence                                                         */
+/* ------------------------------------------------------------------ */
+
+bool automatonsAreEquivalent(RuntimeAutomaton * left, RuntimeAutomaton * right) {
+	/* TODO: implementar equivalencia (p. ej. convertir ambos a DFA y verificar
+	   que la diferencia simétrica sea vacía). */
+	(void) left;
+	(void) right;
+	return false;
 }
 
 /* ------------------------------------------------------------------ */

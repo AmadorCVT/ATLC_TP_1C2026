@@ -6,6 +6,7 @@
 #include "../../support/type/CompilerState.h"
 #include "../../support/type/ModuleDestructor.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 ModuleDestructor initializeAutomatonModule();
@@ -134,13 +135,19 @@ RuntimeAutomaton * convertLNFAtoNFA(RuntimeAutomaton * lnfa, const char * newNam
 RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newName);
 
 /* ------------------------------------------------------------------ */
+/* Equivalence                                                         */
+/* ------------------------------------------------------------------ */
+
+bool automatonsAreEquivalent(RuntimeAutomaton * left, RuntimeAutomaton * right);
+
+/* ------------------------------------------------------------------ */
 /* Output                                                              */
 /* ------------------------------------------------------------------ */
 
-void printAutomaton(RuntimeAutomaton * automaton);
-void showTransitions(RuntimeAutomaton * automaton);
-void showTable(RuntimeAutomaton * automaton);
-void showClosure(RuntimeAutomaton * automaton, const char * stateName);
+void printAutomaton(FILE * out, RuntimeAutomaton * automaton);
+void showTransitions(FILE * out, RuntimeAutomaton * automaton);
+void showTable(FILE * out, RuntimeAutomaton * automaton);
+void showClosure(FILE * out, RuntimeAutomaton * automaton, const char * stateName);
 
 /* ------------------------------------------------------------------ */
 /* Update                                                              */
