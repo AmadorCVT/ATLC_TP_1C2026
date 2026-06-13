@@ -3,8 +3,8 @@
 
 #include <stdbool.h>
 
-typedef struct SemanticScope SemanticScope;
-typedef struct SemanticSymbolTable SemanticSymbolTable;
+typedef struct RuntimeScope RuntimeScope;
+typedef struct RuntimeSymbolTable RuntimeSymbolTable;
 
 /**
  * The global state of the compiler. Should transport every data structure
@@ -17,11 +17,13 @@ typedef struct {
 	void * abstractSyntaxtTree;
 
 	/**
-	 * Semantic-analysis state built from the AST. The concrete structures are
-	 * owned by the semantic analyzer module.
+	 * Symbol table built from the AST during semantic analysis and kept alive
+	 * so later phases (e.g. code generation) can consume the validated
+	 * automata. The concrete structures live in the domain-specific Automaton
+	 * module.
 	 */
-	SemanticSymbolTable * symbolTable;
-	SemanticScope * scopeStack;
+	RuntimeSymbolTable * symbolTable;
+	RuntimeScope * scopeStack;
 	bool hasSemanticErrors;
 
 	// TODO: Add more configuration.

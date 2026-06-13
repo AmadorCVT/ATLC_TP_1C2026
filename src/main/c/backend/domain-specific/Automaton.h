@@ -11,7 +11,7 @@
 ModuleDestructor initializeAutomatonModule();
 
 /* ------------------------------------------------------------------ */
-/* Runtime data structures                                             */
+/* Automaton data structures                                           */
 /* ------------------------------------------------------------------ */
 
 typedef struct RuntimeStringList {
@@ -23,6 +23,7 @@ typedef struct RuntimeTransition {
 	char *               source;
 	char *               symbol;        /* NULL when isLambda */
 	bool                 isLambda;
+	bool                 hadMultipleDestinations; /* set when the source syntax used {.,.} */
 	RuntimeStringList *  destinations;
 	struct RuntimeTransition * next;
 } RuntimeTransition;
@@ -37,40 +38,51 @@ typedef struct RuntimeAutomaton {
 	RuntimeTransition * transitions;
 } RuntimeAutomaton;
 
-typedef struct RuntimeEntry {
-	char *              name;
-	RuntimeAutomaton *  automaton;
-	struct RuntimeEntry * next;
-} RuntimeEntry;
-
-typedef struct RuntimeTable {
-	RuntimeEntry * head;
-} RuntimeTable;
-
-typedef struct RuntimeStringEntry {
-	char *                    name;
-	char *                    value;
-	struct RuntimeStringEntry * next;
-} RuntimeStringEntry;
-
-typedef struct RuntimeStringTable {
-	RuntimeStringEntry * head;
-} RuntimeStringTable;
-
 /* ------------------------------------------------------------------ */
-/* Table lifecycle                                                     */
+/* Symbol table (scoped) — shared by semantic analysis and generation  */
 /* ------------------------------------------------------------------ */
 
-RuntimeTable *       runtimeTableCreate();
-void                 runtimeTableDestroy(RuntimeTable * table);
-void                 runtimeTableInsert(RuntimeTable * table, RuntimeAutomaton * automaton);
-RuntimeAutomaton *   runtimeTableLookup(RuntimeTable * table, const char * name);
+typedef enum RuntimeSymbolType {
+	RUNTIME_SYMBOL_AUTOMATON,
+	RUNTIME_SYMBOL_STRING
+} RuntimeSymbolType;
 
-RuntimeStringTable * runtimeStringTableCreate();
-void                 runtimeStringTableDestroy(RuntimeStringTable * table);
-void                 runtimeStringTableSet(RuntimeStringTable * table, const char * name, const char * value);
-const char *         runtimeStringTableLookup(RuntimeStringTable * table, const char * name);
-void                 runtimeStringTableRemove(RuntimeStringTable * table, const char * name);
+typedef struct RuntimeSymbol {
+	char *               name;
+	RuntimeSymbolType    type;
+	union {
+		RuntimeAutomaton * automaton;
+		char *             string;
+	};
+	struct RuntimeSymbol * next;
+} RuntimeSymbol;
+
+/* RuntimeScope and RuntimeSymbolTable are forward-declared in CompilerState.h
+ * (which this header includes) so that CompilerState can hold pointers to them
+ * without a circular include. Here we provide the full definitions. */
+
+struct RuntimeScope {
+	RuntimeSymbol * symbols;
+	RuntimeScope *  parent;
+};
+
+struct RuntimeSymbolTable {
+	RuntimeScope * globalScope;
+	RuntimeScope * currentScope;
+};
+
+/* ------------------------------------------------------------------ */
+/* Symbol table lifecycle                                              */
+/* ------------------------------------------------------------------ */
+
+RuntimeSymbolTable * runtimeSymbolTableCreate();
+void                 runtimeSymbolTableDestroy(RuntimeSymbolTable * table);
+void                 runtimeSymbolTablePushScope(RuntimeSymbolTable * table);
+void                 runtimeSymbolTablePopScope(RuntimeSymbolTable * table);
+RuntimeSymbol *      runtimeSymbolTableLookupVisible(RuntimeSymbolTable * table, const char * name);
+RuntimeSymbol *      runtimeSymbolTableLookupCurrent(RuntimeSymbolTable * table, const char * name);
+bool                 runtimeSymbolTableAddAutomaton(RuntimeSymbolTable * table, const char * name, RuntimeAutomaton * automaton);
+bool                 runtimeSymbolTableAddString(RuntimeSymbolTable * table, const char * name, char * value);
 
 /* ------------------------------------------------------------------ */
 /* Automaton lifecycle                                                 */
@@ -78,9 +90,27 @@ void                 runtimeStringTableRemove(RuntimeStringTable * table, const 
 
 RuntimeAutomaton * runtimeAutomatonFromAst(Automaton * ast);
 RuntimeAutomaton * cloneRuntimeAutomaton(RuntimeAutomaton * src, const char * newName, AutomatonType newType);
+RuntimeAutomaton * cloneRuntimeAutomatonShell(RuntimeAutomaton * src, const char * newName, AutomatonType newType);
 void               destroyRuntimeAutomaton(RuntimeAutomaton * automaton);
 void               destroyRuntimeStringList(RuntimeStringList * list);
 void               destroyRuntimeTransition(RuntimeTransition * transition);
+
+/* ------------------------------------------------------------------ */
+/* String-list helpers                                                 */
+/* ------------------------------------------------------------------ */
+
+bool         runtimeStringListContains(RuntimeStringList * list, const char * value);
+bool         runtimeStringListHasDuplicates(RuntimeStringList * list);
+unsigned int runtimeStringListLength(RuntimeStringList * list);
+void         appendRuntimeString(RuntimeStringList ** list, const char * value);
+void         appendUniqueRuntimeString(RuntimeStringList ** list, const char * value);
+
+/* ------------------------------------------------------------------ */
+/* Transition helpers                                                  */
+/* ------------------------------------------------------------------ */
+
+bool sameRuntimeTransitionKey(RuntimeTransition * left, RuntimeTransition * right);
+bool hasEarlierRuntimeTransitionWithSameKey(RuntimeTransition * first, RuntimeTransition * current);
 
 /* ------------------------------------------------------------------ */
 /* Simulation                                                          */
@@ -121,9 +151,11 @@ void applyUpdateAccept(RuntimeAutomaton * automaton, StringList * newAccept);
 void applyUpdateTransitions(RuntimeAutomaton * automaton, Transition * newTransitions);
 
 /* ------------------------------------------------------------------ */
-/* String utility                                                      */
+/* String utilities                                                    */
 /* ------------------------------------------------------------------ */
 
+char * copyRuntimeString(const char * value);
+bool   isQuotedString(const char * value);
 char * unquoteString(const char * value);
 
 #endif
