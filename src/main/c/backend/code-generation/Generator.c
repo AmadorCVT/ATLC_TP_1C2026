@@ -97,9 +97,8 @@ static void _generateStatement(Statement * statement) {
 			RuntimeAutomaton * automaton = runtimeAutomatonFromAst(statement->automaton);
 			if (runtimeSymbolTableAddAutomaton(_table, automaton->name, automaton)) {
 				_output("## automaton %s (%s)\n\n", automaton->name, _typeName(automaton->type));
-				_output("```\n");
 				printAutomaton(output_file, automaton);
-				_output("```\n\n");
+				_output("\n");
 			}
 			else {
 				destroyRuntimeAutomaton(automaton);
@@ -125,9 +124,8 @@ static void _generateStatement(Statement * statement) {
 				if (result != NULL && runtimeSymbolTableAddAutomaton(_table, result->name, result)) {
 					_output("## convert %s to %s as %s\n\n",
 						statement->conversion->input, _typeName(statement->conversion->type), result->name);
-					_output("```\n");
 					printAutomaton(output_file, result);
-					_output("```\n\n");
+					_output("\n");
 				}
 				else if (result != NULL) {
 					destroyRuntimeAutomaton(result);
@@ -167,9 +165,8 @@ static void _generateStatement(Statement * statement) {
 			RuntimeAutomaton * automaton = _lookupAutomaton(statement->print->id);
 			if (automaton != NULL) {
 				_output("## print %s (%s)\n\n", automaton->name, _typeName(automaton->type));
-				_output("```\n");
 				printAutomaton(output_file, automaton);
-				_output("```\n\n");
+				_output("\n");
 			}
 			break;
 		}
@@ -208,9 +205,8 @@ static void _generateStatement(Statement * statement) {
 				}
 				applyUpdateTransitions(automaton, statement->update->transitions);
 				_output("## update %s\n\n", automaton->name);
-				_output("```\n");
 				printAutomaton(output_file, automaton);
-				_output("```\n\n");
+				_output("\n");
 			}
 			break;
 		}

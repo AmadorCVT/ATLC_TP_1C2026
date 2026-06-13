@@ -748,45 +748,49 @@ RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newNam
 /* Output                                                              */
 /* ------------------------------------------------------------------ */
 
+/* Renders an automaton as a Markdown bullet list of its characteristics so it
+ * reads differently from the source the user writes. Callers are expected to
+ * have already emitted the operation header; this prints only the list. */
 void printAutomaton(FILE * out, RuntimeAutomaton * automaton) {
 	const char * typeName = automaton->type == DFA ? "DFA" : automaton->type == NFA ? "NFA" : "LNFA";
-	fprintf(out, "automaton %s : %s {\n", automaton->name, typeName);
 
-	fprintf(out, "    alphabet = {");
+	fprintf(out, "- *ID*: %s\n", automaton->name);
+	fprintf(out, "- *Type*: %s\n", typeName);
+
+	fprintf(out, "- *Alphabet*: ");
 	for (RuntimeStringList * s = automaton->alphabet; s != NULL; s = s->next) {
 		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	fprintf(out, "}\n");
+	fprintf(out, "\n");
 
-	fprintf(out, "    states = {");
+	fprintf(out, "- *States*: ");
 	for (RuntimeStringList * s = automaton->states; s != NULL; s = s->next) {
 		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	fprintf(out, "}\n");
+	fprintf(out, "\n");
 
-	fprintf(out, "    start = %s\n", automaton->startState);
+	fprintf(out, "- *Start state*: %s\n", automaton->startState);
 
-	fprintf(out, "    accept = {");
+	fprintf(out, "- *Accept states*: ");
 	for (RuntimeStringList * s = automaton->acceptStates; s != NULL; s = s->next) {
 		fprintf(out, "%s%s", s->value, s->next ? ", " : "");
 	}
-	fprintf(out, "}\n");
+	fprintf(out, "\n");
 
-	fprintf(out, "    transitions {\n");
+	if (automaton->transitions == NULL) {
+		fprintf(out, "- *Transitions*: (none)\n");
+		return;
+	}
+
+	fprintf(out, "- *Transitions*:\n");
 	for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
 		const char * sym = t->isLambda ? "lambda" : t->symbol;
-		if (t->destinations != NULL && t->destinations->next != NULL) {
-			fprintf(out, "        %s -> %s : {", t->source, sym);
-			for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
-				fprintf(out, "%s%s", d->value, d->next ? ", " : "");
-			}
-			fprintf(out, "}\n");
+		fprintf(out, "  - %s --%s--> ", t->source, sym);
+		for (RuntimeStringList * d = t->destinations; d != NULL; d = d->next) {
+			fprintf(out, "%s%s", d->value, d->next ? ", " : "");
 		}
-		else if (t->destinations != NULL) {
-			fprintf(out, "        %s -> %s : %s\n", t->source, sym, t->destinations->value);
-		}
+		fprintf(out, "\n");
 	}
-	fprintf(out, "    }\n};\n");
 }
 
 void showTransitions(FILE * out, RuntimeAutomaton * automaton) {
