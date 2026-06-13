@@ -26,12 +26,15 @@ ModuleDestructor initializeGeneratorModule() {
 
 static void _generateStatement(Statement* statement);
 static void _generatePrologue(void);
+static void _generateAutomaton(Automaton* automaton);
+static char *  _AutomatonTypeToString(AutomatonType type);
+static void _PrintStringList(StringList* list);
 static void _output(const char * const format, ...);
-
 
 static void _generateStatement(Statement* statement) {
 	switch (statement->type) {
 		case AUTOMATON_STATEMENT:
+			_generateAutomaton(statement->automaton);
 			break;
 
 		case TEST_STATEMENT:
@@ -63,12 +66,49 @@ static void _generateStatement(Statement* statement) {
 			break;
 	};
 }
+
 /**
  * Creates the prologue of the generated output, a MarkDown document that 
  * renders the operations being made
  */
 static void _generatePrologue(void) {
 	_output("%s\n\n", "# Automaton program");
+}
+
+
+static void _generateAutomaton(Automaton* automaton) {
+	_output("%s\n\n", "## Automaton definition");
+
+	// List properties
+	_output("- **ID**: %s\n", 
+		automaton->id
+		);
+	_output("- **Type**: %s\n", 
+		_AutomatonTypeToString(automaton->type)
+		);
+	_output("- **Alphabet**: "); 
+	_PrintStringList(automaton->definition->alphabet);
+
+	_output("- **States**: "); 
+	_PrintStringList(automaton->definition->states);
+
+	_output("- **Start state**: %s\n", automaton->definition->startState); 
+
+	_output("- **Accept states**: "); 
+	_PrintStringList(automaton->definition->acceptStates);
+}
+
+static char * _AutomatonTypeToString(AutomatonType type) {
+	switch (type) {
+		case DFA:
+			return "DFA";
+		case NFA:
+			return "NFA";
+		case LNFA:
+			return "LNFA";
+	};
+
+	return "UNKNOWN";
 }
 
 /**
@@ -90,6 +130,19 @@ static void _output(const char * const format, ...) {
 	vfprintf(output_file, format, arguments);
 	fflush(output_file);
 	va_end(arguments);
+}
+
+
+static void _PrintStringList(StringList* list) {
+	
+	if (list->next == NULL) {
+		_output("%s\n", list->value);
+		return ;
+	}
+
+	_output("%s, ", list->value);
+	
+	_PrintStringList(list->next);
 }
 
 /** PUBLIC FUNCTIONS */
