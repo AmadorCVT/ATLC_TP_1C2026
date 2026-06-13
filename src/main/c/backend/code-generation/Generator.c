@@ -97,8 +97,7 @@ static void _generateStatement(Statement * statement) {
 			RuntimeAutomaton * automaton = runtimeAutomatonFromAst(statement->automaton);
 			if (runtimeSymbolTableAddAutomaton(_table, automaton->name, automaton)) {
 				_output("## automaton %s (%s)\n\n", automaton->name, _typeName(automaton->type));
-				printAutomaton(output_file, automaton);
-				_output("\n");
+				_output("Automaton `%s` declared.\n\n", automaton->name);
 			}
 			else {
 				destroyRuntimeAutomaton(automaton);
