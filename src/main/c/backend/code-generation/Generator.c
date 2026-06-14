@@ -168,7 +168,7 @@ static void _generateProgram(Program * program) {
 static void _generateAutomaton(Automaton * automaton) {
 	RuntimeAutomaton * runtimeAutomaton = runtimeAutomatonFromAst(automaton);
 	if (runtimeSymbolTableAddAutomaton(_table, runtimeAutomaton->name, runtimeAutomaton)) {
-		_output("## Automaton %s (%s) declared.\n\n", runtimeAutomaton->name, _typeName(runtimeAutomaton->type));
+		_output("**Automaton** %s (%s) declared.\n\n", runtimeAutomaton->name, _typeName(runtimeAutomaton->type));
 	}
 	else {
 		destroyRuntimeAutomaton(runtimeAutomaton);
@@ -178,7 +178,7 @@ static void _generateAutomaton(Automaton * automaton) {
 static void _generateStringDeclaration(StringDeclaration * stringDeclaration) {
 	char * value = unquoteString(stringDeclaration->value);
 	if (runtimeSymbolTableAddString(_table, stringDeclaration->id, value)) {
-		_output("### string %s = \"%s\"\n\n", stringDeclaration->id, value);
+		_output("**string** %s = \"%s\"\n\n", stringDeclaration->id, value);
 	}
 	else {
 		free(value);
@@ -190,7 +190,7 @@ static void _generateConversion(Conversion * conversion) {
 	if (source != NULL) {
 		RuntimeAutomaton * result = _dispatchConversion(source, conversion->type, conversion->output);
 		if (result != NULL && runtimeSymbolTableAddAutomaton(_table, result->name, result)) {
-			_output("## convert %s to %s as %s\n\n",
+			_output("**convert** %s to %s as %s\n\n",
 				conversion->input, _typeName(conversion->type), result->name);
 			printAutomaton(output_file, result);
 			_output("\n");
@@ -206,19 +206,19 @@ static void _generateShow(Show * show) {
 	if (automaton != NULL) {
 		switch (show->type) {
 			case SHOW_TRANSITIONS:
-				_output("## show transitions of %s\n\n", automaton->name);
+				_output("**show transitions** of %s\n\n", automaton->name);
 				_output("```\n");
 				showTransitions(output_file, automaton);
 				_output("```\n\n");
 				break;
 			case SHOW_TABLE:
-				_output("## show table of %s\n\n", automaton->name);
+				_output("**show table** of %s\n\n", automaton->name);
 				_output("```\n");
 				showTable(output_file, automaton);
 				_output("```\n\n");
 				break;
 			case SHOW_CLOSURE:
-				_output("## show closure of %s in %s\n\n", show->state, automaton->name);
+				_output("**show closure** of %s in %s\n\n", show->state, automaton->name);
 				_output("```\n");
 				showClosure(output_file, automaton, show->state);
 				_output("```\n\n");
@@ -230,7 +230,7 @@ static void _generateShow(Show * show) {
 static void _generatePrint(Print * print) {
 	RuntimeAutomaton * automaton = _lookupAutomaton(print->id);
 	if (automaton != NULL) {
-		_output("## print %s (%s)\n\n", automaton->name, _typeName(automaton->type));
+		_output("**print** %s (%s)\n\n", automaton->name, _typeName(automaton->type));
 		printAutomaton(output_file, automaton);
 		_output("\n");
 	}
@@ -242,7 +242,7 @@ static void _generateTest(Test * test) {
 		char * input = _resolveStringOperand(test->input);
 		if (input != NULL) {
 			bool accepted = simulateAutomaton(automaton, input);
-			_output("## test %s with \"%s\"\n\n", automaton->name, input);
+			_output("**test** %s with \"%s\"\n\n", automaton->name, input);
 			_output("**Result:** %s\n\n", accepted ? "ACCEPTED" : "REJECTED");
 			free(input);
 		}
@@ -252,7 +252,7 @@ static void _generateTest(Test * test) {
 static void _generateEquivalent(Equivalent * equivalent) {
 	RuntimeAutomaton * left = _lookupAutomaton(equivalent->name1);
 	RuntimeAutomaton * right = _lookupAutomaton(equivalent->name2);
-	_output("## equivalent %s == %s\n\n", equivalent->name1, equivalent->name2);
+	_output("**equivalent** %s == %s\n\n", equivalent->name1, equivalent->name2);
 	if (left != NULL && right != NULL) {
 		bool equiv = automatonsAreEquivalent(left, right);
 		_output("**Result:** %s\n\n", equiv ? "equivalent" : "not equivalent");
@@ -267,7 +267,7 @@ static void _generateUpdate(Update * update) {
 			applyUpdateAccept(automaton, update->acceptStates);
 		}
 		applyUpdateTransitions(automaton, update->transitions);
-		_output("## update %s\n\n", automaton->name);
+		_output("**update** %s\n\n", automaton->name);
 		printAutomaton(output_file, automaton);
 		_output("\n");
 	}

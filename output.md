@@ -1,24 +1,55 @@
 # Automaton program
 
-## Automaton ParidadCeros (DFA) declared.
+## Automaton LambdaEjemplo (LNFA) declared.
+
+## show closure of q0 in LambdaEjemplo
+
+```
+closure(q0) in LambdaEjemplo = {q0, q1}
+```
+
+## test LambdaEjemplo with "aaaaaab"
+
+**Result:** ACCEPTED
+
+## test LambdaEjemplo with "ab"
+
+**Result:** ACCEPTED
+
+## test LambdaEjemplo with "aab"
+
+**Result:** ACCEPTED
+
+## print LambdaEjemplo (LNFA)
+
+- *ID*: LambdaEjemplo
+- *Type*: LNFA
+- *Alphabet*: a, b
+- *States*: q0, q1, q2
+- *Start state*: q0
+- *Accept states*: q2
+- *Transitions*:
+  - q0 --lambda--> q1
+  - q1 --a--> q1
+  - q1 --b--> q2
 
 ## for i
 
-### i = "0010011"
+### i = "aaaaaab"
 
-## test ParidadCeros with "0010011"
-
-**Result:** ACCEPTED
-
-### i = "00"
-
-## test ParidadCeros with "00"
+## test LambdaEjemplo with "aaaaaab"
 
 **Result:** ACCEPTED
 
-### i = "11101111110"
+### i = "ab"
 
-## test ParidadCeros with "11101111110"
+## test LambdaEjemplo with "ab"
+
+**Result:** ACCEPTED
+
+### i = "aab"
+
+## test LambdaEjemplo with "aab"
 
 **Result:** ACCEPTED
 
