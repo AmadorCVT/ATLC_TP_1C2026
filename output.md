@@ -1,10 +1,24 @@
 # Automaton program
 
-## Automaton definition
+## Automaton ParidadCeros (DFA) declared.
 
-- **ID**: LambdaEjemplo
-- **Type**: LNFA
-- **Alphabet**: a, b
-- **States**: q0, q1, q2
-- **Start state**: q0
-- **Accept states**: q2
+## for i
+
+### i = "0010011"
+
+## test ParidadCeros with "0010011"
+
+**Result:** ACCEPTED
+
+### i = "00"
+
+## test ParidadCeros with "00"
+
+**Result:** ACCEPTED
+
+### i = "11101111110"
+
+## test ParidadCeros with "11101111110"
+
+**Result:** ACCEPTED
+

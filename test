@@ -15,3 +15,9 @@ show closure(q0) in LambdaEjemplo;
 test LambdaEjemplo with "aaaaaab";
 test LambdaEjemplo with "ab";
 test LambdaEjemplo with "aab";
+
+print LambdaEjemplo;
+
+for i in {"aaaaaab", "ab", "aab"} {
+    test LambdaEjemplo with i;
+}

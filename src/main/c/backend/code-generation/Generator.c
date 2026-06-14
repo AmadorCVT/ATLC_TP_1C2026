@@ -32,6 +32,15 @@ ModuleDestructor initializeGeneratorModule() {
 static void _generateProgram(Program * program);
 static void _generateStatement(Statement * statement);
 static void _generatePrologue(void);
+static void _generateAutomaton(Automaton * automaton);
+static void _generateStringDeclaration(StringDeclaration * stringDeclaration);
+static void _generateConversion(Conversion * conversion);
+static void _generateShow(Show * show);
+static void _generatePrint(Print * print);
+static void _generateTest(Test * test);
+static void _generateEquivalent(Equivalent * equivalent);
+static void _generateUpdate(Update * update);
+static void _generateForLoop(For * for_loop);
 static void _output(const char * const format, ...);
 
 static const char * _typeName(AutomatonType type);
@@ -93,140 +102,42 @@ static RuntimeAutomaton * _dispatchConversion(RuntimeAutomaton * source, Automat
 
 static void _generateStatement(Statement * statement) {
 	switch (statement->type) {
-		case AUTOMATON_STATEMENT: {
-			RuntimeAutomaton * automaton = runtimeAutomatonFromAst(statement->automaton);
-			if (runtimeSymbolTableAddAutomaton(_table, automaton->name, automaton)) {
-				_output("## Automaton %s (%s) declared.\n\n", automaton->name, _typeName(automaton->type));
-				}
-			else {
-				destroyRuntimeAutomaton(automaton);
-			}
+		case AUTOMATON_STATEMENT:
+			_generateAutomaton(statement->automaton);
 			break;
-		}
 
-		case STRING_DECLARATION_STATEMENT: {
-			char * value = unquoteString(statement->stringDeclaration->value);
-			if (runtimeSymbolTableAddString(_table, statement->stringDeclaration->id, value)) {
-				_output("### string %s = \"%s\"\n\n", statement->stringDeclaration->id, value);
-			}
-			else {
-				free(value);
-			}
+		case STRING_DECLARATION_STATEMENT:
+			_generateStringDeclaration(statement->stringDeclaration);
 			break;
-		}
 
-		case CONVERSION_STATEMENT: {
-			RuntimeAutomaton * source = _lookupAutomaton(statement->conversion->input);
-			if (source != NULL) {
-				RuntimeAutomaton * result = _dispatchConversion(source, statement->conversion->type, statement->conversion->output);
-				if (result != NULL && runtimeSymbolTableAddAutomaton(_table, result->name, result)) {
-					_output("## convert %s to %s as %s\n\n",
-						statement->conversion->input, _typeName(statement->conversion->type), result->name);
-					printAutomaton(output_file, result);
-					_output("\n");
-				}
-				else if (result != NULL) {
-					destroyRuntimeAutomaton(result);
-				}
-			}
+		case CONVERSION_STATEMENT:
+			_generateConversion(statement->conversion);
 			break;
-		}
 
-		case SHOW_STATEMENT: {
-			RuntimeAutomaton * automaton = _lookupAutomaton(statement->show->id);
-			if (automaton != NULL) {
-				switch (statement->show->type) {
-					case SHOW_TRANSITIONS:
-						_output("## show transitions of %s\n\n", automaton->name);
-						_output("```\n");
-						showTransitions(output_file, automaton);
-						_output("```\n\n");
-						break;
-					case SHOW_TABLE:
-						_output("## show table of %s\n\n", automaton->name);
-						_output("```\n");
-						showTable(output_file, automaton);
-						_output("```\n\n");
-						break;
-					case SHOW_CLOSURE:
-						_output("## show closure of %s in %s\n\n", statement->show->state, automaton->name);
-						_output("```\n");
-						showClosure(output_file, automaton, statement->show->state);
-						_output("```\n\n");
-						break;
-				}
-			}
+		case SHOW_STATEMENT: 
+			_generateShow(statement->show);
 			break;
-		}
 
-		case PRINT_STATEMENT: {
-			RuntimeAutomaton * automaton = _lookupAutomaton(statement->print->id);
-			if (automaton != NULL) {
-				_output("## print %s (%s)\n\n", automaton->name, _typeName(automaton->type));
-				printAutomaton(output_file, automaton);
-				_output("\n");
-			}
+		case PRINT_STATEMENT:
+			_generatePrint(statement->print);
 			break;
-		}
 
-		case TEST_STATEMENT: {
-			RuntimeAutomaton * automaton = _lookupAutomaton(statement->test->id);
-			if (automaton != NULL) {
-				char * input = _resolveStringOperand(statement->test->input);
-				if (input != NULL) {
-					bool accepted = simulateAutomaton(automaton, input);
-					_output("## test %s with \"%s\"\n\n", automaton->name, input);
-					_output("**Result:** %s\n\n", accepted ? "ACCEPTED" : "REJECTED");
-					free(input);
-				}
-			}
+		case TEST_STATEMENT:
+			_generateTest(statement->test);
 			break;
-		}
 
-		case EQUIVALENT_STATEMENT: {
-			RuntimeAutomaton * left = _lookupAutomaton(statement->equivalent->name1);
-			RuntimeAutomaton * right = _lookupAutomaton(statement->equivalent->name2);
-			_output("## equivalent %s == %s\n\n", statement->equivalent->name1, statement->equivalent->name2);
-			if (left != NULL && right != NULL) {
-				bool equiv = automatonsAreEquivalent(left, right);
-				_output("**Result:** %s\n\n", equiv ? "equivalent" : "not equivalent");
-			}
+		case EQUIVALENT_STATEMENT:
+			_generateEquivalent(statement->equivalent);
 			break;
-		}
 
 		case UPDATE_STATEMENT: {
-			RuntimeAutomaton * automaton = _lookupAutomaton(statement->update->automatonName);
-			if (automaton != NULL) {
-				applyUpdateStates(automaton, statement->update->states);
-				if (statement->update->acceptStates != NULL) {
-					applyUpdateAccept(automaton, statement->update->acceptStates);
-				}
-				applyUpdateTransitions(automaton, statement->update->transitions);
-				_output("## update %s\n\n", automaton->name);
-				printAutomaton(output_file, automaton);
-				_output("\n");
-			}
+			_generateUpdate(statement->update);
 			break;
 		}
 
-		case FOR_STATEMENT: {
-			For * loop = statement->for_loop;
-			_output("## for %s\n\n", loop->index);
-			for (StringList * value = loop->values; value != NULL; value = value->next) {
-				char * resolved = _resolveStringOperand(value->value);
-				if (resolved == NULL) {
-					continue;
-				}
-				runtimeSymbolTablePushScope(_table);
-				runtimeSymbolTableAddString(_table, loop->index, resolved);
-				_output("### %s = \"%s\"\n\n", loop->index, resolved);
-				for (Statement * body = loop->statements; body != NULL; body = body->next) {
-					_generateStatement(body);
-				}
-				runtimeSymbolTablePopScope(_table);
-			}
+		case FOR_STATEMENT:
+			_generateForLoop(statement->for_loop);
 			break;
-		}
 
 		default:
 			logError(_logger, "The specified statement type is unknown: %d", statement->type);
@@ -251,6 +162,131 @@ static void _generateProgram(Program * program) {
 	}
 	for (Statement * statement = program->statements; statement != NULL; statement = statement->next) {
 		_generateStatement(statement);
+	}
+}
+
+static void _generateAutomaton(Automaton * automaton) {
+	RuntimeAutomaton * runtimeAutomaton = runtimeAutomatonFromAst(automaton);
+	if (runtimeSymbolTableAddAutomaton(_table, runtimeAutomaton->name, runtimeAutomaton)) {
+		_output("## Automaton %s (%s) declared.\n\n", runtimeAutomaton->name, _typeName(runtimeAutomaton->type));
+	}
+	else {
+		destroyRuntimeAutomaton(runtimeAutomaton);
+	}
+}
+
+static void _generateStringDeclaration(StringDeclaration * stringDeclaration) {
+	char * value = unquoteString(stringDeclaration->value);
+	if (runtimeSymbolTableAddString(_table, stringDeclaration->id, value)) {
+		_output("### string %s = \"%s\"\n\n", stringDeclaration->id, value);
+	}
+	else {
+		free(value);
+	}
+}
+
+static void _generateConversion(Conversion * conversion) {
+	RuntimeAutomaton * source = _lookupAutomaton(conversion->input);
+	if (source != NULL) {
+		RuntimeAutomaton * result = _dispatchConversion(source, conversion->type, conversion->output);
+		if (result != NULL && runtimeSymbolTableAddAutomaton(_table, result->name, result)) {
+			_output("## convert %s to %s as %s\n\n",
+				conversion->input, _typeName(conversion->type), result->name);
+			printAutomaton(output_file, result);
+			_output("\n");
+		}
+		else if (result != NULL) {
+			destroyRuntimeAutomaton(result);
+		}
+	}
+}
+
+static void _generateShow(Show * show) {
+	RuntimeAutomaton * automaton = _lookupAutomaton(show->id);
+	if (automaton != NULL) {
+		switch (show->type) {
+			case SHOW_TRANSITIONS:
+				_output("## show transitions of %s\n\n", automaton->name);
+				_output("```\n");
+				showTransitions(output_file, automaton);
+				_output("```\n\n");
+				break;
+			case SHOW_TABLE:
+				_output("## show table of %s\n\n", automaton->name);
+				_output("```\n");
+				showTable(output_file, automaton);
+				_output("```\n\n");
+				break;
+			case SHOW_CLOSURE:
+				_output("## show closure of %s in %s\n\n", show->state, automaton->name);
+				_output("```\n");
+				showClosure(output_file, automaton, show->state);
+				_output("```\n\n");
+				break;
+		}
+	}
+}
+
+static void _generatePrint(Print * print) {
+	RuntimeAutomaton * automaton = _lookupAutomaton(print->id);
+	if (automaton != NULL) {
+		_output("## print %s (%s)\n\n", automaton->name, _typeName(automaton->type));
+		printAutomaton(output_file, automaton);
+		_output("\n");
+	}
+}
+
+static void _generateTest(Test * test) {
+	RuntimeAutomaton * automaton = _lookupAutomaton(test->id);
+	if (automaton != NULL) {
+		char * input = _resolveStringOperand(test->input);
+		if (input != NULL) {
+			bool accepted = simulateAutomaton(automaton, input);
+			_output("## test %s with \"%s\"\n\n", automaton->name, input);
+			_output("**Result:** %s\n\n", accepted ? "ACCEPTED" : "REJECTED");
+			free(input);
+		}
+	}
+}
+
+static void _generateEquivalent(Equivalent * equivalent) {
+	RuntimeAutomaton * left = _lookupAutomaton(equivalent->name1);
+	RuntimeAutomaton * right = _lookupAutomaton(equivalent->name2);
+	_output("## equivalent %s == %s\n\n", equivalent->name1, equivalent->name2);
+	if (left != NULL && right != NULL) {
+		bool equiv = automatonsAreEquivalent(left, right);
+		_output("**Result:** %s\n\n", equiv ? "equivalent" : "not equivalent");
+	}
+}
+
+static void _generateUpdate(Update * update) {
+	RuntimeAutomaton * automaton = _lookupAutomaton(update->automatonName);
+	if (automaton != NULL) {
+		applyUpdateStates(automaton, update->states);
+		if (update->acceptStates != NULL) {
+			applyUpdateAccept(automaton, update->acceptStates);
+		}
+		applyUpdateTransitions(automaton, update->transitions);
+		_output("## update %s\n\n", automaton->name);
+		printAutomaton(output_file, automaton);
+		_output("\n");
+	}
+}
+
+static void _generateForLoop(For * loop) {
+	_output("## for %s\n\n", loop->index);
+	for (StringList * value = loop->values; value != NULL; value = value->next) {
+		char * resolved = _resolveStringOperand(value->value);
+		if (resolved == NULL) {
+			continue;
+		}
+		runtimeSymbolTablePushScope(_table);
+		runtimeSymbolTableAddString(_table, loop->index, resolved);
+		_output("### %s = \"%s\"\n\n", loop->index, resolved);
+		for (Statement * body = loop->statements; body != NULL; body = body->next) {
+			_generateStatement(body);
+		}
+		runtimeSymbolTablePopScope(_table);
 	}
 }
 
