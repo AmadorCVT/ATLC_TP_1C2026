@@ -9,81 +9,83 @@
 }
 
 %{
-
-/**
- * @see https://westes.github.io/flex/manual/Definitions-Section.html#Definitions-Section
- */
-
-extern CompilationStatus ArithmeticOperatorLexemeAction(TokenLabel label);
-extern CompilationStatus EnterImportExpressionLexemeAction(FlexContext context);
-extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
 extern CompilationStatus EOFLexemeAction();
+extern CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
 extern CompilationStatus IgnoredLexemeAction();
-extern CompilationStatus IntegerLexemeAction();
-extern CompilationStatus LeaveImportExpressionLexemeAction();
 extern CompilationStatus LeaveMultilineCommentLexemeAction();
-extern CompilationStatus ParenthesisLexemeAction(TokenLabel label);
-extern CompilationStatus SubexpressionLexemeAction();
+extern CompilationStatus TokenLexemeAction(TokenLabel label);
+extern CompilationStatus TokenWithStringLexemeAction(TokenLabel label);
 extern CompilationStatus UnknownLexemeAction();
 
 %}
 
-/**
- * Flex contexts (a.k.a. start conditions).
- *
- * @see https://westes.github.io/flex/manual/Start-Conditions.html
- */
-%x IMPORT_EXPRESSION
 %x MULTILINE_COMMENT
 
-/**
- * Reusable patterns.
- *
- * @see https://westes.github.io/flex/manual/Matching.html
- * @see https://westes.github.io/flex/manual/Patterns.html
- */
+identifier			[[:alpha:]_][[:alnum:]_]*
+numeric_symbol		[[:digit:]]+
 whitespace			[[:space:]]+
+line_comment		"//"[^\r\n]*
 
 %%
-
-%{
-
-/**
- * @see https://westes.github.io/flex/manual/Rules-Section.html#Rules-Section
- */
-
-%}
-
-"{"									{ return EnterImportExpressionLexemeAction(IMPORT_EXPRESSION); }
-<IMPORT_EXPRESSION>[^{}]+			{ return SubexpressionLexemeAction(); }
-<IMPORT_EXPRESSION>"}"				{ return LeaveImportExpressionLexemeAction(); }
-<IMPORT_EXPRESSION>.				{ return UnknownLexemeAction(); }
 
 "/*"								{ return EnterMultilineCommentLexemeAction(MULTILINE_COMMENT); }
 <MULTILINE_COMMENT>"*/"				{ return LeaveMultilineCommentLexemeAction(); }
 <MULTILINE_COMMENT>[^*]+			{ return IgnoredLexemeAction(); }
 <MULTILINE_COMMENT>.				{ return IgnoredLexemeAction(); }
 
-"-"									{ return ArithmeticOperatorLexemeAction(SUB); }
-"*"									{ return ArithmeticOperatorLexemeAction(MUL); }
-"/"									{ return ArithmeticOperatorLexemeAction(DIV); }
-"+"									{ return ArithmeticOperatorLexemeAction(ADD); }
+"automaton"							{ return TokenLexemeAction(AUTOMATON); }
+"alphabet"							{ return TokenLexemeAction(ALPHABET); }
+"states"							{ return TokenLexemeAction(STATES); }
+"start"								{ return TokenLexemeAction(START); }
+"accept"							{ return TokenLexemeAction(ACCEPT); }
+"transitions"						{ return TokenLexemeAction(TRANSITIONS); }
+"lambda"							{ return TokenLexemeAction(LAMBDA); }
+"convert"							{ return TokenLexemeAction(CONVERT); }
+"print"								{ return TokenLexemeAction(PRINT); }
+"show"								{ return TokenLexemeAction(SHOW); }
+"test"								{ return TokenLexemeAction(TEST); }
+"with"								{ return TokenLexemeAction(WITH); }
+"to"								{ return TokenLexemeAction(TO); }
+"as"								{ return TokenLexemeAction(AS); }
+"table"								{ return TokenLexemeAction(TABLE); }
+"of"								{ return TokenLexemeAction(OF); }
+"closure"							{ return TokenLexemeAction(CLOSURE); }
+"in"								{ return TokenLexemeAction(IN); }
+"equivalent"						{ return TokenLexemeAction(EQUIVALENT); }
+"for"						        { return TokenLexemeAction(FOR); }
+"IN"						        { return TokenLexemeAction(IN); }
 
-"("									{ return ParenthesisLexemeAction(OPEN_PARENTHESIS); }
-")"									{ return ParenthesisLexemeAction(CLOSE_PARENTHESIS); }
+"DFA"								{ return TokenLexemeAction(TYPE_DFA); }
+"NFA"								{ return TokenLexemeAction(TYPE_NFA); }
+"LNFA"								{ return TokenLexemeAction(TYPE_LNFA); }
+"String"							{ return TokenLexemeAction(TYPE_STRING); }
 
-[[:digit:]]+						{ return IntegerLexemeAction(); }
+"->"								{ return TokenLexemeAction(ARROW); }
+"<="								{ return TokenLexemeAction(OP_LEQ); }
+">="								{ return TokenLexemeAction(OP_GEQ); }
+"!="								{ return TokenLexemeAction(OP_NEQ); }
+":"									{ return TokenLexemeAction(COLON); }
+";"									{ return TokenLexemeAction(SEMICOLON); }
+","									{ return TokenLexemeAction(COMMA); }
+"="									{ return TokenLexemeAction(ASSIGN); }
+"<"									{ return TokenLexemeAction(OP_LT); }
+">"									{ return TokenLexemeAction(OP_GT); }
+"{"									{ return TokenLexemeAction(OPEN_CURLY_BRACKET); }
+"}"									{ return TokenLexemeAction(CLOSE_CURLY_BRACKET); }
+"("									{ return TokenLexemeAction(OPEN_PARENTHESIS); }
+")"									{ return TokenLexemeAction(CLOSE_PARENTHESIS); }
 
+\"[^\"]*\"							{ return TokenWithStringLexemeAction(STRING); }
+{identifier}						{ return TokenWithStringLexemeAction(ID); }
+{numeric_symbol}					{ return TokenWithStringLexemeAction(NUMERIC_SYMBOL); }
+
+{line_comment}						{ return IgnoredLexemeAction(); }
 {whitespace}						{ return IgnoredLexemeAction(); }
 .									{ return UnknownLexemeAction(); }
 
 <<EOF>>								{ return EOFLexemeAction(); }
 
 %%
-
-/**
- * @see https://westes.github.io/flex/manual/User-Code-Section.html#User-Code-Section
- */
 
 #include "FlexActions.h"
 #include "FlexExport.h"

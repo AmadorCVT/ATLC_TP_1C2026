@@ -1,0 +1,21 @@
+automaton SinTransiciones : DFA {
+    alphabet = {0, 1}
+    states = {q0, q1}
+    start = q0
+    accept = {q0}
+    transitions {
+    }
+};
+
+SinTransiciones {
+    transitions {
+        q0 -> 0 : q1
+        q0 -> 1 : q0
+        q1 -> 0 : q0
+        q1 -> 1 : q1
+    }
+};
+
+test SinTransiciones with "0010011";
+test SinTransiciones with "00";
+test SinTransiciones with "11101111110";

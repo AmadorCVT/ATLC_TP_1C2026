@@ -1,0 +1,10 @@
+// Defines an automaton using line comments
+automaton ComentariosLinea : DFA {
+    alphabet = {a}
+    states = {q0}
+    start = q0
+    accept = {q0}
+    transitions {
+        q0 -> a : q0 // keeps the automaton in q0
+    }
+};

@@ -1,0 +1,23 @@
+automaton Uno : LNFA {
+    alphabet = {a}
+    states = {q0}
+    start = q0
+    accept = {q0}
+    transitions {
+        q0 -> a : q0
+    }
+};
+
+automaton Dos : LNFA {
+    alphabet = {0, 1}
+    states = {s0, s1}
+    start = s0
+    accept = {s1}
+    transitions {
+        s0 -> lambda : {s1}
+        s0 -> 1 : {s0, s1}
+    }
+};
+
+test Uno with "";
+test Dos with "";

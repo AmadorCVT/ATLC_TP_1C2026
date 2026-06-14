@@ -12,7 +12,14 @@
 #include "../../support/type/TokenLabel.h"
 #include "../Frontend.h"
 
-/** Initialize module's internal state. */
-ModuleDestructor initializeFlexActionsModule();
+ModuleDestructor initializeFlexActionsModule(LexicalAnalyzer * lexicalAnalyzer);
+
+CompilationStatus EOFLexemeAction();
+CompilationStatus EnterMultilineCommentLexemeAction(FlexContext context);
+CompilationStatus IgnoredLexemeAction();
+CompilationStatus LeaveMultilineCommentLexemeAction();
+CompilationStatus TokenLexemeAction(TokenLabel label);
+CompilationStatus TokenWithStringLexemeAction(TokenLabel label);
+CompilationStatus UnknownLexemeAction();
 
 #endif

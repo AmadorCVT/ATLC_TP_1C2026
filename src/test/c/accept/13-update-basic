@@ -1,0 +1,14 @@
+automaton M : NFA {
+    alphabet = {a}
+    states = {q0, q1}
+    start = q0
+    accept = {q1}
+    transitions {
+        q0 -> a : q1
+    }
+};
+M {
+    transitions {
+        q0 -> a : {q0, q1}
+    }
+};

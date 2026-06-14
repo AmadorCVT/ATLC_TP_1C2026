@@ -1,0 +1,17 @@
+automaton LambdaEjemplo : LNFA {
+    alphabet = {a, b}
+    states = {q0, q1, q2}
+    start = q0
+    accept = {q2}
+    transitions {
+        q0 -> lambda : {q1}
+        q1 -> a : {q1}
+        q1 -> b : {q2}
+    }
+};
+
+show closure(q0) in LambdaEjemplo;
+
+test LambdaEjemplo with "aaaaaab";
+test LambdaEjemplo with "ab";
+test LambdaEjemplo with "aab";

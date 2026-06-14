@@ -1,6 +1,11 @@
 #ifndef COMPILER_STATE_HEADER
 #define COMPILER_STATE_HEADER
 
+#include <stdbool.h>
+
+typedef struct RuntimeScope RuntimeScope;
+typedef struct RuntimeSymbolTable RuntimeSymbolTable;
+
 /**
  * The global state of the compiler. Should transport every data structure
  * needed across the different phases of a compilation.
@@ -12,14 +17,15 @@ typedef struct {
 	void * abstractSyntaxtTree;
 
 	/**
-	 * The computed value of the entire program (only for the calculator). You
-	 * should change or remove this field, or a random child will die, and it
-	 * will be your fault.
+	 * Symbol table built from the AST during semantic analysis and kept alive
+	 * so later phases (e.g. code generation) can consume the validated
+	 * automata. The concrete structures live in the domain-specific Automaton
+	 * module.
 	 */
-	signed int value;
+	RuntimeSymbolTable * symbolTable;
+	RuntimeScope * scopeStack;
+	bool hasSemanticErrors;
 
-	// TODO: Add a symbol table.
-	// TODO: Add an stack to handle nested scopes.
 	// TODO: Add more configuration.
 	// TODO: Add whatever you need.
 	// TODO: ...

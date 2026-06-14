@@ -1,0 +1,8 @@
+automaton TipoInvalido : PDA {
+    alphabet = {a}
+    states = {q0}
+    start = q0
+    accept = {q0}
+    transitions {
+    }
+};
