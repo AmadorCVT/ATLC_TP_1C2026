@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-/* ------------------------------------------------------------------ */
-/* Module internal state                                               */
-/* ------------------------------------------------------------------ */
+
 
 static Logger * _logger = NULL;
 
@@ -21,9 +19,7 @@ ModuleDestructor initializeAutomatonModule() {
 	return _shutdownAutomatonModule;
 }
 
-/* ------------------------------------------------------------------ */
-/* Private helpers                                                     */
-/* ------------------------------------------------------------------ */
+
 
 char * copyRuntimeString(const char * value) {
 	if (value == NULL) return NULL;
@@ -138,9 +134,7 @@ static void _removeTransitionsWithSameKey(RuntimeAutomaton * automaton, RuntimeT
 	}
 }
 
-/* ------------------------------------------------------------------ */
-/* Destroy                                                             */
-/* ------------------------------------------------------------------ */
+
 
 void destroyRuntimeStringList(RuntimeStringList * list) {
 	while (list != NULL) {
@@ -173,9 +167,7 @@ void destroyRuntimeAutomaton(RuntimeAutomaton * automaton) {
 	free(automaton);
 }
 
-/* ------------------------------------------------------------------ */
-/* Symbol table (scoped)                                               */
-/* ------------------------------------------------------------------ */
+
 
 static void _destroyRuntimeSymbol(RuntimeSymbol * symbol) {
 	if (symbol == NULL) return;
@@ -275,9 +267,7 @@ bool runtimeSymbolTableAddString(RuntimeSymbolTable * table, const char * name, 
 	return true;
 }
 
-/* ------------------------------------------------------------------ */
-/* Automaton lifecycle                                                 */
-/* ------------------------------------------------------------------ */
+
 
 RuntimeAutomaton * runtimeAutomatonFromAst(Automaton * ast) {
 	RuntimeAutomaton * ra = calloc(1, sizeof(RuntimeAutomaton));
@@ -311,10 +301,7 @@ RuntimeAutomaton * cloneRuntimeAutomaton(RuntimeAutomaton * src, const char * ne
 	return clone;
 }
 
-/* A metadata-only copy: alphabet, states, start and accept states, but no
- * transitions. Used when a conversion only needs to register its output symbol
- * (with the right type) so later statements type-check; the real transitions
- * are produced later by the conversion routines. */
+
 RuntimeAutomaton * cloneRuntimeAutomatonShell(RuntimeAutomaton * src, const char * newName, AutomatonType newType) {
 	RuntimeAutomaton * shell = calloc(1, sizeof(RuntimeAutomaton));
 	shell->name = copyRuntimeString(newName);
@@ -326,9 +313,7 @@ RuntimeAutomaton * cloneRuntimeAutomatonShell(RuntimeAutomaton * src, const char
 	return shell;
 }
 
-/* ------------------------------------------------------------------ */
-/* Lambda-closure (fixpoint)                                           */
-/* ------------------------------------------------------------------ */
+
 
 RuntimeStringList * lambdaClosure(RuntimeAutomaton * automaton, RuntimeStringList * states) {
 	RuntimeStringList * closure = NULL;
@@ -354,9 +339,7 @@ RuntimeStringList * lambdaClosure(RuntimeAutomaton * automaton, RuntimeStringLis
 	return closure;
 }
 
-/* ------------------------------------------------------------------ */
-/* Simulation                                                          */
-/* ------------------------------------------------------------------ */
+
 
 static bool _simulateDFA(RuntimeAutomaton * automaton, const char * input) {
 	const char * state = automaton->startState;
@@ -454,16 +437,12 @@ bool simulateAutomaton(RuntimeAutomaton * automaton, const char * input) {
 	}
 }
 
-/* ------------------------------------------------------------------ */
-/* Conversions                                                         */
-/* ------------------------------------------------------------------ */
 
 RuntimeAutomaton * convertDFAtoNFA(RuntimeAutomaton * dfa, const char * newName) {
 	return cloneRuntimeAutomaton(dfa, newName, NFA);
 }
 
-/* We need a way to name subset-states so they're consistent,
-   regardless of the order we found them*/
+
 
 static RuntimeStringList * _cloneStringList(RuntimeStringList * list) {
 	RuntimeStringList * clone = NULL;
@@ -475,14 +454,14 @@ static RuntimeStringList * _cloneStringList(RuntimeStringList * list) {
 
 static void _sortStringList(RuntimeStringList ** list) {
 	if (*list == NULL || (*list)->next == NULL) return;
-	/* Simple bubble sort */
+	
 	bool swapped = true;
 	while (swapped) {
 		swapped = false;
 		RuntimeStringList ** ptr = list;
 		while ((*ptr)->next != NULL) {
 			if (strcmp((*ptr)->value, (*ptr)->next->value) > 0) {
-				/* swap the two nodes */
+				
 				RuntimeStringList * a = *ptr;
 				RuntimeStringList * b = a->next;
 				a->next = b->next;
@@ -499,8 +478,8 @@ static char * _buildSubsetName(RuntimeStringList * states) {
 	RuntimeStringList * sorted = _cloneStringList(states);
 	_sortStringList(&sorted);
 
-	/* figure out how much space we need */
-	size_t length = 2; /* for the braces */
+	
+	size_t length = 2; 
 	int count = 0;
 	for (RuntimeStringList * s = sorted; s != NULL; s = s->next) {
 		length += strlen(s->value);
@@ -520,8 +499,7 @@ static char * _buildSubsetName(RuntimeStringList * states) {
 	return name;
 }
 
-/* Given a set of NFA states and a symbol, find all the states
- * we can reach by following transitions with that symbol */
+
 static RuntimeStringList * _moveNFA(RuntimeAutomaton * nfa, RuntimeStringList * states, const char * symbol) {
 	RuntimeStringList * result = NULL;
 	for (RuntimeStringList * state = states; state != NULL; state = state->next) {
@@ -538,7 +516,7 @@ static RuntimeStringList * _moveNFA(RuntimeAutomaton * nfa, RuntimeStringList * 
 	return result;
 }
 
-/* Check if two string lists have the same elements, regardless of order */
+
 static bool _sameStringSet(RuntimeStringList * a, RuntimeStringList * b) {
 	for (RuntimeStringList * s = a; s != NULL; s = s->next) {
 		if (!runtimeStringListContains(b, s->value)) return false;
@@ -549,8 +527,7 @@ static bool _sameStringSet(RuntimeStringList * a, RuntimeStringList * b) {
 	return true;
 }
 
-/* We keep a worklist of subset-states during the NFA→DFA construction.
- * Each entry is a set of NFA states plus the name we gave it. */
+
 
 typedef struct SubsetEntry {
 	RuntimeStringList * states;
@@ -588,12 +565,12 @@ RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName)
 	dfa->name = copyRuntimeString(newName);
 	dfa->type = DFA;
 
-	/* same alphabet */
+	
 	for (RuntimeStringList * s = nfa->alphabet; s != NULL; s = s->next) {
 		appendRuntimeString(&dfa->alphabet, s->value);
 	}
 
-	/* the initial DFA state is just {startState} */
+	
 	RuntimeStringList * initialSet = NULL;
 	appendRuntimeString(&initialSet, nfa->startState);
 
@@ -602,8 +579,7 @@ RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName)
 	dfa->startState = copyRuntimeString(allSubsets->name);
 	appendRuntimeString(&dfa->states, allSubsets->name);
 
-	/* keep processing until every subset has been visited.
-	 * instead of a separate worklist we just scan for unprocessed entries. */
+	
 	bool foundUnprocessed = true;
 	while (foundUnprocessed) {
 		foundUnprocessed = false;
@@ -619,17 +595,17 @@ RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName)
 		}
 		if (current == NULL) break;
 
-		/* try every symbol in the alphabet */
+		
 		for (RuntimeStringList * sym = dfa->alphabet; sym != NULL; sym = sym->next) {
 			RuntimeStringList * moved = _moveNFA(nfa, current->states, sym->value);
 			if (moved == NULL) {
-				/* no transitions for this symbol, reject */
+				
 				continue;
 			}
 
 			SubsetEntry * existing = _findSubset(allSubsets, moved);
 			if (existing == NULL) {
-				/* brand new subset */
+				
 				SubsetEntry * newEntry = _createSubsetEntry(moved);
 				appendRuntimeString(&dfa->states, newEntry->name);
 				newEntry->next = allSubsets;
@@ -651,7 +627,7 @@ RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName)
 		}
 	}
 
-	/* a DFA state is accepting if any of its NFA states is accepting */
+	
 	for (SubsetEntry * e = allSubsets; e != NULL; e = e->next) {
 		for (RuntimeStringList * s = e->states; s != NULL; s = s->next) {
 			if (runtimeStringListContains(nfa->acceptStates, s->value)) {
@@ -671,20 +647,20 @@ RuntimeAutomaton * convertLNFAtoNFA(RuntimeAutomaton * lnfa, const char * newNam
 	nfa->name = copyRuntimeString(newName);
 	nfa->type = NFA;
 
-	/* same alphabet (no lambda column in an NFA) */
+	
 	for (RuntimeStringList * s = lnfa->alphabet; s != NULL; s = s->next) {
 		appendRuntimeString(&nfa->alphabet, s->value);
 	}
 
-	/* same states */
+	
 	for (RuntimeStringList * s = lnfa->states; s != NULL; s = s->next) {
 		appendRuntimeString(&nfa->states, s->value);
 	}
 
-	/* same start state */
+	
 	nfa->startState = copyRuntimeString(lnfa->startState);
 
-	/* accept state if it contains any of the original accept states */
+	
 	for (RuntimeStringList * state = lnfa->states; state != NULL; state = state->next) {
 		RuntimeStringList * seed = NULL;
 		appendRuntimeString(&seed, state->value);
@@ -744,13 +720,6 @@ RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newNam
 	return dfa;
 }
 
-/* ------------------------------------------------------------------ */
-/* Output                                                              */
-/* ------------------------------------------------------------------ */
-
-/* Renders an automaton as a Markdown bullet list of its characteristics so it
- * reads differently from the source the user writes. Callers are expected to
- * have already emitted the operation header; this prints only the list. */
 void printAutomaton(FILE * out, RuntimeAutomaton * automaton) {
 	const char * typeName = automaton->type == DFA ? "DFA" : automaton->type == NFA ? "NFA" : "LNFA";
 
@@ -805,25 +774,25 @@ void showTransitions(FILE * out, RuntimeAutomaton * automaton) {
 	}
 }
 
-/* Prints a transition table*/
+
 void showTable(FILE * out, RuntimeAutomaton * automaton) {
 	const char * typeName = automaton->type == DFA ? "DFA" : automaton->type == NFA ? "NFA" : "LNFA";
 	fprintf(out, "Transition table of %s (%s):\n", automaton->name, typeName);
 
-	/* get column headers */
+	
 	bool hasLambda = false;
 	for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
 		if (t->isLambda) { hasLambda = true; break; }
 	}
 
-	/* figure out column widths so things line up nicely */
+	
 	int stateColWidth = 5; /* minimum */
 	for (RuntimeStringList * s = automaton->states; s != NULL; s = s->next) {
 		int len = (int) strlen(s->value) + 2;
 		if (len > stateColWidth) stateColWidth = len;
 	}
 
-	/* print header row */
+	
 	fprintf(out, "  %-*s", stateColWidth, "State");
 	for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
 		fprintf(out, " | %-8s", sym->value);
@@ -833,7 +802,7 @@ void showTable(FILE * out, RuntimeAutomaton * automaton) {
 	}
 	fprintf(out, "\n");
 
-	/* separator line */
+	
 	fprintf(out, "  ");
 	for (int i = 0; i < stateColWidth; i++) fprintf(out, "-");
 	for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
@@ -844,9 +813,9 @@ void showTable(FILE * out, RuntimeAutomaton * automaton) {
 	}
 	fprintf(out, "\n");
 
-	/* one row per state */
+	
 	for (RuntimeStringList * state = automaton->states; state != NULL; state = state->next) {
-		/* mark the start state with -> and accept states with * */
+		
 		bool isStart = strcmp(state->value, automaton->startState) == 0;
 		bool isAccept = runtimeStringListContains(automaton->acceptStates, state->value);
 
@@ -857,7 +826,7 @@ void showTable(FILE * out, RuntimeAutomaton * automaton) {
 			state->value);
 		fprintf(out, "  %-*s", stateColWidth, label);
 
-		/* for each alphabet symbol, find where this state goes */
+		
 		for (RuntimeStringList * sym = automaton->alphabet; sym != NULL; sym = sym->next) {
 			RuntimeStringList * dests = NULL;
 			for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
@@ -874,7 +843,7 @@ void showTable(FILE * out, RuntimeAutomaton * automaton) {
 			} else if (dests->next == NULL) {
 				fprintf(out, " | %-8s", dests->value);
 			} else {
-				/* multiple destinations, show as {q0,q1} */
+			
 				char buf[256] = "{";
 				for (RuntimeStringList * d = dests; d != NULL; d = d->next) {
 					strcat(buf, d->value);
@@ -886,7 +855,7 @@ void showTable(FILE * out, RuntimeAutomaton * automaton) {
 			destroyRuntimeStringList(dests);
 		}
 
-		/* lambda column for LNFAs */
+		
 		if (hasLambda) {
 			RuntimeStringList * dests = NULL;
 			for (RuntimeTransition * t = automaton->transitions; t != NULL; t = t->next) {
@@ -930,9 +899,6 @@ void showClosure(FILE * out, RuntimeAutomaton * automaton, const char * stateNam
 	destroyRuntimeStringList(closure);
 }
 
-/* ------------------------------------------------------------------ */
-/* Update                                                              */
-/* ------------------------------------------------------------------ */
 
 void applyUpdateStates(RuntimeAutomaton * automaton, StringList * newStates) {
 	for (StringList * s = newStates; s != NULL; s = s->next) {
@@ -956,21 +922,120 @@ void applyUpdateTransitions(RuntimeAutomaton * automaton, Transition * newTransi
 	}
 }
 
-/* ------------------------------------------------------------------ */
-/* Equivalence                                                         */
-/* ------------------------------------------------------------------ */
 
-bool automatonsAreEquivalent(RuntimeAutomaton * left, RuntimeAutomaton * right) {
-	/* TODO: implementar equivalencia (p. ej. convertir ambos a DFA y verificar
-	   que la diferencia simétrica sea vacía). */
-	(void) left;
-	(void) right;
-	return false;
+typedef struct EquivPair {
+	char *             stateL;
+	char *             stateR;
+	bool               processed;
+	struct EquivPair * next;
+} EquivPair;
+
+static EquivPair * _findEquivPair(EquivPair * list, const char * l, const char * r) {
+	for (EquivPair * p = list; p != NULL; p = p->next) {
+		bool lMatch = (l == NULL && p->stateL == NULL)
+		           || (l != NULL && p->stateL != NULL && strcmp(l, p->stateL) == 0);
+		bool rMatch = (r == NULL && p->stateR == NULL)
+		           || (r != NULL && p->stateR != NULL && strcmp(r, p->stateR) == 0);
+		if (lMatch && rMatch) return p;
+	}
+	return NULL;
 }
 
-/* ------------------------------------------------------------------ */
-/* String utility                                                      */
-/* ------------------------------------------------------------------ */
+static void _destroyEquivPairs(EquivPair * list) {
+	while (list != NULL) {
+		EquivPair * next = list->next;
+		free(list->stateL);
+		free(list->stateR);
+		free(list);
+		list = next;
+	}
+}
+
+static const char * _equivDfaStep(RuntimeAutomaton * dfa, const char * state, const char * symbol) {
+	if (state == NULL) return NULL;
+	for (RuntimeTransition * t = dfa->transitions; t != NULL; t = t->next) {
+		if (!t->isLambda
+			&& strcmp(t->source, state) == 0
+			&& strcmp(t->symbol, symbol) == 0
+			&& t->destinations != NULL) {
+			return t->destinations->value;
+		}
+	}
+	return NULL;
+}
+
+bool automatonsAreEquivalent(RuntimeAutomaton * left, RuntimeAutomaton * right) {
+	RuntimeAutomaton * dfaL = NULL;
+	RuntimeAutomaton * dfaR = NULL;
+	switch (left->type) {
+		case DFA:  dfaL = cloneRuntimeAutomaton(left, "__eq_l__", DFA); break;
+		case NFA:  dfaL = convertNFAtoDFA(left, "__eq_l__"); break;
+		case LNFA: dfaL = convertLNFAtoDFA(left, "__eq_l__"); break;
+		default: return false;
+	}
+	switch (right->type) {
+		case DFA:  dfaR = cloneRuntimeAutomaton(right, "__eq_r__", DFA); break;
+		case NFA:  dfaR = convertNFAtoDFA(right, "__eq_r__"); break;
+		case LNFA: dfaR = convertLNFAtoDFA(right, "__eq_r__"); break;
+		default:
+			destroyRuntimeAutomaton(dfaL);
+			return false;
+	}
+
+	RuntimeStringList * alphabet = NULL;
+	for (RuntimeStringList * s = dfaL->alphabet; s != NULL; s = s->next)
+		appendUniqueRuntimeString(&alphabet, s->value);
+	for (RuntimeStringList * s = dfaR->alphabet; s != NULL; s = s->next)
+		appendUniqueRuntimeString(&alphabet, s->value);
+
+	EquivPair * pairs = calloc(1, sizeof(EquivPair));
+	pairs->stateL = copyRuntimeString(dfaL->startState);
+	pairs->stateR = copyRuntimeString(dfaR->startState);
+
+	bool equivalent = true;
+	bool foundUnprocessed = true;
+	while (foundUnprocessed && equivalent) {
+		foundUnprocessed = false;
+		EquivPair * current = NULL;
+		for (EquivPair * p = pairs; p != NULL; p = p->next) {
+			if (!p->processed) {
+				current = p;
+				current->processed = true;
+				foundUnprocessed = true;
+				break;
+			}
+		}
+		if (current == NULL) break;
+
+		bool lAccepts = current->stateL != NULL
+		             && runtimeStringListContains(dfaL->acceptStates, current->stateL);
+		bool rAccepts = current->stateR != NULL
+		             && runtimeStringListContains(dfaR->acceptStates, current->stateR);
+		if (lAccepts != rAccepts) {
+			equivalent = false;
+			break;
+		}
+
+		for (RuntimeStringList * sym = alphabet; sym != NULL; sym = sym->next) {
+			const char * nextL = _equivDfaStep(dfaL, current->stateL, sym->value);
+			const char * nextR = _equivDfaStep(dfaR, current->stateR, sym->value);
+			if (_findEquivPair(pairs, nextL, nextR) == NULL) {
+				EquivPair * newPair = calloc(1, sizeof(EquivPair));
+				newPair->stateL = copyRuntimeString(nextL);
+				newPair->stateR = copyRuntimeString(nextR);
+				newPair->next = pairs;
+				pairs = newPair;
+			}
+		}
+	}
+
+	_destroyEquivPairs(pairs);
+	destroyRuntimeStringList(alphabet);
+	destroyRuntimeAutomaton(dfaL);
+	destroyRuntimeAutomaton(dfaR);
+	return equivalent;
+}
+
 
 char * unquoteString(const char * value) {
 	if (value == NULL) return NULL;

@@ -11,9 +11,7 @@
 
 ModuleDestructor initializeAutomatonModule();
 
-/* ------------------------------------------------------------------ */
-/* Automaton data structures                                           */
-/* ------------------------------------------------------------------ */
+
 
 typedef struct RuntimeStringList {
 	char *                   value;
@@ -22,9 +20,9 @@ typedef struct RuntimeStringList {
 
 typedef struct RuntimeTransition {
 	char *               source;
-	char *               symbol;        /* NULL when isLambda */
+	char *               symbol;        
 	bool                 isLambda;
-	bool                 hadMultipleDestinations; /* set when the source syntax used {.,.} */
+	bool                 hadMultipleDestinations; 
 	RuntimeStringList *  destinations;
 	struct RuntimeTransition * next;
 } RuntimeTransition;
@@ -39,9 +37,6 @@ typedef struct RuntimeAutomaton {
 	RuntimeTransition * transitions;
 } RuntimeAutomaton;
 
-/* ------------------------------------------------------------------ */
-/* Symbol table (scoped) — shared by semantic analysis and generation  */
-/* ------------------------------------------------------------------ */
 
 typedef enum RuntimeSymbolType {
 	RUNTIME_SYMBOL_AUTOMATON,
@@ -58,9 +53,7 @@ typedef struct RuntimeSymbol {
 	struct RuntimeSymbol * next;
 } RuntimeSymbol;
 
-/* RuntimeScope and RuntimeSymbolTable are forward-declared in CompilerState.h
- * (which this header includes) so that CompilerState can hold pointers to them
- * without a circular include. Here we provide the full definitions. */
+
 
 struct RuntimeScope {
 	RuntimeSymbol * symbols;
@@ -72,9 +65,7 @@ struct RuntimeSymbolTable {
 	RuntimeScope * currentScope;
 };
 
-/* ------------------------------------------------------------------ */
-/* Symbol table lifecycle                                              */
-/* ------------------------------------------------------------------ */
+
 
 RuntimeSymbolTable * runtimeSymbolTableCreate();
 void                 runtimeSymbolTableDestroy(RuntimeSymbolTable * table);
@@ -85,9 +76,7 @@ RuntimeSymbol *      runtimeSymbolTableLookupCurrent(RuntimeSymbolTable * table,
 bool                 runtimeSymbolTableAddAutomaton(RuntimeSymbolTable * table, const char * name, RuntimeAutomaton * automaton);
 bool                 runtimeSymbolTableAddString(RuntimeSymbolTable * table, const char * name, char * value);
 
-/* ------------------------------------------------------------------ */
-/* Automaton lifecycle                                                 */
-/* ------------------------------------------------------------------ */
+
 
 RuntimeAutomaton * runtimeAutomatonFromAst(Automaton * ast);
 RuntimeAutomaton * cloneRuntimeAutomaton(RuntimeAutomaton * src, const char * newName, AutomatonType newType);
@@ -96,9 +85,7 @@ void               destroyRuntimeAutomaton(RuntimeAutomaton * automaton);
 void               destroyRuntimeStringList(RuntimeStringList * list);
 void               destroyRuntimeTransition(RuntimeTransition * transition);
 
-/* ------------------------------------------------------------------ */
-/* String-list helpers                                                 */
-/* ------------------------------------------------------------------ */
+
 
 bool         runtimeStringListContains(RuntimeStringList * list, const char * value);
 bool         runtimeStringListHasDuplicates(RuntimeStringList * list);
@@ -106,60 +93,43 @@ unsigned int runtimeStringListLength(RuntimeStringList * list);
 void         appendRuntimeString(RuntimeStringList ** list, const char * value);
 void         appendUniqueRuntimeString(RuntimeStringList ** list, const char * value);
 
-/* ------------------------------------------------------------------ */
-/* Transition helpers                                                  */
-/* ------------------------------------------------------------------ */
+
 
 bool sameRuntimeTransitionKey(RuntimeTransition * left, RuntimeTransition * right);
 bool hasEarlierRuntimeTransitionWithSameKey(RuntimeTransition * first, RuntimeTransition * current);
 
-/* ------------------------------------------------------------------ */
-/* Simulation                                                          */
-/* ------------------------------------------------------------------ */
+
 
 bool simulateAutomaton(RuntimeAutomaton * automaton, const char * input);
 
-/* ------------------------------------------------------------------ */
-/* Lambda-closure                                                      */
-/* ------------------------------------------------------------------ */
+
 
 RuntimeStringList * lambdaClosure(RuntimeAutomaton * automaton, RuntimeStringList * states);
 
-/* ------------------------------------------------------------------ */
-/* Conversions                                                         */
-/* ------------------------------------------------------------------ */
+
 
 RuntimeAutomaton * convertDFAtoNFA(RuntimeAutomaton * dfa, const char * newName);
 RuntimeAutomaton * convertNFAtoDFA(RuntimeAutomaton * nfa, const char * newName);
 RuntimeAutomaton * convertLNFAtoNFA(RuntimeAutomaton * lnfa, const char * newName);
 RuntimeAutomaton * convertLNFAtoDFA(RuntimeAutomaton * lnfa, const char * newName);
 
-/* ------------------------------------------------------------------ */
-/* Equivalence                                                         */
-/* ------------------------------------------------------------------ */
+
 
 bool automatonsAreEquivalent(RuntimeAutomaton * left, RuntimeAutomaton * right);
 
-/* ------------------------------------------------------------------ */
-/* Output                                                              */
-/* ------------------------------------------------------------------ */
 
 void printAutomaton(FILE * out, RuntimeAutomaton * automaton);
 void showTransitions(FILE * out, RuntimeAutomaton * automaton);
 void showTable(FILE * out, RuntimeAutomaton * automaton);
 void showClosure(FILE * out, RuntimeAutomaton * automaton, const char * stateName);
 
-/* ------------------------------------------------------------------ */
-/* Update                                                              */
-/* ------------------------------------------------------------------ */
+
 
 void applyUpdateStates(RuntimeAutomaton * automaton, StringList * newStates);
 void applyUpdateAccept(RuntimeAutomaton * automaton, StringList * newAccept);
 void applyUpdateTransitions(RuntimeAutomaton * automaton, Transition * newTransitions);
 
-/* ------------------------------------------------------------------ */
-/* String utilities                                                    */
-/* ------------------------------------------------------------------ */
+
 
 char * copyRuntimeString(const char * value);
 bool   isQuotedString(const char * value);
